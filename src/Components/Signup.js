@@ -4,10 +4,6 @@ import { Link , useHistory} from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
 export default function Signup() {
-  const firstNameref = useRef();
-  const lastNameref = useRef();
-  const mobileRef = useRef();
-  const companyRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
@@ -26,8 +22,7 @@ export default function Signup() {
     try {
         setError('')
         setLoading(true)
-      await signup(emailRef.current.value, passwordRef.current.value, firstNameref.current.value
-        , lastNameref.current.value, mobileRef.current.value, companyRef.current.value);
+      await signup(emailRef.current.value, passwordRef.current.value);
       history.push("/")
     } catch {
         setError('Failed to create an account!')
@@ -42,33 +37,18 @@ export default function Signup() {
           <h2 className="text-center mb-4">Sign Up</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
-          <Form.Group id="fname">
-              <Form.Label>First Name:</Form.Label>
-              <Form.Control type="Name" ref={firstNameref} required />
-            </Form.Group>
-            <Form.Group id="lname">
-              <Form.Label>Last Name:</Form.Label>
-              <Form.Control type="Name" ref={lastNameref} required />
-            </Form.Group>
             <Form.Group id="email">
-              <Form.Label>Email:</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control type="email" ref={emailRef} required />
             </Form.Group>
-            <Form.Group id="phone">
-              <Form.Label>Mobile Phone:</Form.Label>
-              <Form.Control type="phone" ref={mobileRef} required />
-            </Form.Group>
-            <Form.Group id="company">
-              <Form.Label>Company Name:</Form.Label>
-              <Form.Control type="text" ref={companyRef} required />
-            </Form.Group>
+
             <Form.Group id="password">
-              <Form.Label>Password:</Form.Label>
+              <Form.Label>Password</Form.Label>
               <Form.Control type="password" ref={passwordRef} required />
             </Form.Group>
 
             <Form.Group id="password-confirm">
-              <Form.Label>Password Confirmation:</Form.Label>
+              <Form.Label>Password Confirmation</Form.Label>
               <Form.Control type="password" ref={passwordConfirmRef} required />
             </Form.Group>
             <Button disabled={loading} type="submit" className="w-100">
