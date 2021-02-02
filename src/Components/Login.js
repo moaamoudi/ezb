@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
+import GoogleButton from 'react-google-button'
 
 
 
@@ -73,7 +74,8 @@ export default function Login() {
             <h5>Or</h5>
           </div>
           <div className="w-100 text-center mt-3">
-            <button  onClick={responseGoogle}><img src="" alt="Sign in with google"></img></button>
+             
+            <GoogleButton className="w-100 text-center mt-2" onClick={responseGoogle}></GoogleButton>
           </div>
         </Card.Body>
       </Card>

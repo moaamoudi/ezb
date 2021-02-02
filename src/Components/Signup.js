@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert} from "react-bootstrap";
 import { Link , useHistory} from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
+import { auth } from "../firebase";
+
 
 export default function Signup() {
   const firstNameref = useRef();
@@ -26,8 +28,17 @@ export default function Signup() {
     try {
         setError('')
         setLoading(true)
-      await signup(emailRef.current.value, passwordRef.current.value, firstNameref.current.value
-        , lastNameref.current.value, mobileRef.current.value, companyRef.current.value);
+      await signup(emailRef.current.value, passwordRef.current.value);
+      await auth.currentUser.updateProfile({
+        displayName: firstNameref.current.value+" "+lastNameref.current.value,
+        phoneNumber: mobileRef.current.value+"",
+      }).then(function() {
+        console.log("success")
+      }).catch(function(error) {
+        console.log("failed")
+      });
+      
+      console.log(auth.currentUser);
       history.push("/")
     } catch {
         setError('Failed to create an account!')
@@ -56,7 +67,7 @@ export default function Signup() {
             </Form.Group>
             <Form.Group id="phone">
               <Form.Label>Mobile Phone:</Form.Label>
-              <Form.Control type="phone" ref={mobileRef} required />
+              <Form.Control type="phone" ref={mobileRef} required ></Form.Control>
             </Form.Group>
             <Form.Group id="company">
               <Form.Label>Company Name:</Form.Label>

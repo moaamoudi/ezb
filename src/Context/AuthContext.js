@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   //const [size, setSize] = useState();
 
-  function signup(email, password) {
+  function signup(email, password,) {
     return auth.createUserWithEmailAndPassword(email, password);
   }
 
