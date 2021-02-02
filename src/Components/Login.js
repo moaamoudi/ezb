@@ -19,7 +19,7 @@ export default function Login() {
       setError("");
       setLoading(true);
       await authLogin();
-      history.push("/");
+      history.push("/complete-details");
     } catch {
       setError("Failed to log in");
     }
@@ -75,7 +75,7 @@ export default function Login() {
           </div>
           <div className="w-100 text-center mt-3">
              
-            <GoogleButton className="w-100 text-center mt-2" onClick={responseGoogle}></GoogleButton>
+            <GoogleButton style={{borderRadius: "4px"}}  className="w-100 text-center mt-2" onClick={responseGoogle}></GoogleButton>
           </div>
         </Card.Body>
       </Card>

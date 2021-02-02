@@ -8,6 +8,18 @@ export default function Dashboard() {
     const { currentUser, logout } = useAuth()
     const history = useHistory()
 
+    async function test(){
+      await currentUser.updateProfile({
+        phoneNumber: "966566968612" ,
+      }).then(function() {
+        console.log("success")
+      }).catch(function(error) {
+        console.log("failed")
+      });
+
+      console.log(currentUser)
+    }
+
     async function handleLogout() {
         setError('')
 
@@ -27,6 +39,7 @@ export default function Dashboard() {
           {error && <Alert variant="danger">{error}</Alert>}
           <strong>Email:</strong> {currentUser.email}
           <Link to="update-profile" className="btn btn-primary w-100 mt-3">Update Profile</Link>
+          <button onClick={test}>Test User</button>
           </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">

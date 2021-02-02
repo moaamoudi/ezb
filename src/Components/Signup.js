@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert} from "react-bootstrap";
 import { Link , useHistory} from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 
 
 export default function Signup() {
@@ -29,16 +29,30 @@ export default function Signup() {
         setError('')
         setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value);
+      console.log(mobileRef.current.value)
       await auth.currentUser.updateProfile({
         displayName: firstNameref.current.value+" "+lastNameref.current.value,
-        // phoneNumber: mobileRef.current.value+"",
+        
       }).then(function() {
         console.log("success")
       }).catch(function(error) {
         console.log("failed")
       });
+
+       await db.collection("Users").doc("" + auth.currentUser.uid)
+      .set({
+        firstName: "" + firstNameref.current.value,
+        lastName: "" + lastNameref.current.value,
+        phone: "" + mobileRef.current.value,
+        companyName: "" + companyRef.current.value,
+      })
+      .then(function () {
+        console.log("Document successfully written!");
+      })
+      .catch(function (error) {
+        console.error("Error writing document: ", error);
+      });
       
-      console.log(auth.currentUser);
       history.push("/")
     } catch {
         setError('Failed to create an account!')
