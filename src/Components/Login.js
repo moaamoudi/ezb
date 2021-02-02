@@ -2,7 +2,8 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
+
+
 
 export default function Login() {
   const emailRef = useRef();
@@ -12,21 +13,16 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  async function responseGoogle(response) {
+  async function responseGoogle() {
     try {
       setError("");
       setLoading(true);
-      console.log(response.profileObj);
-      await authLogin(response);
+      await authLogin();
       history.push("/");
     } catch {
       setError("Failed to log in");
     }
     setLoading(false);
-  }
-
-  function logout(){
-    
   }
 
   async function handleSubmit(e) {
@@ -77,18 +73,7 @@ export default function Login() {
             <h5>Or</h5>
           </div>
           <div className="w-100 text-center mt-3">
-            <GoogleLogin
-              clientId="949205911863-n8hilbrtehs14uokcpegl7puuegm9r0v.apps.googleusercontent.com"
-              buttonText="Log In With Google"
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-              cookiePolicy={"single_host_origin"}
-            />
-            <GoogleLogout
-              clientId="949205911863-n8hilbrtehs14uokcpegl7puuegm9r0v.apps.googleusercontent.com"
-              buttonText="Logout"
-              onLogoutSuccess={logout}
-            ></GoogleLogout>
+            <button  onClick={responseGoogle}><img src="" alt="Sign in with google"></img></button>
           </div>
         </Card.Body>
       </Card>
