@@ -2,14 +2,12 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
-import GoogleButton from 'react-google-button'
-
-
+import GoogleButton from "react-google-button";
 
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login, authLogin } = useAuth();
+  const { login, authLogin, checkUserExist } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -19,10 +17,15 @@ export default function Login() {
       setError("");
       setLoading(true);
       await authLogin();
-      history.push("/complete-details");
+      if (await checkUserExist()) {
+        history.push("/");
+      } else {
+        history.push("/complete-details");
+      }
     } catch {
       setError("Failed to log in");
     }
+
     setLoading(false);
   }
 
@@ -74,8 +77,11 @@ export default function Login() {
             <h5>Or</h5>
           </div>
           <div className="w-100 text-center mt-3">
-             
-            <GoogleButton style={{borderRadius: "4px"}}  className="w-100 text-center mt-2" onClick={responseGoogle}></GoogleButton>
+            <GoogleButton
+              style={{ borderRadius: "4px" }}
+              className="w-100 text-center mt-2"
+              onClick={responseGoogle}
+            ></GoogleButton>
           </div>
         </Card.Body>
       </Card>

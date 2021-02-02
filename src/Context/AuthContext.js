@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   //const [size, setSize] = useState();
 
-  function signup(email, password,) {
+  function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
   }
 
@@ -36,13 +36,35 @@ export function AuthProvider({ children }) {
     return currentUser.updatePassword(password);
   }
 
+  async function checkUserExist() {
+    var exists = false;
+    if (auth.currentUser) {
+      await db
+        .collection("Users")
+        .doc("" + auth.currentUser.uid)
+        .get()
+        .then((doc) => {
+          const data = doc.data();
+          if (data !== undefined) {
+            exists = true;
+            return exists;
+          } else {
+            console.log("does not exist");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      return exists;
+    }
+  }
+
   function authLogin() {
     return auth
       .signInWithPopup(provider)
       .then((result) => {
         /** @type {firebase.auth.OAuthCredential} */
         //var credential = result.credential;
-
         // This gives you a Google Access Token. You can use it to access the Google API.
         //var token = credential.accessToken;
         // The signed-in user info.
@@ -61,63 +83,63 @@ export function AuthProvider({ children }) {
       });
   }
 
-  async function testdb() {
-    console.log(currentUser);
+  //async function testdb() {
+  // console.log(currentUser);
 
-    //db.settings({ timestampsInSnapshots: true });
+  //db.settings({ timestampsInSnapshots: true });
 
-    // const userRef = db.collection("GoogleUser").add({
-    //   fullname: "Hesham Amoudi",
-    //   email: "klzg",
-    // });
-    //var temp
-    // await db.collection("GoogleUser")
-    //   .get()
-    //   .then((snap) => {
-    //     temp = snap.size // will return the collection size
-    //   });
+  // const userRef = db.collection("GoogleUser").add({
+  //   fullname: "Hesham Amoudi",
+  //   email: "klzg",
+  // });
+  //var temp
+  // await db.collection("GoogleUser")
+  //   .get()
+  //   .then((snap) => {
+  //     temp = snap.size // will return the collection size
+  //   });
 
-    //   console.log(temp)
+  //   console.log(temp)
 
-    //   temp= temp +1
+  //   temp= temp +1
 
-    //   db.collection("GoogleUser")
-    //   .doc("" + temp)
-    //   .set({
-    //     name: "hello",
-    //     state: "aaa",
-    //     country: "fuck",
-    //   })
-    //   .then(function () {
-    //     console.log("Document successfully written!");
-    //   })
-    //   .catch(function (error) {
-    //     console.error("Error writing document: ", error);
-    //   });
+  //   db.collection("GoogleUser")
+  //   .doc("" + temp)
+  //   .set({
+  //     name: "hello",
+  //     state: "aaa",
+  //     country: "fuck",
+  //   })
+  //   .then(function () {
+  //     console.log("Document successfully written!");
+  //   })
+  //   .catch(function (error) {
+  //     console.error("Error writing document: ", error);
+  //   });
 
-    //   db.collection("GoogleUser").get().then(function(querySnapshot) {
-    //     querySnapshot.forEach(function(doc) {
-    //         // doc.data() is never undefined for query doc snapshots
-    //         console.log(doc.id, " => ", doc.data());
-    //     });
-    // });
+  //   db.collection("GoogleUser").get().then(function(querySnapshot) {
+  //     querySnapshot.forEach(function(doc) {
+  //         // doc.data() is never undefined for query doc snapshots
+  //         console.log(doc.id, " => ", doc.data());
+  //     });
+  // });
 
-    // var docRef = db.collection("GoogleUser").doc("" + currentUser.uid);
+  // var docRef = db.collection("GoogleUser").doc("" + currentUser.uid);
 
-    // docRef
-    //   .get()
-    //   .then(function (doc) {
-    //     if (doc.exists) {
-    //       console.log("Document data:", doc.data());
-    //     } else {
-    //       // doc.data() will be undefined in this case
-    //       console.log("No such document!");
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.log("Error getting document:", error);
-    //   });
-  }
+  // docRef
+  //   .get()
+  //   .then(function (doc) {
+  //     if (doc.exists) {
+  //       console.log("Document data:", doc.data());
+  //     } else {
+  //       // doc.data() will be undefined in this case
+  //       console.log("No such document!");
+  //     }
+  //   })
+  //   .catch(function (error) {
+  //     console.log("Error getting document:", error);
+  //   });
+  //}
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -138,7 +160,7 @@ export function AuthProvider({ children }) {
     updatePassword,
     authLogin,
     auth,
-    testdb,
+    checkUserExist,
   };
   return (
     <AuthContext.Provider value={value}>
