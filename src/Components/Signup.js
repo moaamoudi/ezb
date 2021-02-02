@@ -31,7 +31,7 @@ export default function Signup() {
       await signup(emailRef.current.value, passwordRef.current.value);
       await auth.currentUser.updateProfile({
         displayName: firstNameref.current.value+" "+lastNameref.current.value,
-        phoneNumber: mobileRef.current.value+"",
+        // phoneNumber: mobileRef.current.value+"",
       }).then(function() {
         console.log("success")
       }).catch(function(error) {
@@ -77,7 +77,7 @@ export default function Signup() {
               <Form.Label>Password:</Form.Label>
               <Form.Control type="password" ref={passwordRef} required />
             </Form.Group>
-
+{/* fsdpofsdf */}
             <Form.Group id="password-confirm">
               <Form.Label>Password Confirmation:</Form.Label>
               <Form.Control type="password" ref={passwordConfirmRef} required />
