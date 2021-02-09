@@ -33,7 +33,7 @@ export default function Dashboard() {
 
   return (
     <>
-    
+    <NavBar></NavBar>
     
       
       <div className="w-100 text-center mt-2">

@@ -10,14 +10,15 @@ import { Container } from "react-bootstrap";
 import { AuthProvider } from "../Context/AuthContext";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import NavBar from "./NavBar";
+import './App.css'
 
 function App() {
   return (
-    <div>
+    <div className="main-background">
       <Router>
         <AuthProvider>
           <Switch>
-              <PrivateRoute exact path="/" component={NavBar,Dashboard} />
+              <PrivateRoute exact path="/" component={Dashboard} />
             <Container
               className="d-flex align-items-center justify-content-center"
               style={{ minHeight: "100vh" }}
