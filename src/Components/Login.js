@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
+import { Form, Button, Card, Alert, Container } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import "./Login.css";
 import logo from "../imgs/logo.png";
-
+import Particles from 'particles-bg'
 
 export default function Login() {
   const emailRef = useRef();
@@ -48,73 +48,73 @@ export default function Login() {
 
   return (
     <>
-    
       
-        <Card className="main-shadow">
-          <Card.Body>
-            <img
-              alt=""
-              src={logo}
-              width="200vh"
-              height="100%"
-              className="center-img mb-4"
-            />
-            <h2 className="text-center mb-4">Log In</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-              <Form.Group id="email">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  ref={emailRef}
-                  required
-                  className="button-bg"
-                />
-              </Form.Group>
+          <Card className="main-shadow">
+            <Card.Body>
+              <img
+                alt=""
+                src={logo}
+                width="200vh"
+                height="100%"
+                className="center-img mb-4"
+              />
+              <h2 className="text-center mb-4">Log In</h2>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <Form onSubmit={handleSubmit}>
+                <Form.Group id="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    ref={emailRef}
+                    required
+                    className="button-bg"
+                  />
+                </Form.Group>
 
-              <Form.Group id="password">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  ref={passwordRef}
-                  required
-                  className="form-control button-bg"
-                />
-              </Form.Group>
+                <Form.Group id="password">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    ref={passwordRef}
+                    required
+                    className="form-control button-bg"
+                  />
+                </Form.Group>
 
-              <Button
-                disabled={loading}
-                variant="light"
-                type="submit"
-                className="w-100 button-bg mt-3"
-              >
-                Log In
-              </Button>
-            </Form>
-            <div className="w-100 text-center mt-3">
-              <Link to="/forgot-password" className="a-login">
-                Forgot Password?
-              </Link>
-            </div>
+                <Button
+                  disabled={loading}
+                  variant="light"
+                  type="submit"
+                  className="w-100 button-bg mt-3"
+                >
+                  Log In
+                </Button>
+              </Form>
+              <div className="w-100 text-center mt-3">
+                <Link to="/forgot-password" className="a-login">
+                  Forgot Password?
+                </Link>
+              </div>
 
-            <div className="w-100 text-center mt-3">
-              <h5>Or</h5>
-            </div>
-            <div className="w-100 text-center mt-3">
-              <GoogleButton
-                style={{ borderRadius: "4px" }}
-                className="w-100 text-center mt-2"
-                onClick={responseGoogle}
-              ></GoogleButton>
-            </div>
-          </Card.Body>
-        </Card>
-        <div className="w-100 text-center mt-2">
-          Dont Have An Account?{" "}
-          <Link to="/signup" className="a-login">
-            Sign Up
-          </Link>
-        </div>
+              <div className="w-100 text-center mt-3">
+                <h5>Or</h5>
+              </div>
+              <div className="w-100 text-center mt-3">
+                <GoogleButton
+                  style={{ borderRadius: "4px" }}
+                  className="w-100 text-center mt-2"
+                  onClick={responseGoogle}
+                ></GoogleButton>
+              </div>
+            </Card.Body>
+          </Card>
+          <div className="w-100 text-center mt-2">
+            Dont Have An Account?{" "}
+            <Link to="/signup" className="a-login">
+              Sign Up
+            </Link>
+          </div>
+        
       
     </>
   );
