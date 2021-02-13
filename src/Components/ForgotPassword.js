@@ -66,14 +66,14 @@ export default function ForgotPassword() {
               Login
             </Link>
           </div>
-        </Card.Body>
-      </Card>
-      <div className="w-100 text-center mt-2">
+        </Card.Body><div className="w-100 text-center mt-2 mb-3">
         Dont Have An Account?{" "}
         <Link to="/signup" className="a-login">
           Sign Up
         </Link>
       </div>
+      </Card>
+      
     </>
   );
 }

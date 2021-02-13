@@ -152,14 +152,14 @@ export default function Signup() {
               Sign Up
             </Button>
           </Form>
-        </Card.Body>
-      </Card>
-      <div className="w-100 text-center mt-2">
+        </Card.Body><div className="w-100 text-center mt-2 mb-3">
         Already Have An Account?{" "}
         <Link to="/login" className="a-login">
           Log In
         </Link>
       </div>
+      </Card>
+      
     </>
   );
 }

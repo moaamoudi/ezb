@@ -16,18 +16,21 @@ export default function PublicRoute({ component: Component, ...rest }) {
           <Redirect to="/" />
         ) : (
           <>
-            <Particles
-              className="defaultParticles"
+          <div className="defaultParticles"> <Particles
+            
+              
               id="tsparticles"
               options={{
                 background: {
+                  
                   color: {
-                    value: "#0d47a1",
+                    value: "#ebe8e7",
                   },
                 },
                 fpsLimit: 60,
                 interactivity: {
                   detectsOn: "canvas",
+                  
                   events: {
                     onClick: {
                       enable: true,
@@ -57,12 +60,12 @@ export default function PublicRoute({ component: Component, ...rest }) {
                 },
                 particles: {
                   color: {
-                    value: "#ffffff",
+                    value: "#f7a392",
                   },
                   links: {
-                    color: "#ffffff",
+                    color: "black",
                     distance: 150,
-                    enable: true,
+                    enable: false,
                     opacity: 0.5,
                     width: 1,
                   },
@@ -92,12 +95,13 @@ export default function PublicRoute({ component: Component, ...rest }) {
                   },
                   size: {
                     random: true,
-                    value: 5,
+                    value: 10,
                   },
                 },
                 detectRetina: true,
               }}
-            />
+            /></div>
+           
             <Container
               className="d-flex align-items-center justify-content-center"
               style={{ minHeight: "100vh" }}

@@ -12,3 +12,6 @@
     margin-left: auto;
     margin-right: auto;
 }
+#register{
+    z-index: 5;
+}
