@@ -55,7 +55,6 @@ export default function ForgotPassword() {
               disabled={loading}
               type="submit"
               variant="light"
-              type="submit"
               className="w-100 button-bg mt-3"
             >
               Reset Password

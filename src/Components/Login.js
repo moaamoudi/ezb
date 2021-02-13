@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert, Container } from "react-bootstrap";
+import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import GoogleButton from "react-google-button";
-import "./Login.css";
+import "./styles/Login.css";
 import logo from "../imgs/logo.png";
-import Particles from 'particles-bg'
+
 
 export default function Login() {
   const emailRef = useRef();

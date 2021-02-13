@@ -1,28 +1,12 @@
 import React, { useState } from "react";
 import { useAuth } from "../Context/AuthContext";
-import { Link, useHistory } from "react-router-dom";
-import NavBar from "./NavBar";
-import { Card, Button, Alert } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import { Button, Alert } from "react-bootstrap";
 
 export default function Dashboard() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  
-  async function test() {
-    await currentUser
-      .updateProfile({
-        phoneNumber: "966566968612",
-      })
-      .then(function () {
-        console.log("success");
-      })
-      .catch(function (error) {
-        console.log("failed");
-      });
-
-    console.log(currentUser);
-  }
 
   async function handleLogout() {
     setError("");
@@ -37,8 +21,8 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* <NavBar></NavBar> */}
-
+    <h1>{currentUser.displayName}</h1>
+      {error && <Alert variant="danger">{error}</Alert>}
       <div className="w-100 text-center mt-2">
         <Button variant="link" onClick={handleLogout}>
           Log Out

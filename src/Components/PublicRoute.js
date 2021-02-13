@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import { Route, Redirect } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import Particles from "react-tsparticles";
-import "./particles.css";
+import "./styles/particles.css";
 
 export default function PublicRoute({ component: Component, ...rest }) {
   const { currentUser } = useAuth();

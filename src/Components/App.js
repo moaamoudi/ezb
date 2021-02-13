@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React } from "react";
 import Signup from "./Signup";
 import Login from "./Login";
 import CompleteDetails from "./CompleteDetails";
@@ -6,14 +6,11 @@ import Dashboard from "./Dashboard";
 import PrivateRoute from "./PrivateRoute";
 import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
-import { AuthProvider, useAuth } from "../Context/AuthContext";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import "./App.css";
-import Particles from "particles-bg";
-import { auth } from "../firebase";
-import { render } from "@testing-library/react";
-import { Component } from "react";
+import { AuthProvider } from "../Context/AuthContext";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
+import "./styles/App.css";
 import PublicRoute from "./PublicRoute";
+import "./styles/App.scss";
 
 function App() {
   return (
@@ -35,7 +32,7 @@ function App() {
           </Switch>
         </AuthProvider>
       </Router>
-     </div>
+    </div>
   );
 }
 
