@@ -36,7 +36,8 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
       <SidebarContent>
         <Menu iconShape="circle">
           <MenuItem
-            style={{fontSize:"25px"}}
+            className="mb-2"
+            style={{ fontSize: "25px" }}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +55,8 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             <Link to="/" />
           </MenuItem>
           <MenuItem
-           style={{fontSize:"25px"}}
+            className="mb-2"
+            style={{ fontSize: "25px" }}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +75,8 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             <Link to="/update-profile" />
           </MenuItem>
           <MenuItem
-           style={{fontSize:"25px"}}
+            className="mb-2"
+            style={{ fontSize: "25px" }}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +93,8 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             Clients <Link to="/clients" />
           </MenuItem>
           <MenuItem
-           style={{fontSize:"25px"}}
+            style={{ fontSize: "25px" }}
+            className="mb-2"
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
