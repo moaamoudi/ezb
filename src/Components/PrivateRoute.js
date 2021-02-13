@@ -1,5 +1,4 @@
 import React from "react";
-import { Nav } from "react-bootstrap";
 import { Route, Redirect } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import NavBar from "./NavBar";
@@ -12,11 +11,11 @@ export default function PrivateRoute({ component: Component, ...rest }) {
       {...rest}
       render={(props) => {
         return currentUser ? (
-          <>
+          < div className="inline-block">
             <NavBar></NavBar>
-            <SideBar/>
+            <SideBar className="inline-block"/>
             <Component {...props} />
-          </>
+          </div>
         ) : (
           <Redirect to="/login" />
         );

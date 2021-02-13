@@ -1,17 +1,26 @@
-import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
-import 'react-pro-sidebar/dist/css/styles.css';
+import { ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 
-function SideBar(){
-    return (
-<ProSidebar>
-  <Menu iconShape="square">
-    <MenuItem >Dashboard</MenuItem>
-    <SubMenu title="Components" >
-      <MenuItem>Component 1</MenuItem>
-      <MenuItem>Component 2</MenuItem>
-    </SubMenu>
-  </Menu>
-</ProSidebar>
-    );
+import "./SideBar.scss";
+import { Link } from "react-router-dom";
+
+function SideBar() {
+  return (
+    <ProSidebar>
+      <Menu iconShape="square">
+        <MenuItem>
+          Home <Link to="/" />
+        </MenuItem>
+        <MenuItem>
+          Calender <Link to="/calender" />
+        </MenuItem>
+        <MenuItem>
+          Clients <Link to="/clients" />
+        </MenuItem>
+        <MenuItem>
+          Contracts <Link to="/contracts" />
+        </MenuItem>
+      </Menu>
+    </ProSidebar>
+  );
 }
 export default SideBar;
