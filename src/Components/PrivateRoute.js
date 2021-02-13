@@ -47,7 +47,9 @@ export default function PrivateRoute({ component: Component, ...rest }) {
         
         
       /> */}
-              <Component {...props} />
+              <div>
+                <Component {...props} />
+              </div>
             </div>
           </>
         ) : (
