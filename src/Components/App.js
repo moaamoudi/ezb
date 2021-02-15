@@ -4,6 +4,7 @@ import Login from "./Login";
 import CompleteDetails from "./CompleteDetails";
 import Dashboard from "./Dashboard";
 import PrivateRoute from "./PrivateRoute";
+import InnerCompleteDetails from "./InnerCompleteDetails";
 import ForgotPassword from "./ForgotPassword";
 import UpdateProfile from "./UpdateProfile";
 import { AuthProvider } from "../Context/AuthContext";
@@ -20,7 +21,7 @@ function App() {
           <Switch>
             <PrivateRoute exact path="/" component={Dashboard} />
             <PrivateRoute path="/update-profile" component={UpdateProfile} />
-            <PrivateRoute
+            <InnerCompleteDetails
               path="/complete-details"
               component={CompleteDetails}
             />

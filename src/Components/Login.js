@@ -7,6 +7,7 @@ import "./styles/Login.css";
 import logo from "../imgs/logo.png";
 
 
+
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -34,7 +35,6 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     try {
       setError("");
       setLoading(true);
