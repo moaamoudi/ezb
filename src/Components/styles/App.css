@@ -1,6 +1,7 @@
 .main-background {
   /* background-color: #ebe8e7 !important; */
   height: 94vh;
+  width: 100%;
 }
 .a-login {
   color: #df4323;

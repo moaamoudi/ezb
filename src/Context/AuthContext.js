@@ -49,7 +49,6 @@ export function AuthProvider({ children }) {
             exists = true;
             return exists;
           } else {
-            console.log("does not exist");
           }
         })
         .catch((error) => {
@@ -141,6 +140,25 @@ export function AuthProvider({ children }) {
   //   });
   //}
 
+  async function getCompanyName() {
+    var temp;
+    await db
+      .collection("Users")
+      .doc("" + auth.currentUser.uid)
+      .get()
+      .then((doc) => {
+        const data = doc.data();
+        temp = data
+        console.log(temp);
+        return temp;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    return temp;
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -161,6 +179,7 @@ export function AuthProvider({ children }) {
     authLogin,
     auth,
     checkUserExist,
+    getCompanyName,
   };
   return (
     <AuthContext.Provider value={value}>

@@ -20,7 +20,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div>
+    <div style={{width:"100%", textAlign:"center"}}>
     <h1>{currentUser.displayName}</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       <div className="w-100 text-center mt-2">

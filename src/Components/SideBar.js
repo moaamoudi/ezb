@@ -4,7 +4,7 @@ import {
   Menu,
   MenuItem,
   // SubMenu,
-  SidebarHeader,
+  //SidebarHeader,
   SidebarFooter,
   SidebarContent,
 } from "react-pro-sidebar";
@@ -17,7 +17,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
       toggled={toggled}
       breakPoint="md"
       onToggle={handleToggleSidebar}
-      width="210px"
+      width="240px"
     >
       {/* <SidebarHeader>
         <div
@@ -37,13 +37,13 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
       <SidebarContent>
         <Menu iconShape="circle">
           <MenuItem
-            className="mb-2"
-            style={{ fontSize: "25px" }}
+            className="mb-3"
+            style={{ fontSize: "24px" }}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="25"
+                height="25"
                 fill="currentColor"
                 className="bi bi-house-door"
                 viewBox="0 0 16 16"
@@ -56,13 +56,13 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             <Link to="/" />
           </MenuItem>
           <MenuItem
-            className="mb-2"
-            style={{ fontSize: "25px" }}
+            className="mb-3"
+            style={{ fontSize: "24px" }}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="25"
+                height="25"
                 fill="currentColor"
                 className="bi bi-calendar-week"
                 viewBox="0 0 16 16"
@@ -76,13 +76,13 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             <Link to="/update-profile" />
           </MenuItem>
           <MenuItem
-            className="mb-2"
-            style={{ fontSize: "25px" }}
+            className="mb-3"
+            style={{ fontSize: "24px" }}
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="25"
+                height="25"
                 fill="currentColor"
                 className="bi bi-people"
                 viewBox="0 0 16 16"
@@ -94,13 +94,13 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             Clients <Link to="/clients" />
           </MenuItem>
           <MenuItem
-            style={{ fontSize: "25px" }}
-            className="mb-2"
+            style={{ fontSize: "24px" }}
+            className="mb-3"
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="30"
-                height="30"
+                width="25"
+                height="25"
                 fill="currentColor"
                 className="bi bi-file-text"
                 viewBox="0 0 16 16"
