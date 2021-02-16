@@ -20,7 +20,7 @@ export default function Dashboard() {
   }
 
   return (
-    <>
+    <div>
     <h1>{currentUser.displayName}</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       <div className="w-100 text-center mt-2">
@@ -28,6 +28,6 @@ export default function Dashboard() {
           Log Out
         </Button>
       </div>
-    </>
+    </div>
   );
 }

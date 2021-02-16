@@ -17,8 +17,9 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
       toggled={toggled}
       breakPoint="md"
       onToggle={handleToggleSidebar}
+      width="210px"
     >
-      <SidebarHeader>
+      {/* <SidebarHeader>
         <div
           style={{
             padding: "24px",
@@ -31,7 +32,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             whiteSpace: "nowrap",
           }}
         ></div>
-      </SidebarHeader>
+      </SidebarHeader> */}
 
       <SidebarContent>
         <Menu iconShape="circle">

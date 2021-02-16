@@ -6,7 +6,6 @@ import SideBar from "./SideBar";
 
 export default function PrivateRouteLayout({ component: Component, ...rest }) {
   const [collapsed, setCollapsed] = useState(false);
-
   const [toggled, setToggled] = useState(false);
   const { currentUser } = useAuth();
 
@@ -37,19 +36,7 @@ export default function PrivateRouteLayout({ component: Component, ...rest }) {
                 toggled={toggled}
                 handleToggleSidebar={handleToggleSidebar}
               />
-              {/* <Main
-        
-        toggled={toggled}
-        collapsed={collapsed}
-        
-        handleToggleSidebar={handleToggleSidebar}
-        handleCollapsedChange={handleCollapsedChange}
-        
-        
-      /> */}
-              <div>
-                <Component {...props} />
-              </div>
+              <Component {...props} />
             </div>
           </>
         ) : (
