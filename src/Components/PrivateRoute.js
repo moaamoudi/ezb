@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 import NavBar from "./NavBar";
 import SideBar from "./SideBar";
-
+import "./styles/SideBar.scss"
 export default function PrivateRouteLayout({ component: Component, ...rest }) {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);

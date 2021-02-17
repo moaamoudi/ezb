@@ -11,7 +11,7 @@ import { AuthProvider } from "../Context/AuthContext";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./styles/App.css";
 import PublicRoute from "./PublicRoute";
-import "./styles/App.scss";
+
 
 function App() {
   return (

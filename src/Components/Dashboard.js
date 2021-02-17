@@ -5,7 +5,7 @@ import { Button, Alert } from "react-bootstrap";
 import PopUp from "./PopUpProject";
 export default function Dashboard() {
   const [error, setError] = useState("");
-  const { currentUser, logout } = useAuth();
+  const { logout } = useAuth();
   const history = useHistory();
   
   async function handleLogout() {
@@ -21,8 +21,8 @@ export default function Dashboard() {
 
   return (
     <div style={{width:"100%", textAlign:"center"}}>
-
-           <PopUp/>
+          <div style={{zIndex:"1000"}}><PopUp/></div>
+           
             
 
 
