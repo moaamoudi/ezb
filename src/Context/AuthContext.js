@@ -35,6 +35,32 @@ export function AuthProvider({ children }) {
   function updatePassword(password) {
     return auth.currentUser.updatePassword(password);
   }
+  async function insertProjectToFirestore(
+    projectName,
+    startDate,
+    endDate,
+    goals,
+    description
+  ) {
+    await db
+      .collection("Users/"+auth.currentUser.uid+"/Projects")
+      .doc("" + projectName)
+      .set({
+            email: "" + auth.currentUser.email,
+            projectName: "" + projectName,
+            startDate: "" + startDate,
+            endDate: "" + endDate,
+            goals: "" + goals,
+            description: "" + description,
+          }
+      )
+      .then(function () {
+        console.log("Document successfully written!");
+      })
+      .catch(function (error) {
+        console.error("Error writing document: ", error);
+      });
+  }
 
   async function updateProfile(firstName, lastName) {
     await auth.currentUser.updateProfile({
@@ -193,6 +219,7 @@ export function AuthProvider({ children }) {
     checkUserExist,
     updateProfile,
     insertDetailsToFirestore,
+    insertProjectToFirestore,
   };
   return (
     <AuthContext.Provider value={value}>

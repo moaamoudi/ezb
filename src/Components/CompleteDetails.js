@@ -21,6 +21,7 @@ export default function CompleteDetails() {
         .collection("Users")
         .doc("" + auth.currentUser.uid)
         .set({
+          email: "" + auth.currentUser.email,
           firstName: "" + name[0],
           lastName: "" + name[1],
           phone: "" + mobileRef.current.value,

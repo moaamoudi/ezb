@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
-
+import PopUp from "./PopUpProject";
 export default function Dashboard() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-
+  
   async function handleLogout() {
     setError("");
 
@@ -21,7 +21,16 @@ export default function Dashboard() {
 
   return (
     <div style={{width:"100%", textAlign:"center"}}>
-    <h1>{currentUser.displayName}</h1>
+
+           <PopUp/>
+            
+
+
+
+
+
+
+
       {error && <Alert variant="danger">{error}</Alert>}
       <div className="w-100 text-center mt-2">
         <Button variant="link" onClick={handleLogout}>
