@@ -10,7 +10,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
-  //const [size, setSize] = useState();
+  
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -29,11 +29,42 @@ export function AuthProvider({ children }) {
   }
 
   function updateEmail(email) {
-    return currentUser.updateEmail(email);
+    return auth.currentUser.updateEmail(email);
   }
 
   function updatePassword(password) {
-    return currentUser.updatePassword(password);
+    return auth.currentUser.updatePassword(password);
+  }
+
+  async function updateProfile(firstName, lastName) {
+    await auth.currentUser.updateProfile({
+        displayName: firstName + " " + lastName,
+      })
+      .then(function () {
+        console.log("success");
+      })
+      .catch(function (error) {
+        console.log("failed");
+      });
+  }
+
+  async function insertDetailsToFirestore(firstName, lastName, phone, companyName) {
+    await db
+      .collection("Users")
+      .doc("" + auth.currentUser.uid)
+      .set({
+        email: "" + auth.currentUser.email,
+        firstName: "" + firstName,
+        lastName: "" + lastName,
+        phone: "" + phone,
+        companyName: "" + companyName,
+      })
+      .then(function () {
+        console.log("Document successfully written!");
+      })
+      .catch(function (error) {
+        console.error("Error writing document: ", error);
+      });
   }
 
   async function checkUserExist() {
@@ -140,33 +171,14 @@ export function AuthProvider({ children }) {
   //   });
   //}
 
-  async function getCompanyName() {
-    var temp;
-    await db
-      .collection("Users")
-      .doc("" + auth.currentUser.uid)
-      .get()
-      .then((doc) => {
-        const data = doc.data();
-        temp = data
-        console.log(temp);
-        return temp;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    return temp;
-  }
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
       setLoading(false);
-    });
+    })
 
     return unsubscribe;
-  }, []);
+  }, [])
 
   const value = {
     currentUser,
@@ -179,7 +191,8 @@ export function AuthProvider({ children }) {
     authLogin,
     auth,
     checkUserExist,
-    getCompanyName,
+    updateProfile,
+    insertDetailsToFirestore,
   };
   return (
     <AuthContext.Provider value={value}>

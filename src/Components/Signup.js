@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
-import { auth, db } from "../firebase";
 import logo from "../imgs/logo.png";
 
 export default function Signup() {
@@ -13,7 +12,7 @@ export default function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup } = useAuth();
+  const { signup, insertDetailsToFirestore, updateProfile } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -29,34 +28,16 @@ export default function Signup() {
       setError("");
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
-      console.log(mobileRef.current.value);
-      await auth.currentUser
-        .updateProfile({
-          displayName:
-            firstNameref.current.value + " " + lastNameref.current.value,
-        })
-        .then(function () {
-          console.log("success");
-        })
-        .catch(function (error) {
-          console.log("failed");
-        });
-
-      await db
-        .collection("Users")
-        .doc("" + auth.currentUser.uid)
-        .set({
-          firstName: "" + firstNameref.current.value,
-          lastName: "" + lastNameref.current.value,
-          phone: "" + mobileRef.current.value,
-          companyName: "" + companyRef.current.value,
-        })
-        .then(function () {
-          console.log("Document successfully written!");
-        })
-        .catch(function (error) {
-          console.error("Error writing document: ", error);
-        });
+      await updateProfile(
+        firstNameref.current.value,
+        lastNameref.current.value
+      );
+      await insertDetailsToFirestore(
+        firstNameref.current.value,
+        lastNameref.current.value,
+        mobileRef.current.value,
+        companyRef.current.value
+      );
 
       history.push("/");
     } catch {
@@ -151,14 +132,14 @@ export default function Signup() {
               Sign Up
             </Button>
           </Form>
-        </Card.Body><div className="w-100 text-center mt-2 mb-3">
-        Already Have An Account?{" "}
-        <Link to="/login" className="a-login">
-          Log In
-        </Link>
-      </div>
+        </Card.Body>
+        <div className="w-100 text-center mt-2 mb-3">
+          Already Have An Account?{" "}
+          <Link to="/login" className="a-login">
+            Log In
+          </Link>
+        </div>
       </Card>
-      
     </>
   );
 }

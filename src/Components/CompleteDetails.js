@@ -17,8 +17,6 @@ export default function CompleteDetails() {
       setError("");
       setLoading(true);
       var name = auth.currentUser.displayName.split(" ");
-      console.log(name[0]);
-      console.log(name[1]);
       await db
         .collection("Users")
         .doc("" + auth.currentUser.uid)

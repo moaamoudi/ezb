@@ -7,7 +7,9 @@ import SideBar from "./SideBar";
 export default function PrivateRouteLayout({ component: Component, ...rest }) {
   const [collapsed, setCollapsed] = useState(false);
   const [toggled, setToggled] = useState(false);
+  const { companyName } = useAuth();
   const { currentUser } = useAuth();
+  
 
   const handleCollapsedChange = () => {
     setCollapsed(!collapsed);
@@ -28,6 +30,7 @@ export default function PrivateRouteLayout({ component: Component, ...rest }) {
               collapsed={collapsed}
               handleToggleSidebar={handleToggleSidebar}
               handleCollapsedChange={handleCollapsedChange}
+              companyName={companyName + ""}
             ></NavBar>
 
             <div className="app">

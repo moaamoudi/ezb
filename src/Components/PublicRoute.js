@@ -1,24 +1,15 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { Route, Redirect } from "react-router-dom";
-import { useAuth } from "../Context/AuthContext";
+import { Route } from "react-router-dom";
 import Particles from "react-tsparticles";
 import "./styles/particles.css";
 
 export default function PublicRoute({ component: Component, ...rest }) {
-  const { currentUser, checkUserExist } = useAuth();
-
   return (
     <Route
       {...rest}
       render={(props) => {
-        return currentUser ? (
-          checkUserExist() ? (
-            <Redirect to="/" />
-          ) : (
-            <Redirect to="/complete-details" />
-          )
-        ) : (
+        return (
           <>
             <div className="defaultParticles">
               {" "}

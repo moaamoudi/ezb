@@ -23,9 +23,12 @@ body {
 
 .app {
   height: 100%;
-  display: inline-flex;
-  position: relative;
   width: 100%;
+  display: flex;
+  // position: relative;
+  justify-content: center;
+  justify-items: center;
+  
 
   .btn-toggle {
     cursor: pointer;
