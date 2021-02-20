@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { auth, db, provider } from "../firebase";
+import StickyState from "../Components/useStickyState.js";
 
 const AuthContext = React.createContext();
 
@@ -10,7 +11,9 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
-  
+  const [projects, setProjects] = useState();
+  const [selectedProject, setSelectedProject] = useState();
+  const [project, setProject] = StickyState(selectedProject, "project");
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -35,6 +38,21 @@ export function AuthProvider({ children }) {
   function updatePassword(password) {
     return auth.currentUser.updatePassword(password);
   }
+
+  async function getUserProjects() {
+    if (currentUser) {
+      db.collection("Users/" + currentUser.uid + "/Projects").onSnapshot(
+        (temp) => {
+          const items = [];
+          temp.forEach((doc) => {
+            items.push(doc.data());
+          });
+          setProjects(items);
+        }
+      );
+    }
+  }
+
   async function insertProjectToFirestore(
     projectName,
     startDate,
@@ -43,17 +61,17 @@ export function AuthProvider({ children }) {
     description
   ) {
     await db
-      .collection("Users/"+auth.currentUser.uid+"/Projects")
+      .collection("Users/" + auth.currentUser.uid + "/Projects")
       .doc("" + projectName)
       .set({
-            email: "" + auth.currentUser.email,
-            projectName: "" + projectName,
-            startDate: "" + startDate,
-            endDate: "" + endDate,
-            goals: "" + goals,
-            description: "" + description,
-          }
-      )
+        uid: "" + auth.currentUser.uid,
+        email: "" + auth.currentUser.email,
+        projectName: "" + projectName,
+        startDate: "" + startDate,
+        endDate: "" + endDate,
+        goals: "" + goals,
+        description: "" + description,
+      })
       .then(function () {
         console.log("Document successfully written!");
       })
@@ -63,7 +81,8 @@ export function AuthProvider({ children }) {
   }
 
   async function updateProfile(firstName, lastName) {
-    await auth.currentUser.updateProfile({
+    await auth.currentUser
+      .updateProfile({
         displayName: firstName + " " + lastName,
       })
       .then(function () {
@@ -74,7 +93,12 @@ export function AuthProvider({ children }) {
       });
   }
 
-  async function insertDetailsToFirestore(firstName, lastName, phone, companyName) {
+  async function insertDetailsToFirestore(
+    firstName,
+    lastName,
+    phone,
+    companyName
+  ) {
     await db
       .collection("Users")
       .doc("" + auth.currentUser.uid)
@@ -118,93 +142,23 @@ export function AuthProvider({ children }) {
   function authLogin() {
     return auth
       .signInWithPopup(provider)
-      .then((result) => {
-        /** @type {firebase.auth.OAuthCredential} */
-        //var credential = result.credential;
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        //var token = credential.accessToken;
-        // The signed-in user info.
-        //var user = result.user;
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        //var errorCode = error.code;
-        // var errorMessage = error.message;
-        // The email of the user's account used.
-        // var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        // var credential = error.credential;
-        // ...
-      });
+      .then((result) => {})
+      .catch((error) => {});
   }
 
-  //async function testdb() {
-  // console.log(currentUser);
-
-  //db.settings({ timestampsInSnapshots: true });
-
-  // const userRef = db.collection("GoogleUser").add({
-  //   fullname: "Hesham Amoudi",
-  //   email: "klzg",
-  // });
-  //var temp
-  // await db.collection("GoogleUser")
-  //   .get()
-  //   .then((snap) => {
-  //     temp = snap.size // will return the collection size
-  //   });
-
-  //   console.log(temp)
-
-  //   temp= temp +1
-
-  //   db.collection("GoogleUser")
-  //   .doc("" + temp)
-  //   .set({
-  //     name: "hello",
-  //     state: "aaa",
-  //     country: "fuck",
-  //   })
-  //   .then(function () {
-  //     console.log("Document successfully written!");
-  //   })
-  //   .catch(function (error) {
-  //     console.error("Error writing document: ", error);
-  //   });
-
-  //   db.collection("GoogleUser").get().then(function(querySnapshot) {
-  //     querySnapshot.forEach(function(doc) {
-  //         // doc.data() is never undefined for query doc snapshots
-  //         console.log(doc.id, " => ", doc.data());
-  //     });
-  // });
-
-  // var docRef = db.collection("GoogleUser").doc("" + currentUser.uid);
-
-  // docRef
-  //   .get()
-  //   .then(function (doc) {
-  //     if (doc.exists) {
-  //       console.log("Document data:", doc.data());
-  //     } else {
-  //       // doc.data() will be undefined in this case
-  //       console.log("No such document!");
-  //     }
-  //   })
-  //   .catch(function (error) {
-  //     console.log("Error getting document:", error);
-  //   });
-  //}
+  function setSelectedProject1(project) {
+    setProject(project);
+    setSelectedProject(project);
+  }
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
       setLoading(false);
-    })
+    });
 
     return unsubscribe;
-  }, [])
+  }, []);
 
   const value = {
     currentUser,
@@ -220,6 +174,11 @@ export function AuthProvider({ children }) {
     updateProfile,
     insertDetailsToFirestore,
     insertProjectToFirestore,
+    getUserProjects,
+    projects,
+    selectedProject,
+    setSelectedProject1,
+    project,
   };
   return (
     <AuthContext.Provider value={value}>

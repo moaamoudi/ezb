@@ -11,7 +11,7 @@ import { AuthProvider } from "../Context/AuthContext";
 import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./styles/App.css";
 import PublicRoute from "./PublicRoute";
-
+import ProjectPage from "./ProjectPage";
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
           <Switch>
             <PrivateRoute exact path="/" component={Dashboard} />
             <PrivateRoute path="/update-profile" component={UpdateProfile} />
+            <PrivateRoute path="/projects/:project" component={ProjectPage} />
             <InnerCompleteDetails
               path="/complete-details"
               component={CompleteDetails}
