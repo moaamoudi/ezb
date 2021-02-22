@@ -59,7 +59,7 @@ export default function Dashboard() {
                 <Card.Body>
                   <h1>{project.projectName}</h1>
                   <label>Started on</label>
-                  <h5>{project.startDate}</h5>
+                  <h5>{project.formattedStartDate}</h5>
                   <Button onClick={() => viewDetails(project)}>Details</Button>
                 </Card.Body>
               </Card>

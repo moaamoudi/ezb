@@ -57,7 +57,8 @@ export function AuthProvider({ children }) {
     projectName,
     startDate,
     endDate,
-    goals,
+    formattedStartDate,
+    formattedEndDate,
     description
   ) {
     await db
@@ -69,7 +70,8 @@ export function AuthProvider({ children }) {
         projectName: "" + projectName,
         startDate: "" + startDate,
         endDate: "" + endDate,
-        goals: "" + goals,
+        formattedStartDate: "" + formattedStartDate,
+        formattedEndDate: "" + formattedEndDate,
         description: "" + description,
       })
       .then(function () {
@@ -126,7 +128,7 @@ export function AuthProvider({ children }) {
         .get()
         .then((doc) => {
           const data = doc.data();
-          console.log(data)
+          console.log(data);
           if (data !== undefined) {
             exists = true;
             return exists;
