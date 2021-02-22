@@ -6,7 +6,7 @@ export default function ProjectPage() {
 
   return (
     <div style={{ width: "100%", textAlign: "center" }}>
-      {project.projectName}
+      <h1>{project.projectName}</h1>
     </div>
   );
 }

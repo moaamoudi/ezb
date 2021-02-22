@@ -11,7 +11,7 @@ export default function Dashboard() {
   const { logout, getUserProjects, setSelectedProject1 } = useAuth();
   const history = useHistory();
   const { projects } = useAuth();
- 
+
   async function handleLogout() {
     setError("");
 
@@ -27,7 +27,6 @@ export default function Dashboard() {
     setSelectedProject1(project);
     history.push("/projects/" + project.projectName);
   }
-   
 
   useEffect(() => {
     if (projectsFetched) {
@@ -47,26 +46,24 @@ export default function Dashboard() {
       </div>
 
       {projects ? (
-        <div style={{width:"88vw" }}>
-          <ScrollMenu  itemStyle={{outlineColor:"white"}}
+        <div style={{ width: "100%", textAlign: "center" }}>
+          <ScrollMenu
+            alignCenter={false}
+            itemStyle={{ outlineColor: "transparent" }}
             data={projects.map((project) => (
-              <div
+              <Card
                 key={project.projectName}
-                style={{ display: "inline-block" }}
+                className="main-shadow  m-3 text-center"
+                style={{ width: "250px" }}
               >
-                <Card className="main-shadow  m-3 text-center" style={{ width: "250px"  }}>
-                  <Card.Body>
-                    <h1>{project.projectName}</h1>
-                    <label>Started on</label>
-                    <h5>{project.startDate}</h5>
-                    <Button onClick={() => viewDetails(project)}>
-                      Details
-                    </Button>
-                  </Card.Body>
-                </Card>
-              </div>
+                <Card.Body>
+                  <h1>{project.projectName}</h1>
+                  <label>Started on</label>
+                  <h5>{project.startDate}</h5>
+                  <Button onClick={() => viewDetails(project)}>Details</Button>
+                </Card.Body>
+              </Card>
             ))}
-           
           />
 
           <PopUp />

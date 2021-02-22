@@ -26,9 +26,8 @@ body {
   height: 100%;
   width: 100%;
   display: flex;
-  // position: relative;
-  justify-content: center;
-  justify-items: center;
+  position: fixed;
+  
  
 
   .btn-toggle {

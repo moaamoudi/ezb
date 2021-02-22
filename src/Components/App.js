@@ -31,6 +31,7 @@ function App() {
             <PublicRoute path="/ezb" component={Login} />
             <PublicRoute path="/login" component={Login} />
             <PublicRoute path="/forgot-password" component={ForgotPassword} />
+
           </Switch>
         </AuthProvider>
       </Router>

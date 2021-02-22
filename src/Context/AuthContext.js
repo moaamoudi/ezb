@@ -126,6 +126,7 @@ export function AuthProvider({ children }) {
         .get()
         .then((doc) => {
           const data = doc.data();
+          console.log(data)
           if (data !== undefined) {
             exists = true;
             return exists;
