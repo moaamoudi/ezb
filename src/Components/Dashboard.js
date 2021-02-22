@@ -48,7 +48,7 @@ export default function Dashboard() {
 
       {projects ? (
         <div style={{width:"88vw" }}>
-          <ScrollMenu
+          <ScrollMenu  itemStyle={{outlineColor:"white"}}
             data={projects.map((project) => (
               <div
                 key={project.projectName}
