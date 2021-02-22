@@ -3,14 +3,15 @@ import { useAuth } from "../Context/AuthContext";
 import { useHistory } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
 import PopUp from "./PopUpProject";
-
+import { Card } from "react-bootstrap";
+import ScrollMenu from "react-horizontal-scrolling-menu";
 export default function Dashboard() {
   const [error, setError] = useState("");
   const [projectsFetched, setProjectsFetched] = useState(false);
   const { logout, getUserProjects, setSelectedProject1 } = useAuth();
   const history = useHistory();
   const { projects } = useAuth();
-
+ 
   async function handleLogout() {
     setError("");
 
@@ -26,6 +27,7 @@ export default function Dashboard() {
     setSelectedProject1(project);
     history.push("/projects/" + project.projectName);
   }
+   
 
   useEffect(() => {
     if (projectsFetched) {
@@ -45,20 +47,33 @@ export default function Dashboard() {
       </div>
 
       {projects ? (
-        <div>
-          {projects.map((project) => (
-            <div key={project.projectName}>
-              <h1>{project.projectName}</h1>
-              <button onClick={() => viewDetails(project)}>Details</button>
-            </div>
-          ))}
+        <div style={{width:"88vw" }}>
+          <ScrollMenu
+            data={projects.map((project) => (
+              <div
+                key={project.projectName}
+                style={{ display: "inline-block" }}
+              >
+                <Card className="main-shadow  m-3 text-center" style={{ width: "250px"  }}>
+                  <Card.Body>
+                    <h1>{project.projectName}</h1>
+                    <label>Started on</label>
+                    <h5>{project.startDate}</h5>
+                    <Button onClick={() => viewDetails(project)}>
+                      Details
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </div>
+            ))}
+           
+          />
+
           <PopUp />
         </div>
       ) : (
         <div></div>
       )}
-      
     </div>
-
   );
 }

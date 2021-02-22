@@ -17,7 +17,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
       toggled={toggled}
       breakPoint="md"
       onToggle={handleToggleSidebar}
-      width="240px"
+      width="12vw"
       style={{marginRight:"auto",zIndex:"1"}}
     >
       {/* <SidebarHeader>
