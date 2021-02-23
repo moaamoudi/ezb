@@ -82,8 +82,9 @@ export default function Dashboard() {
               </Card>
             ))}
           />
-
-          <PopUp />
+          <div>
+            <PopUp />
+          </div>
         </div>
       ) : (
         <div></div>

@@ -1,0 +1,9 @@
+.popup-content {
+    margin: auto;
+    background: rgb(255, 255, 255);
+    width: fit-content;
+    padding: 5px;
+    /* left: 25%; */
+    top: -25%;
+    position: fixed;
+  }
