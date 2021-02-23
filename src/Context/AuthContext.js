@@ -57,8 +57,6 @@ export function AuthProvider({ children }) {
     projectName,
     startDate,
     endDate,
-    formattedStartDate,
-    formattedEndDate,
     description
   ) {
     await db
@@ -70,8 +68,6 @@ export function AuthProvider({ children }) {
         projectName: "" + projectName,
         startDate: "" + startDate,
         endDate: "" + endDate,
-        formattedStartDate: "" + formattedStartDate,
-        formattedEndDate: "" + formattedEndDate,
         description: "" + description,
       })
       .then(function () {

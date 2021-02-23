@@ -28,6 +28,15 @@ export default function Dashboard() {
     history.push("/projects/" + project.projectName);
   }
 
+  function calculateDateLeft(prStartDate, prEndDate) {
+    var startDate = new Date(prStartDate);
+    var endDate = new Date(prEndDate);
+    var currentDate = new Date();
+    return parseInt(
+      (endDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24)
+    );
+  }
+
   useEffect(() => {
     if (projectsFetched) {
     } else {
@@ -48,6 +57,7 @@ export default function Dashboard() {
       {projects ? (
         <div style={{ width: "100%", textAlign: "center" }}>
           <ScrollMenu
+            wrapperStyle={{ width: "88%" }}
             alignCenter={false}
             itemStyle={{ outlineColor: "transparent" }}
             data={projects.map((project) => (
@@ -58,8 +68,15 @@ export default function Dashboard() {
               >
                 <Card.Body>
                   <h1>{project.projectName}</h1>
-                  <label>Started on</label>
-                  <h5>{project.formattedStartDate}</h5>
+                  <h5>
+                    {calculateDateLeft(project.startDate, project.endDate) > 0
+                      ? calculateDateLeft(project.startDate, project.endDate) +
+                        " Days Left"
+                      : calculateDateLeft(project.startDate, project.endDate) +
+                        " Days Behind"}
+                  </h5>
+                  <label className="mb-0">Started on</label>
+                  <h5>{project.startDate}</h5>
                   <Button onClick={() => viewDetails(project)}>Details</Button>
                 </Card.Body>
               </Card>

@@ -10,8 +10,6 @@ import { format } from "date-fns";
 export default function PopupProject() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
-  const [formattedStartDate, setFormattedStartDate] = useState();
-  const [formattedEndDate, setFormattedEndDate] = useState();
   const { insertProjectToFirestore } = useAuth();
   const ProjectName = useRef();
   const ProjectDescription = useRef();
@@ -23,21 +21,14 @@ export default function PopupProject() {
       ProjectName.current.value,
       startDate,
       endDate,
-      formattedStartDate,
-      formattedEndDate,
       ProjectDescription.current.value
     );
   }
 
   function onDateChange(startDate, endDate) {
     if (startDate && endDate) {
-      var formattedStartDate = format(startDate, "dd/MM/yyyy");
-      var formattedEndDate = format(endDate, "dd/MM/yyyy");
-
-      setStartDate(startDate);
-      setEndDate(endDate);
-      setFormattedStartDate(formattedStartDate);
-      setFormattedEndDate(formattedEndDate);
+      setStartDate(format(startDate, "MMM-dd-yyyy"));
+      setEndDate(format(endDate, "MMM-dd-yyyy"));
     }
   }
 
