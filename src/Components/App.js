@@ -12,6 +12,8 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./styles/App.css";
 import PublicRoute from "./PublicRoute";
 import ProjectPage from "./ProjectPage";
+import ClientsPage from './ClientsPage'
+import ContracsPage from './ContractsPage'
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <PrivateRoute exact path="/" component={Dashboard} />
             <PrivateRoute path="/update-profile" component={UpdateProfile} />
             <PrivateRoute path="/projects/:project" component={ProjectPage} />
+            <PrivateRoute path="/clients" component={ClientsPage} />
+            <PrivateRoute path="/contracts" component={ContracsPage} />
             <InnerCompleteDetails
               path="/complete-details"
               component={CompleteDetails}

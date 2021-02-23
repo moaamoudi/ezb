@@ -32,6 +32,8 @@ export default function Dashboard() {
     var startDate = new Date(prStartDate);
     var endDate = new Date(prEndDate);
     var currentDate = new Date();
+
+    
     return parseInt(
       (endDate.getTime() - currentDate.getTime()) / (1000 * 3600 * 24)
     );
@@ -72,7 +74,7 @@ export default function Dashboard() {
                     {calculateDateLeft(project.startDate, project.endDate) > 0
                       ? calculateDateLeft(project.startDate, project.endDate) +
                         " Days Left"
-                      : calculateDateLeft(project.startDate, project.endDate) +
+                      : Math.abs(calculateDateLeft(project.startDate, project.endDate)) +
                         " Days Behind"}
                   </h5>
                   <label className="mb-0">Started on</label>

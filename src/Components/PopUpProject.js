@@ -66,7 +66,7 @@ export default function PopupProject() {
 
               <Form.Group id="ProjectDate">
                 <RangeDatePicker
-                  className="datePicker"
+                  className="datePicker my-own-class-name"
                   onChange={(startDate, endDate) =>
                     onDateChange(startDate, endDate)
                   }
@@ -77,7 +77,6 @@ export default function PopupProject() {
                   startDatePlaceholder="Start Date"
                   endDatePlaceholder="End Date"
                   disabled={false}
-                  className="my-own-class-name"
                   startWeekDay="sunday"
                   highlightToday="true"
                 />
