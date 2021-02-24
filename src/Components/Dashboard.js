@@ -29,7 +29,7 @@ export default function Dashboard() {
   }
 
   function calculateDateLeft(prStartDate, prEndDate) {
-    var startDate = new Date(prStartDate);
+    // var startDate = new Date(prStartDate);
     var endDate = new Date(prEndDate);
     var currentDate = new Date();
 

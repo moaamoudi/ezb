@@ -6,7 +6,7 @@ import React, { useRef, useState } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
 import { format } from "date-fns";
-import './styles/PopUp.css'
+import "./styles/PopUp.css";
 
 export default function PopupProject() {
   const [startDate, setStartDate] = useState();
@@ -34,13 +34,14 @@ export default function PopupProject() {
   }
 
   return (
-    <>
-      <Popup
-        trigger={<button> PopUp</button>}
-        position="center center"
-        modal
-      >
-        <Card className="main-shadow" style={{ width: "400px" }} >
+    <Popup
+      trigger={<button> PopUp</button>}
+      position="center center"
+      modal
+      nested
+    >
+      {(close) => (
+        <Card className="main-shadow" style={{ width: "400px" }}>
           <Card.Body>
             <h2 className="text-center mb-4">Add Project</h2>
             {/* {error && <Alert variant="danger">{error}</Alert>} */}
@@ -51,9 +52,10 @@ export default function PopupProject() {
                   type="Name"
                   ref={ProjectName}
                   required
-                  className="form-control button-bg"
+                  className="form-control button-bg "
                 />
               </Form.Group>
+
               <Form.Group id="ProjectDescription">
                 <Form.Label>Project Description:</Form.Label>
                 <Form.Control
@@ -66,7 +68,7 @@ export default function PopupProject() {
 
               <Form.Group id="ProjectDate">
                 <RangeDatePicker
-                  className="datePicker my-own-class-name"
+                  className="datePicker my-own-class-name w-100"
                   onChange={(startDate, endDate) =>
                     onDateChange(startDate, endDate)
                   }
@@ -81,19 +83,30 @@ export default function PopupProject() {
                   highlightToday="true"
                 />
               </Form.Group>
-
-              <Button
-                //   disabled={loading}
-                variant="light"
-                type="submit"
-                className="w-100 button-bg mt-3"
-              >
-                Next
-              </Button>
+              <div className="text-center">
+                <Button
+                  variant="light"
+                  className="w-50 button-bg mt-3"
+                  type="submit"
+                >
+                  Add
+                </Button>
+                
+              </div>
+              <div className="text-center"><Button
+                  variant="light"
+                  className="w-50 button-bg mt-3"
+                  onClick={() => {
+                    close();
+                  }}
+                >
+                  close
+                </Button></div>
+              
             </Form>
           </Card.Body>
         </Card>
-      </Popup>
-    </>
+      )}
+    </Popup>
   );
 }
