@@ -1,0 +1,15 @@
+.form{
+    border: 5px solid #cc5d5d;
+    
+    border-radius: 10px;
+    padding: 5px;
+    width:30%;
+    position: absolute;
+    left: 38%;background:#e28a8a;
+}
+.labels{
+     text-align: left;
+    
+
+
+}

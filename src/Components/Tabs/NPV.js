@@ -1,39 +1,85 @@
 import React from "react";
-import { Form, Button } from "react-bootstrap";
-
+import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
+import "../styles/npv.css";
 export default function NPV() {
   return (
     <div style={{ width: "100%", height: "100%" }}>
-      <Form>
-        <Form.Group id="ProjectName">
-          <Form.Label>Initial Investment</Form.Label>
+      <div>
+        <Form className="form">
+          <InputGroup className="mb-2">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Initial investment:</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="inlineFormInputGroup"
+              placeholder="Ex:200000000$"
+            />
+            <InputGroup.Prepend>
+              <Form.Control
+                style={{ marginLeft: "10px" }}
+                as="select"
+                className="mr-sm-2"
+                id="inlineFormCustomSelect"
+                custom
+                required
+              >
+                <option value="0">Currency</option>
+                <option value="1">SR</option>
+                <option value="2">POUND</option>
+                <option value="3">DOLLAR</option>
+              </Form.Control>
+            </InputGroup.Prepend>
+          </InputGroup>
+          <Form.Label>Cash Flow:</Form.Label>
+          <InputGroup className="mb-2">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Year 1: $</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="inlineFormInputGroup"
+              placeholder="Ex: 200,000,000/200000000"
+            />
+            <InputGroup.Prepend>
+              <Button>x</Button>
+            </InputGroup.Prepend>
+          </InputGroup>
+          <InputGroup className="mb-2">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Year 1: $</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="inlineFormInputGroup"
+              placeholder="Ex: 200,000,000/200000000"
+            />
+            <InputGroup.Prepend>
+              <Button>x</Button>
+            </InputGroup.Prepend>
+          </InputGroup>
 
-          <Form.Control
-            style={{ width: "20%" }}
-            type="Name"
-            // ref={ProjectName}
-            icon="fas fa-dollar-sign"
-            required
-            className="form-control button-bg "
-          />
-        </Form.Group>
+          <InputGroup className="mb-2">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Year 1: $</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="inlineFormInputGroup"
+              placeholder="Ex: 200,000,000/200000000"
+            />
+            <InputGroup.Prepend>
+              <Button>x</Button>
+            </InputGroup.Prepend>
+          </InputGroup>
 
-        <Form.Group id="ProjectDescription">
-          <Form.Label>Project Description:</Form.Label>
-          <Form.Control
-            type="Name"
-            // ref={ProjectDescription}
-            required
-            className="form-control button-bg"
-          />
-        </Form.Group>
-
-        <div className="text-center">
-          <Button variant="light" className="w-50 button-bg mt-3" type="submit">
-            Calculate
-          </Button>
-        </div>
-      </Form>
+          <div className="text-center">
+            <Button
+              variant="light"
+              className="w-50 button-bg mt-3"
+              type="submit"
+            >
+              Calculate
+            </Button>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 }

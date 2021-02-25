@@ -12,7 +12,7 @@ export default function ProjectPage() {
   return (
     <div style={{ width: "100%", textAlign: "left" }}>
       <h1>{project.projectName}</h1>
-      <div>
+      <div >
         <Tabs>
           <TabList>
             <Tab>Current Work</Tab>
@@ -91,7 +91,7 @@ export default function ProjectPage() {
                 />
               </div>
             </TabPanel>
-            <TabPanel>
+            <TabPanel >
               <NPV></NPV>
             </TabPanel>
             <TabPanel>
