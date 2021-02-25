@@ -13,7 +13,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState();
   const [selectedProject, setSelectedProject] = useState();
-  const [project, setProject] = StickyState(selectedProject, "project");
+  // const [project, setProject] = StickyState(selectedProject, "project");
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -146,8 +146,8 @@ export function AuthProvider({ children }) {
   }
 
   function setSelectedProject1(project) {
-    setProject(project);
-    setSelectedProject(project);
+    // setProject(project);
+    // setSelectedProject(project);
   }
 
   useEffect(() => {
@@ -177,7 +177,7 @@ export function AuthProvider({ children }) {
     projects,
     selectedProject,
     setSelectedProject1,
-    project,
+    // project,
   };
   return (
     <AuthContext.Provider value={value}>
