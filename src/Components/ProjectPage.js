@@ -1,8 +1,10 @@
 import React from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { Form, Button} from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import "./styles/tabs.css";
+import {Chart} from 'react-google-charts'
+
 export default function ProjectPage() {
   const { project } = useAuth();
 
@@ -10,63 +12,120 @@ export default function ProjectPage() {
     <div style={{ width: "100%", textAlign: "left" }}>
       <h1>{project.projectName}</h1>
       <div>
-        <Tabs >
+        <Tabs>
           <TabList>
             <Tab>Current Work</Tab>
             <Tab>Gantt Chart</Tab>
             <Tab>NPV</Tab>
             <Tab>Inventory</Tab>
           </TabList>
-          <div >
+          <div>
             <TabPanel>
               <div style={{ width: "100%", height: "100%" }}>hello</div>
             </TabPanel>
             <TabPanel>
-              <h2>Any content 2</h2>
+              <div style={{ width: "100%", padding:"50px" }}>
+                <Chart
+                  width={"100%"}
+                  height={"400px"}
+                  chartType="Gantt"
+                  loader={<div>Loading Chart</div>}
+                  data={[
+                    [
+                      { type: "string", label: "Task ID" },
+                      { type: "string", label: "Task Name" },
+                      { type: "date", label: "Start Date" },
+                      { type: "date", label: "End Date" },
+                      { type: "number", label: "Duration" },
+                      { type: "number", label: "Percent Complete" },
+                      { type: "string", label: "Dependencies" },
+                    ],
+                    [
+                      "Research",
+                      "Find sources",
+                      new Date(2015, 0, 1),
+                      new Date(2015, 0, 5),
+                      null,
+                      100,
+                      null,
+                    ],
+                    [
+                      "Write",
+                      "Write paper",
+                      null,
+                      new Date(2015, 0, 9),
+                      3 * 24 * 60 * 60 * 1000,
+                      25,
+                      "Research,Outline",
+                    ],
+                    [
+                      "Cite",
+                      "Create bibliography",
+                      null,
+                      new Date(2015, 0, 7),
+                      1 * 24 * 60 * 60 * 1000,
+                      20,
+                      "Research",
+                    ],
+                    [
+                      "Complete",
+                      "Hand in paper",
+                      null,
+                      new Date(2015, 0, 10),
+                      1 * 24 * 60 * 60 * 1000,
+                      0,
+                      "Cite,Write",
+                    ],
+                    [
+                      "Outline",
+                      "Outline paper",
+                      null,
+                      new Date(2015, 0, 6),
+                      1 * 24 * 60 * 60 * 1000,
+                      100,
+                      "Research",
+                    ],
+                  ]}
+                  rootProps={{ "data-testid": "1" }}
+                />
+              </div>
             </TabPanel>
             <TabPanel>
-              <div style={{ width: "100%", height: "100%" }} >
-                
-              <Form >
-              <Form.Group id="ProjectName">
-                <Form.Label>Initial Investment</Form.Label>
-                
-                <Form.Control
-                style={{ width: "20%"  }}
-                  type="Name"
-                  // ref={ProjectName}
-                  icon="fas fa-dollar-sign"
-                  required
-                  className="form-control button-bg "
-                />
-                
-              </Form.Group>
+              <div style={{ width: "100%", height: "100%" }}>
+                <Form>
+                  <Form.Group id="ProjectName">
+                    <Form.Label>Initial Investment</Form.Label>
 
-              <Form.Group id="ProjectDescription">
-                <Form.Label>Project Description:</Form.Label>
-                <Form.Control
-                  type="Name"
-                  // ref={ProjectDescription}
-                  required
-                  className="form-control button-bg"
-                />
-              </Form.Group>
+                    <Form.Control
+                      style={{ width: "20%" }}
+                      type="Name"
+                      // ref={ProjectName}
+                      icon="fas fa-dollar-sign"
+                      required
+                      className="form-control button-bg "
+                    />
+                  </Form.Group>
 
-              <div className="text-center">
-                <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
-                  type="submit"
-                >
-                  Calculate
-                </Button>
-                
-              </div>
-              
-              
-            </Form>
+                  <Form.Group id="ProjectDescription">
+                    <Form.Label>Project Description:</Form.Label>
+                    <Form.Control
+                      type="Name"
+                      // ref={ProjectDescription}
+                      required
+                      className="form-control button-bg"
+                    />
+                  </Form.Group>
 
-
+                  <div className="text-center">
+                    <Button
+                      variant="light"
+                      className="w-50 button-bg mt-3"
+                      type="submit"
+                    >
+                      Calculate
+                    </Button>
+                  </div>
+                </Form>
               </div>
             </TabPanel>
             <TabPanel>
