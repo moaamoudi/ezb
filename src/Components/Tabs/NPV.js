@@ -30,6 +30,19 @@ export default function NPV() {
               </Form.Control>
             </InputGroup.Prepend>
           </InputGroup>
+          <InputGroup className="mb-2">
+            <InputGroup.Prepend>
+              <InputGroup.Text>Discount Rate:</InputGroup.Text>
+            </InputGroup.Prepend>
+            <FormControl
+              id="inlineFormInputGroup"
+              placeholder="Ex:20%"
+              
+            />
+            <InputGroup.Prepend className="mr-2">
+            <InputGroup.Text>%</InputGroup.Text>
+            </InputGroup.Prepend>
+          </InputGroup>
           <Form.Label>Cash Flow:</Form.Label>
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
