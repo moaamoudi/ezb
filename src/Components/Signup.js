@@ -23,7 +23,10 @@ export default function Signup() {
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match!");
     }
-    if (passwordRef.current.value.length < 8 || passwordConfirmRef.current.value.length < 8) {
+    if (
+      passwordRef.current.value.length < 8 ||
+      passwordConfirmRef.current.value.length < 8
+    ) {
       return setError("Password should at least be 8 characters long!");
     }
 
@@ -36,19 +39,18 @@ export default function Signup() {
         lastNameref.current.value
       );
 
-        var companies = [
-          companyRef.current.value,
-        ]
-
+      var companies = [companyRef.current.value];
+      console.log("before insert")
       await insertDetailsToFirestore(
         firstNameref.current.value,
         lastNameref.current.value,
         mobileRef.current.value,
-        companies,
+        companies
       );
-
-      await fetchUserDetails()
-
+      console.log("after fetch")
+        console.log("before fetch")
+      await fetchUserDetails();
+      console.log("after fetch")
       history.push("/");
     } catch {
       setError("Failed to create an account!");

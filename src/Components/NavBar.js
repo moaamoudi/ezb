@@ -1,6 +1,7 @@
 import * as reactBootstrap from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
+import { Dropdown } from "semantic-ui-react";
 import "./styles/NavBar.css";
 import logo from "../imgs/logo.png";
 
@@ -14,9 +15,11 @@ function NavBar(props) {
   const { currentUser, userDetails } = useAuth();
   
 
-
   async function getCompanyName() {
-    await setCompanyName(userDetails.companyName);
+    if (userDetails) {
+      await setCompanyName(userDetails.companyName);
+    }
+
     // if (currentUser) {
     //   var temp;
 
@@ -91,7 +94,7 @@ function NavBar(props) {
           justifyItems: "center",
         }}
       >
-        <h2>{companyName}</h2>
+        <h2>{companyName }</h2>
       </div>
 
       <div style={{ marginRight: "1rem", marginLeft: "auto" }}>

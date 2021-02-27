@@ -9,7 +9,7 @@ import logo from "../imgs/logo.png";
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login, authLogin, fetchUserDetails, checkUserExist } = useAuth();
+  const { login, authLogin, checkUserExist, fetchUserDetails } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -20,7 +20,6 @@ export default function Login() {
       setLoading(true);
       await authLogin();
       if (await checkUserExist()) {
-        fetchUserDetails()
         history.push("/");
       } else {
         history.push("/complete-details");
@@ -38,11 +37,11 @@ export default function Login() {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      await fetchUserDetails();
       history.push("/");
     } catch {
       setError("Failed to log in!");
     }
+    fetchUserDetails()
     setLoading(false);
   }
 

@@ -10,7 +10,7 @@ export default function CompleteDetails() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const { insertCompanyToFirestore, fetchUserDetails } = useAuth();
+  const { insertCompanyToFirestore } = useAuth();
   
 
   async function handleSubmit(e) {
@@ -43,7 +43,7 @@ export default function CompleteDetails() {
         });
 
       await insertCompanyToFirestore(companies);
-      await fetchUserDetails()
+      
       
 
       history.push("/");

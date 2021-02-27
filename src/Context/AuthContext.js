@@ -1,6 +1,7 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useCallback } from "react";
 import { auth, db, provider } from "../firebase";
 import StickyState from "../Components/useStickyState.js";
+import { set } from "date-fns";
 
 const AuthContext = React.createContext();
 
@@ -14,7 +15,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState();
   const [selectedProject, setSelectedProject] = useState();
-  const [companiesData, setCompaniesData] = useState()
+  const [companiesData, setCompaniesData] = useState();
   // const [project, setProject] = StickyState(selectedProject, "project");
 
   function signup(email, password) {
@@ -41,25 +42,21 @@ export function AuthProvider({ children }) {
     return auth.currentUser.updatePassword(password);
   }
 
-   function getCompanies() {
-    console.log("GETCOMPANIES");
-    if (currentUser) {
-      console.log("AFTER GETCOMPANIES IF");
-       db.collection("Companies/").onSnapshot((temp) => {
-        const items = [];
+  function getCompanies() {
+    if (auth.currentUser && userDetails) {
+      db.collection("Companies/").onSnapshot((temp) => {
+        var items = [];
         temp.forEach((doc) => {
-          console.log(doc.data());
-          
           userDetails.companyName.forEach((company) => {
             if (doc.data().companyName === company) {
               console.log("FOUND");
-              items.push(doc.data())
+              items.push(doc.data());
             }
           });
-
-          
         });
+        console.log(items);
         setCompaniesData(items);
+        // localStorage.setItem("companiesData", JSON.stringify(items));
       });
     }
   }
@@ -126,6 +123,7 @@ export function AuthProvider({ children }) {
     phone,
     companyName
   ) {
+    setLoading(true);
     var details = {
       email: "" + auth.currentUser.email,
       firstName: "" + firstName,
@@ -146,8 +144,10 @@ export function AuthProvider({ children }) {
       });
 
     await insertCompanyToFirestore(companyName);
+    setLoading(false);
   }
   async function insertCompanyToFirestore(companyName) {
+    setLoading(true);
     var users = [
       {
         uid: auth.currentUser.uid,
@@ -169,10 +169,14 @@ export function AuthProvider({ children }) {
       .catch(function (error) {
         console.error("Error writing document: ", error);
       });
+    setLoading(false);
   }
 
   async function fetchUserDetails() {
+    setLoading(true);
+
     var details = "";
+
     if (auth.currentUser) {
       await db
         .collection("Users")
@@ -183,10 +187,12 @@ export function AuthProvider({ children }) {
           if (data !== undefined) {
             console.log("logged in succesfully with set");
             details = data;
-            // console.log(details);
+            console.log(details);
             setUserDetails(details);
-            
+            localStorage.setItem("userDetails", JSON.stringify(details));
             getCompanies();
+            setLoading(false);
+            return details;
           } else {
           }
         })
@@ -194,10 +200,11 @@ export function AuthProvider({ children }) {
           console.log(error);
         });
     }
-    return details;
+    setLoading(false);
   }
 
   async function checkUserExist() {
+    setLoading(true);
     var exists = false;
     if (auth.currentUser) {
       await db
@@ -216,6 +223,8 @@ export function AuthProvider({ children }) {
         .catch((error) => {
           console.log(error);
         });
+      fetchUserDetails();
+      setLoading(false);
       return exists;
     }
   }
@@ -235,12 +244,28 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
-      setUserDetails(fetchUserDetails());
       setLoading(false);
-      
     });
 
     return unsubscribe;
+  }, []);
+
+  useEffect(() => {
+    const data = localStorage.getItem("userDetails");
+
+    console.log(data);
+    if (data !== "undefined") {
+      console.log(data);
+      setUserDetails(JSON.parse(data));
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log(userDetails);
+    if (userDetails) {
+      console.log(userDetails);
+      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+    }
   }, []);
 
   const value = {
