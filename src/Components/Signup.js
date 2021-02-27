@@ -12,7 +12,7 @@ export default function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup, insertDetailsToFirestore, updateProfile } = useAuth();
+  const { signup, insertDetailsToFirestore, updateProfile, fetchUserDetails } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -23,6 +23,9 @@ export default function Signup() {
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match!");
     }
+    if (passwordRef.current.value.length < 8 || passwordConfirmRef.current.value.length < 8) {
+      return setError("Password should at least be 8 characters long!");
+    }
 
     try {
       setError("");
@@ -32,12 +35,19 @@ export default function Signup() {
         firstNameref.current.value,
         lastNameref.current.value
       );
+
+        var companies = [
+          companyRef.current.value,
+        ]
+
       await insertDetailsToFirestore(
         firstNameref.current.value,
         lastNameref.current.value,
         mobileRef.current.value,
-        companyRef.current.value
+        companies,
       );
+
+      await fetchUserDetails()
 
       history.push("/");
     } catch {

@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
 import "./styles/NavBar.css";
 import logo from "../imgs/logo.png";
-import { db } from "../firebase.js";
 
 function NavBar(props) {
   // collapsed,
@@ -12,34 +11,35 @@ function NavBar(props) {
   // handleToggleSidebar,
   const [companyName, setCompanyName] = useState("");
   const handleCollapsedChange = props.handleCollapsedChange;
-  const { currentUser } = useAuth();
+  const { currentUser, userDetails } = useAuth();
+  
 
-  // handleRtlChange,
-  // handleImageChange,
 
   async function getCompanyName() {
-    if (currentUser) {
-      var temp;
+    await setCompanyName(userDetails.companyName);
+    // if (currentUser) {
+    //   var temp;
 
-      await db
-        .collection("Users")
-        .doc("" + currentUser.uid)
-        .get()
-        .then((doc) => {
-          const data = doc.data();
-          temp = data.companyName;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    //   await db
+    //     .collection("Users")
+    //     .doc("" + currentUser.email)
+    //     .get()
+    //     .then((doc) => {
+    //       const data = doc.data();
+    //       temp = data.companyName;
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
 
-      setCompanyName(temp);
-    }
+    //   setCompanyName(temp);
+    // }
   }
 
   useEffect(() => {
     getCompanyName();
   });
+
   return (
     <reactBootstrap.Navbar
       variant="light"

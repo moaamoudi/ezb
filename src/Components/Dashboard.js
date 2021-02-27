@@ -10,7 +10,7 @@ export default function Dashboard() {
   const [projectsFetched, setProjectsFetched] = useState(false);
   const { logout, getUserProjects, setSelectedProject1 } = useAuth();
   const history = useHistory();
-  const { projects } = useAuth();
+  const { projects, companiesData } = useAuth();
 
   async function handleLogout() {
     setError("");
@@ -87,6 +87,7 @@ export default function Dashboard() {
           <div>
             <PopUp />
           </div>
+          
         </div>
       ) : (
         <div></div>

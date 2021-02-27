@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { auth, db } from "../firebase";
+import { useAuth } from "../Context/AuthContext.js";
 
 export default function CompleteDetails() {
   const mobileRef = useRef();
@@ -9,6 +10,8 @@ export default function CompleteDetails() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const { insertCompanyToFirestore, fetchUserDetails } = useAuth();
+  
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -17,22 +20,31 @@ export default function CompleteDetails() {
       setError("");
       setLoading(true);
       var name = auth.currentUser.displayName.split(" ");
+
+      var companies = [companyRef.current.value];
+
       await db
         .collection("Users")
-        .doc("" + auth.currentUser.uid)
+        .doc("" + auth.currentUser.email)
         .set({
           email: "" + auth.currentUser.email,
           firstName: "" + name[0],
           lastName: "" + name[1],
           phone: "" + mobileRef.current.value,
-          companyName: "" + companyRef.current.value,
+          companyName: companies,
+          uid: "" + auth.currentUser.uid,
         })
         .then(function () {
           console.log("Document successfully written!");
+          
         })
         .catch(function (error) {
           console.error("Error writing document: ", error);
         });
+
+      await insertCompanyToFirestore(companies);
+      await fetchUserDetails()
+      
 
       history.push("/");
     } catch {
