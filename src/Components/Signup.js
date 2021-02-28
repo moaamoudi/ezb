@@ -12,7 +12,7 @@ export default function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup, insertDetailsToFirestore, updateProfile, fetchUserDetails } = useAuth();
+  const { signup, insertDetailsToFirestore, updateProfile, fetchUserDetails, getCompanies } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -50,6 +50,7 @@ export default function Signup() {
       console.log("after fetch")
         console.log("before fetch")
       await fetchUserDetails();
+      await getCompanies()
       console.log("after fetch")
       history.push("/");
     } catch {

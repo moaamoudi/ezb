@@ -10,8 +10,7 @@ export default function CompleteDetails() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const { insertCompanyToFirestore } = useAuth();
-  
+  const { insertCompanyToFirestore, checkUserExist, getCompanies } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -36,15 +35,14 @@ export default function CompleteDetails() {
         })
         .then(function () {
           console.log("Document successfully written!");
-          
         })
         .catch(function (error) {
           console.error("Error writing document: ", error);
         });
 
       await insertCompanyToFirestore(companies);
-      
-      
+      await checkUserExist();
+      await getCompanies();
 
       history.push("/");
     } catch {
