@@ -1,0 +1,22 @@
+.main {
+  display: inline-flex;
+  height: 100%;
+  width: 100%;
+  padding-left: 170px;
+}
+
+.test {
+  background-color: #efefef;
+  height: 500px;
+  width: 500px;
+  margin-top: 20%;
+}
+
+.space {
+  width: 200px;
+}
+
+.empButton{
+    margin-top: 17%;
+    
+}
