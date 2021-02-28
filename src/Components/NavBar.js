@@ -1,9 +1,9 @@
 import * as reactBootstrap from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
+import { Dropdown } from "semantic-ui-react";
 import "./styles/NavBar.css";
 import logo from "../imgs/logo.png";
-import { db } from "../firebase.js";
 
 function NavBar(props) {
   // collapsed,
@@ -12,34 +12,37 @@ function NavBar(props) {
   // handleToggleSidebar,
   const [companyName, setCompanyName] = useState("");
   const handleCollapsedChange = props.handleCollapsedChange;
-  const { currentUser } = useAuth();
-
-  // handleRtlChange,
-  // handleImageChange,
+  const { currentUser, userDetails } = useAuth();
+  
 
   async function getCompanyName() {
-    if (currentUser) {
-      var temp;
-
-      await db
-        .collection("Users")
-        .doc("" + currentUser.uid)
-        .get()
-        .then((doc) => {
-          const data = doc.data();
-          temp = data.companyName;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-
-      setCompanyName(temp);
+    if (userDetails) {
+      await setCompanyName(userDetails.companyName);
     }
+
+    // if (currentUser) {
+    //   var temp;
+
+    //   await db
+    //     .collection("Users")
+    //     .doc("" + currentUser.email)
+    //     .get()
+    //     .then((doc) => {
+    //       const data = doc.data();
+    //       temp = data.companyName;
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+
+    //   setCompanyName(temp);
+    // }
   }
 
   useEffect(() => {
     getCompanyName();
   });
+
   return (
     <reactBootstrap.Navbar
       variant="light"
@@ -91,7 +94,7 @@ function NavBar(props) {
           justifyItems: "center",
         }}
       >
-        <h2>{companyName}</h2>
+        <h2>{companyName }</h2>
       </div>
 
       <div style={{ marginRight: "1rem", marginLeft: "auto" }}>

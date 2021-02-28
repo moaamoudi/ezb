@@ -100,7 +100,7 @@ export default function PopupProject() {
                     close();
                   }}
                 >
-                  close
+                  Cancel
                 </Button></div>
               
             </Form>

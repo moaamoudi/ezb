@@ -34,13 +34,9 @@ export default function NPV() {
             <InputGroup.Prepend>
               <InputGroup.Text>Discount Rate:</InputGroup.Text>
             </InputGroup.Prepend>
-            <FormControl
-              id="inlineFormInputGroup"
-              placeholder="Ex:20%"
-              
-            />
+            <FormControl id="inlineFormInputGroup" placeholder="Ex:20%" />
             <InputGroup.Prepend className="mr-2">
-            <InputGroup.Text>%</InputGroup.Text>
+              <InputGroup.Text>%</InputGroup.Text>
             </InputGroup.Prepend>
           </InputGroup>
           <Form.Label>Cash Flow:</Form.Label>
@@ -78,7 +74,7 @@ export default function NPV() {
               placeholder="Ex: 200,000,000/200000000"
             />
             <InputGroup.Prepend>
-              <Button>x</Button>
+              <Button style={{ borderRadius: "4px" }}>X</Button>
             </InputGroup.Prepend>
           </InputGroup>
 
