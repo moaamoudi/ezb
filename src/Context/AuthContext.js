@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useCallback } from "react";
 import { auth, db, provider } from "../firebase";
 import StickyState from "../Components/useStickyState.js";
 import { set } from "date-fns";
+import useLocalStorage from "../Components/useLocalStorage.js";
 
 const AuthContext = React.createContext();
 
@@ -11,11 +12,14 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
-  const [userDetails, setUserDetails] = useState();
+  const [userDetails, setUserDetails] = useLocalStorage("userDetails", []);
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState();
   const [selectedProject, setSelectedProject] = useState();
-  const [companiesData, setCompaniesData] = useState();
+  const [companiesData, setCompaniesData] = useLocalStorage(
+    "companiesData",
+    {}
+  );
   // const [project, setProject] = StickyState(selectedProject, "project");
 
   function signup(email, password) {
@@ -42,23 +46,33 @@ export function AuthProvider({ children }) {
     return auth.currentUser.updatePassword(password);
   }
 
-  function getCompanies() {
-    if (auth.currentUser && userDetails) {
-      db.collection("Companies/").onSnapshot((temp) => {
-        var items = [];
+  async function getCompanies() {
+    setLoading(true);
+    var items = [];
+    if (auth.currentUser) {
+      console.log(userDetails);
+      await db.collection("Companies/").onSnapshot((temp) => {
         temp.forEach((doc) => {
-          userDetails.companyName.forEach((company) => {
-            if (doc.data().companyName === company) {
-              console.log("FOUND");
+          doc.data().users.forEach((user) => {
+            if (user.email === auth.currentUser.email) {
+              console.log(user.email);
               items.push(doc.data());
             }
           });
+
+          // userDetails.companyName.forEach((company) => {
+          //   if (doc.data().companyName === company) {
+          //     console.log("FOUND");
+          //     items.push(doc.data());
+          //   }
+          // });
         });
         console.log(items);
         setCompaniesData(items);
         // localStorage.setItem("companiesData", JSON.stringify(items));
       });
     }
+    setLoading(false);
   }
 
   //--------------------------------------------------------------------------------------
@@ -175,7 +189,7 @@ export function AuthProvider({ children }) {
   async function fetchUserDetails() {
     setLoading(true);
 
-    var details = "";
+    var details = [];
 
     if (auth.currentUser) {
       await db
@@ -189,10 +203,8 @@ export function AuthProvider({ children }) {
             details = data;
             console.log(details);
             setUserDetails(details);
-            localStorage.setItem("userDetails", JSON.stringify(details));
-            getCompanies();
-            setLoading(false);
-            return details;
+            console.log(userDetails);
+            // localStorage.setItem("userDetails", JSON.stringify(details));
           } else {
           }
         })
@@ -223,7 +235,7 @@ export function AuthProvider({ children }) {
         .catch((error) => {
           console.log(error);
         });
-      fetchUserDetails();
+      await fetchUserDetails();
       setLoading(false);
       return exists;
     }
@@ -250,23 +262,23 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    const data = localStorage.getItem("userDetails");
+  // useEffect(() => {
+  //   const data = localStorage.getItem("userDetails");
 
-    console.log(data);
-    if (data !== "undefined") {
-      console.log(data);
-      setUserDetails(JSON.parse(data));
-    }
-  }, []);
+  //   console.log(data);
+  //   if (data !== "undefined") {
+  //     console.log(data);
+  //     setUserDetails(JSON.parse(data));
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    console.log(userDetails);
-    if (userDetails) {
-      console.log(userDetails);
-      localStorage.setItem("userDetails", JSON.stringify(userDetails));
-    }
-  }, []);
+  // useEffect(() => {
+  //   console.log(userDetails);
+  //   if (userDetails) {
+  //     console.log(userDetails);
+  //     localStorage.setItem("userDetails", JSON.stringify(userDetails));
+  //   }
+  // }, []);
 
   const value = {
     currentUser,
