@@ -20,8 +20,9 @@ export function AuthProvider({ children }) {
     "companiesData",
     {}
   );
+  
+  const [selectCompany, setSelectCompany] = useState(companiesData[0]);
   // const [project, setProject] = StickyState(selectedProject, "project");
-
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
   }
@@ -116,6 +117,32 @@ export function AuthProvider({ children }) {
       .catch(function (error) {
         console.error("Error writing document: ", error);
       });
+      await db
+        .collection("Companies").onSnapshot((temp) => {
+          temp.forEach((doc) => {
+            doc.data().users.forEach((user) => {
+              if (user.email === auth.currentUser.email) {
+               if(user.type ==="owner"){
+                 db.collection("Companies/"+doc.id+"/projects").doc(""+projectName).set({
+  
+           uid: "" + auth.currentUser.uid,
+           email: "" + auth.currentUser.email,
+           projectName: "" + projectName,
+           startDate: "" + startDate,
+           endDate: "" + endDate,
+           description: "" + description
+                 }).then(function () {
+                    console.log("Document successfully written!");
+                  })
+                  .catch(function (error) {
+                    console.error("Error writing document: ", error);
+                  });
+               }
+              }
+            });
+          });
+  
+        });
   }
 
   async function updateProfile(firstName, lastName) {
@@ -304,6 +331,8 @@ export function AuthProvider({ children }) {
     fetchUserDetails,
     userDetails,
     companiesData,
+    selectCompany,
+    setSelectCompany,
   };
   return (
     <AuthContext.Provider value={value}>

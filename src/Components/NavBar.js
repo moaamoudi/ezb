@@ -4,44 +4,21 @@ import { useAuth } from "../Context/AuthContext";
 import { Dropdown } from "semantic-ui-react";
 import "./styles/NavBar.css";
 import logo from "../imgs/logo.png";
+import { set } from "date-fns";
 
 function NavBar(props) {
   // collapsed,
   // rtl,
   // image,
   // handleToggleSidebar,
-  const [companyName, setCompanyName] = useState("");
+  
   const handleCollapsedChange = props.handleCollapsedChange;
-  const { currentUser, userDetails } = useAuth();
+  const { currentUser, userDetails,companiesData ,selectCompany,setSelectCompany} = useAuth();
+  useEffect(() => {
+    setSelectCompany(companiesData[0])
+  }, [companiesData])
   
 
-  async function getCompanyName() {
-    if (userDetails) {
-      await setCompanyName(userDetails.companyName);
-    }
-
-    // if (currentUser) {
-    //   var temp;
-
-    //   await db
-    //     .collection("Users")
-    //     .doc("" + currentUser.email)
-    //     .get()
-    //     .then((doc) => {
-    //       const data = doc.data();
-    //       temp = data.companyName;
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-
-    //   setCompanyName(temp);
-    // }
-  }
-
-  useEffect(() => {
-    getCompanyName();
-  });
 
   return (
     <reactBootstrap.Navbar
@@ -94,7 +71,30 @@ function NavBar(props) {
           justifyItems: "center",
         }}
       >
-        <h2>{companyName }</h2>
+        <h2 style={{ display: "flex" }}>
+          {selectCompany.companyName}
+          {companiesData.length>1?(<div className="dropDown"><reactBootstrap.Dropdown 
+            menuAlign="right"
+            variant="menu"
+            id="dropdown-menu-align-right"
+            title=""
+          >
+             <reactBootstrap.Dropdown.Toggle split variant="menu ml-2" id="dropdown-custom-2" />
+
+            <reactBootstrap.Dropdown.Menu className="super-colors">
+            {companiesData.map((company) => (
+              <div>
+                
+              <reactBootstrap.Dropdown.Item eventKey={company}  as="button" onSelect={()=>{setSelectCompany(company)}}>
+                {company.companyName}
+              </reactBootstrap.Dropdown.Item>
+              <hr style={{width:"100%", margin:"0"}}/></div>
+            ))}
+            </reactBootstrap.Dropdown.Menu>
+          </reactBootstrap.Dropdown ></div>):(<></>)}
+          
+        </h2>
+        
       </div>
 
       <div style={{ marginRight: "1rem", marginLeft: "auto" }}>
