@@ -17,7 +17,6 @@ export default function PopupProject() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
     insertProjectToFirestore(
       ProjectName.current.value,
       startDate,

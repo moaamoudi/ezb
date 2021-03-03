@@ -11,14 +11,15 @@ function NavBar(props) {
   // rtl,
   // image,
   // handleToggleSidebar,
-  
-  const handleCollapsedChange = props.handleCollapsedChange;
-  const { currentUser, userDetails,companiesData ,selectCompany,setSelectCompany} = useAuth();
-  useEffect(() => {
-    setSelectCompany(companiesData[0])
-  }, [companiesData])
-  
 
+  const handleCollapsedChange = props.handleCollapsedChange;
+  const {
+    currentUser,
+    userDetails,
+    companiesData,
+    selectCompany,
+    setSelectedCompany,
+  } = useAuth();
 
   return (
     <reactBootstrap.Navbar
@@ -73,28 +74,42 @@ function NavBar(props) {
       >
         <h2 style={{ display: "flex" }}>
           {selectCompany.companyName}
-          {companiesData.length>1?(<div className="dropDown"><reactBootstrap.Dropdown 
-            menuAlign="right"
-            variant="menu"
-            id="dropdown-menu-align-right"
-            title=""
-          >
-             <reactBootstrap.Dropdown.Toggle split variant="menu ml-2" id="dropdown-custom-2" />
+          {companiesData.length > 1 ? (
+            <div className="dropDown">
+              <reactBootstrap.Dropdown
+                menuAlign="right"
+                variant="menu"
+                id="dropdown-menu-align-right"
+                title=""
+              >
+                <reactBootstrap.Dropdown.Toggle
+                  split
+                  variant="menu ml-2"
+                  id="dropdown-custom-2"
+                />
 
-            <reactBootstrap.Dropdown.Menu className="super-colors">
-            {companiesData.map((company) => (
-              <div>
-                
-              <reactBootstrap.Dropdown.Item eventKey={company}  as="button" onSelect={()=>{setSelectCompany(company)}}>
-                {company.companyName}
-              </reactBootstrap.Dropdown.Item>
-              <hr style={{width:"100%", margin:"0"}}/></div>
-            ))}
-            </reactBootstrap.Dropdown.Menu>
-          </reactBootstrap.Dropdown ></div>):(<></>)}
-          
+                <reactBootstrap.Dropdown.Menu>
+                  {companiesData.map((company) => (
+                    <div>
+                      <reactBootstrap.Dropdown.Item
+                        eventKey={company}
+                        as="button"
+                        onSelect={() => {
+                          setSelectedCompany(company);
+                        }}
+                      >
+                        {company.companyName}
+                      </reactBootstrap.Dropdown.Item>
+                      <hr style={{ width: "100%", margin: "0" }} />
+                    </div>
+                  ))}
+                </reactBootstrap.Dropdown.Menu>
+              </reactBootstrap.Dropdown>
+            </div>
+          ) : (
+            <></>
+          )}
         </h2>
-        
       </div>
 
       <div style={{ marginRight: "1rem", marginLeft: "auto" }}>

@@ -20,9 +20,13 @@ export function AuthProvider({ children }) {
     "companiesData",
     {}
   );
-  
-  const [selectCompany, setSelectCompany] = useState(companiesData[0]);
+  const [selectCompany, setSelectCompany] = useLocalStorage(
+    "selectedCompany",
+    companiesData[0]
+  );
+
   // const [project, setProject] = StickyState(selectedProject, "project");
+
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
   }
@@ -47,6 +51,13 @@ export function AuthProvider({ children }) {
     return auth.currentUser.updatePassword(password);
   }
 
+  function setSelectedCompany(company) {
+    console.log(selectCompany);
+    console.log("company changed");
+    setSelectCompany(company);
+    console.log(selectCompany);
+  }
+
   async function getCompanies() {
     setLoading(true);
     var items = [];
@@ -55,6 +66,7 @@ export function AuthProvider({ children }) {
       await db.collection("Companies/").onSnapshot((temp) => {
         temp.forEach((doc) => {
           doc.data().users.forEach((user) => {
+            console.log(doc.data());
             if (user.email === auth.currentUser.email) {
               console.log(user.email);
               items.push(doc.data());
@@ -73,7 +85,6 @@ export function AuthProvider({ children }) {
         // localStorage.setItem("companiesData", JSON.stringify(items));
       });
     }
-    setLoading(false);
   }
 
   //--------------------------------------------------------------------------------------
@@ -92,57 +103,40 @@ export function AuthProvider({ children }) {
     }
   }
 
-  //--------------------------------------------------------------------------------------
-  //RECONSTRUCT
   async function insertProjectToFirestore(
     projectName,
     startDate,
     endDate,
     description
   ) {
-    await db
-      .collection("Users/" + auth.currentUser.email + "/Projects")
-      .doc("" + projectName)
-      .set({
-        uid: "" + auth.currentUser.uid,
-        email: "" + auth.currentUser.email,
-        projectName: "" + projectName,
-        startDate: "" + startDate,
-        endDate: "" + endDate,
-        description: "" + description,
-      })
-      .then(function () {
-        console.log("Document successfully written!");
-      })
-      .catch(function (error) {
-        console.error("Error writing document: ", error);
-      });
-      await db
-        .collection("Companies").onSnapshot((temp) => {
-          temp.forEach((doc) => {
-            doc.data().users.forEach((user) => {
-              if (user.email === auth.currentUser.email) {
-               if(user.type ==="owner"){
-                 db.collection("Companies/"+doc.id+"/projects").doc(""+projectName).set({
-  
-           uid: "" + auth.currentUser.uid,
-           email: "" + auth.currentUser.email,
-           projectName: "" + projectName,
-           startDate: "" + startDate,
-           endDate: "" + endDate,
-           description: "" + description
-                 }).then(function () {
+    await db.collection("Companies").onSnapshot((temp) => {
+      temp.forEach((doc) => {
+        doc.data().users.forEach((user) => {
+          if (user.email === auth.currentUser.email) {
+            if (doc.data().companyName === selectCompany.companyName) {
+              if (user.type === "owner") {
+                db.collection("Companies/" + doc.id + "/projects")
+                  .doc("" + projectName)
+                  .set({
+                    uid: "" + auth.currentUser.uid,
+                    email: "" + auth.currentUser.email,
+                    projectName: "" + projectName,
+                    startDate: "" + startDate,
+                    endDate: "" + endDate,
+                    description: "" + description,
+                  })
+                  .then(function () {
                     console.log("Document successfully written!");
                   })
                   .catch(function (error) {
                     console.error("Error writing document: ", error);
                   });
-               }
               }
-            });
-          });
-  
+            }
+          }
         });
+      });
+    });
   }
 
   async function updateProfile(firstName, lastName) {
@@ -165,6 +159,7 @@ export function AuthProvider({ children }) {
     companyName
   ) {
     setLoading(true);
+
     var details = {
       email: "" + auth.currentUser.email,
       firstName: "" + firstName,
@@ -173,6 +168,7 @@ export function AuthProvider({ children }) {
       companyName: companyName,
       uid: "" + auth.currentUser.uid,
     };
+
     await db
       .collection("Users")
       .doc("" + auth.currentUser.email)
@@ -184,9 +180,18 @@ export function AuthProvider({ children }) {
         console.error("Error writing document: ", error);
       });
 
-    await insertCompanyToFirestore(companyName);
+    await insertCompanyToFirestore(companyName[0]);
+    await updateDetails();
     setLoading(false);
   }
+
+  async function updateDetails() {
+    await fetchUserDetails();
+    await getCompanies();
+    await setSelectedCompany(selectCompany)
+    setLoading(false)
+  }
+
   async function insertCompanyToFirestore(companyName) {
     setLoading(true);
     var users = [
@@ -197,20 +202,25 @@ export function AuthProvider({ children }) {
       },
     ];
 
+    var projects = [];
+
+    var company = {
+      companyName: companyName,
+      users: users,
+      projects: projects,
+    };
+
     await db
       .collection("Companies")
       .doc()
-      .set({
-        companyName: companyName[0],
-        users: users,
-      })
+      .set(company)
       .then(function () {
         console.log("Document successfully written!");
       })
       .catch(function (error) {
         console.error("Error writing document: ", error);
       });
-    setLoading(false);
+    setSelectedCompany(company);
   }
 
   async function fetchUserDetails() {
@@ -231,7 +241,6 @@ export function AuthProvider({ children }) {
             console.log(details);
             setUserDetails(details);
             console.log(userDetails);
-            // localStorage.setItem("userDetails", JSON.stringify(details));
           } else {
           }
         })
@@ -239,7 +248,6 @@ export function AuthProvider({ children }) {
           console.log(error);
         });
     }
-    setLoading(false);
   }
 
   async function checkUserExist() {
@@ -262,7 +270,6 @@ export function AuthProvider({ children }) {
         .catch((error) => {
           console.log(error);
         });
-      await fetchUserDetails();
       setLoading(false);
       return exists;
     }
@@ -333,6 +340,8 @@ export function AuthProvider({ children }) {
     companiesData,
     selectCompany,
     setSelectCompany,
+    setSelectedCompany,
+    updateDetails,
   };
   return (
     <AuthContext.Provider value={value}>

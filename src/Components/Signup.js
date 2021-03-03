@@ -12,7 +12,12 @@ export default function Signup() {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup, insertDetailsToFirestore, updateProfile, fetchUserDetails, getCompanies } = useAuth();
+  const {
+    signup,
+    insertDetailsToFirestore,
+    updateProfile,
+    updateDetails,
+  } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -40,18 +45,17 @@ export default function Signup() {
       );
 
       var companies = [companyRef.current.value];
-      console.log("before insert")
+      console.log("before insert");
       await insertDetailsToFirestore(
         firstNameref.current.value,
         lastNameref.current.value,
         mobileRef.current.value,
         companies
       );
-      console.log("after fetch")
-        console.log("before fetch")
-      await fetchUserDetails();
-      await getCompanies()
-      console.log("after fetch")
+      console.log("after fetch");
+      console.log("before fetch");
+      await updateDetails();
+      console.log("after fetch");
       history.push("/");
     } catch {
       setError("Failed to create an account!");

@@ -10,7 +10,12 @@ export default function CompleteDetails() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const { insertCompanyToFirestore, checkUserExist, getCompanies } = useAuth();
+  const {
+    insertCompanyToFirestore,
+    checkUserExist,
+    getCompanies,
+    insertDetailsToFirestore,
+  } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -22,28 +27,9 @@ export default function CompleteDetails() {
 
       var companies = [companyRef.current.value];
 
-      await db
-        .collection("Users")
-        .doc("" + auth.currentUser.email)
-        .set({
-          email: "" + auth.currentUser.email,
-          firstName: "" + name[0],
-          lastName: "" + name[1],
-          phone: "" + mobileRef.current.value,
-          companyName: companies,
-          uid: "" + auth.currentUser.uid,
-        })
-        .then(function () {
-          console.log("Document successfully written!");
-        })
-        .catch(function (error) {
-          console.error("Error writing document: ", error);
-        });
-
-      await insertCompanyToFirestore(companies);
-      await checkUserExist();
-      await getCompanies();
-
+      insertDetailsToFirestore(name[0], name[1], mobileRef.current.value, companies)
+      // await checkUserExist();
+      // await getCompanies();
       history.push("/");
     } catch {
       setError("Failed to submit Details!");

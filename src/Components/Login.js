@@ -9,7 +9,7 @@ import logo from "../imgs/logo.png";
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login, authLogin, checkUserExist, fetchUserDetails, getCompanies } = useAuth();
+  const { login, authLogin, checkUserExist, updateDetails } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -20,7 +20,7 @@ export default function Login() {
       setLoading(true);
       await authLogin();
       if (await checkUserExist()) {
-        getCompanies()
+        await updateDetails();
         history.push("/");
       } else {
         history.push("/complete-details");
@@ -42,8 +42,7 @@ export default function Login() {
     } catch {
       setError("Failed to log in!");
     }
-    await fetchUserDetails()
-    await getCompanies()
+    await updateDetails();
     setLoading(false);
   }
 
