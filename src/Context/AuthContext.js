@@ -25,7 +25,6 @@ export function AuthProvider({ children }) {
     companiesData[0]
   );
 
-
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
   }
@@ -51,29 +50,32 @@ export function AuthProvider({ children }) {
   }
 
   function setSelectedCompany(company) {
-    console.log(selectCompany);
     console.log("company changed");
     setSelectCompany(company);
-    console.log(selectCompany);
   }
+
+  async function UpdateGetSetCompany() {}
 
   async function getCompanies() {
     setLoading(true);
     var items = [];
     if (auth.currentUser) {
       console.log(userDetails);
-      await db.collection("Companies/").onSnapshot((temp) => {
+
+      await db.collection("Companies").onSnapshot((temp) => {
         temp.forEach((doc) => {
           doc.data().users.forEach((user) => {
-            console.log(doc.data());
             if (user.email === auth.currentUser.email) {
               console.log(user.email);
-              items.push(doc.data());
+              var item = doc.data();
+              item.id = doc.id;
+              items.push(item);
             }
           });
         });
-        console.log(items);
+        console.log(items[0].id);
         setCompaniesData(items);
+        setSelectedCompany(items[0]);
       });
     }
   }
@@ -100,34 +102,42 @@ export function AuthProvider({ children }) {
     endDate,
     description
   ) {
-    await db.collection("Companies").onSnapshot((temp) => {
-      temp.forEach((doc) => {
-        doc.data().users.forEach((user) => {
+    setLoading(true);
+
+    var project = {
+      uid: "" + auth.currentUser.uid,
+      email: "" + auth.currentUser.email,
+      projectName: "" + projectName,
+      startDate: "" + startDate,
+      endDate: "" + endDate,
+      description: "" + description,
+    };
+    selectCompany.projects.push(project);
+    
+   
+    companiesData.forEach((company) => {
+      if (company.companyName === selectCompany.companyName) {
+        company.users.forEach((user) => {
           if (user.email === auth.currentUser.email) {
-            if (doc.data().companyName === selectCompany.companyName) {
-              if (user.type === "owner") {
-                db.collection("Companies/" + doc.id + "/projects")
-                  .doc("" + projectName)
-                  .set({
-                    uid: "" + auth.currentUser.uid,
-                    email: "" + auth.currentUser.email,
-                    projectName: "" + projectName,
-                    startDate: "" + startDate,
-                    endDate: "" + endDate,
-                    description: "" + description,
-                  })
-                  .then(function () {
-                    console.log("Document successfully written!");
-                  })
-                  .catch(function (error) {
-                    console.error("Error writing document: ", error);
-                  });
-              }
+            if (user.type === "owner") {
+              db.collection("Companies")
+                .doc("" + selectCompany.id)
+                .set({companyName: selectCompany.companyName,
+                  id: selectCompany.id,
+                  users: selectCompany.users,
+                  projects: selectCompany.projects,})
+                .then(function () {
+                  console.log("Document successfully written!");
+                })
+                .catch(function (error) {
+                  console.error("Error writing document: ", error);
+                });
             }
           }
         });
-      });
+      }
     });
+    await updateDetails();
   }
 
   async function updateProfile(firstName, lastName) {
@@ -179,8 +189,8 @@ export function AuthProvider({ children }) {
   async function updateDetails() {
     await fetchUserDetails();
     await getCompanies();
-    await setSelectedCompany(selectCompany)
-    setLoading(false)
+    await setSelectedCompany(selectCompany);
+    setLoading(false);
   }
 
   async function insertCompanyToFirestore(companyName) {
@@ -286,24 +296,6 @@ export function AuthProvider({ children }) {
 
     return unsubscribe;
   }, []);
-
-  // useEffect(() => {
-  //   const data = localStorage.getItem("userDetails");
-
-  //   console.log(data);
-  //   if (data !== "undefined") {
-  //     console.log(data);
-  //     setUserDetails(JSON.parse(data));
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(userDetails);
-  //   if (userDetails) {
-  //     console.log(userDetails);
-  //     localStorage.setItem("userDetails", JSON.stringify(userDetails));
-  //   }
-  // }, []);
 
   const value = {
     currentUser,
