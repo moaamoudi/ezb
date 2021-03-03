@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { auth, db, provider } from "../firebase";
-import StickyState from "../Components/useStickyState.js";
+
 import { set } from "date-fns";
 import useLocalStorage from "../Components/useLocalStorage.js";
 
@@ -25,7 +25,6 @@ export function AuthProvider({ children }) {
     companiesData[0]
   );
 
-  // const [project, setProject] = StickyState(selectedProject, "project");
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -72,17 +71,9 @@ export function AuthProvider({ children }) {
               items.push(doc.data());
             }
           });
-
-          // userDetails.companyName.forEach((company) => {
-          //   if (doc.data().companyName === company) {
-          //     console.log("FOUND");
-          //     items.push(doc.data());
-          //   }
-          // });
         });
         console.log(items);
         setCompaniesData(items);
-        // localStorage.setItem("companiesData", JSON.stringify(items));
       });
     }
   }
