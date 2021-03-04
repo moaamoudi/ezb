@@ -30,11 +30,7 @@ export default function Dashboard() {
 
   function viewDetails(project) {
     setSelectedProject1(project);
-    history.push(
-      selectCompany.companyName +
-        "/projects/" +
-        selectCompany.project.projectName
-    );
+    history.push(selectCompany.companyName + "/projects/" + project);
   }
 
   function calculateDateLeft(prStartDate, prEndDate) {
