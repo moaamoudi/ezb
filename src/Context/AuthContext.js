@@ -62,10 +62,10 @@ export function AuthProvider({ children }) {
   }
 
   async function getCompanies() {
+    let items = [];
     if (auth.currentUser) {
-      let items = [];
       console.log(userDetails);
-
+      items = [];
       await db.collection("Companies").onSnapshot((temp) => {
         temp.forEach((doc) => {
           doc.data().users.forEach((user) => {
@@ -77,11 +77,13 @@ export function AuthProvider({ children }) {
             }
           });
         });
-        console.log(items[0].id);
+        console.log(items);
         setCompaniesData(items);
         setSelectedCompany(items[0]);
+        items = [];
       });
     }
+    items = [];
   }
 
   //--------------------------------------------------------------------------------------
