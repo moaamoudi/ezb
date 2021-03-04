@@ -94,7 +94,6 @@ function NavBar(props) {
                   {companiesData.map((company) => (
                     <div>
                       <reactBootstrap.Dropdown.Item
-                        eventKey={company}
                         as="button"
                         onSelect={() => {
                           setSelectedCompany(company);
