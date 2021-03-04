@@ -79,7 +79,6 @@ export function AuthProvider({ children }) {
         });
         console.log(items);
         setCompaniesData(items);
-        setSelectedCompany(items[0]);
         items = [];
       });
     }
