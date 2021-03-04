@@ -41,13 +41,6 @@ export default function Dashboard() {
     );
   }
 
-  // useEffect(() => {
-  //   if (projectsFetched) {
-  //   } else {
-  //     getUserProjects();
-  //     setProjectsFetched(true);
-  //   }
-  // }, [getUserProjects, projectsFetched]);
 
   return (
     <div style={{ width: "100%", textAlign: "center" }}>
@@ -97,4 +90,3 @@ export default function Dashboard() {
     </div>
   );
 }
- 

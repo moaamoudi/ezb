@@ -79,7 +79,7 @@ function NavBar(props) {
           {companiesData.length > 1 ? (
             <div className="dropDown">
               <reactBootstrap.Dropdown
-                menuAlign="right"
+                alignRight={true}
                 variant="menu"
                 id="dropdown-menu-align-right"
                 title=""
@@ -92,7 +92,7 @@ function NavBar(props) {
 
                 <reactBootstrap.Dropdown.Menu>
                   {companiesData.map((company) => (
-                    <div>
+                    <div key={company.companyName}>
                       <reactBootstrap.Dropdown.Item
                         as="button"
                         onSelect={() => {

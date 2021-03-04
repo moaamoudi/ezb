@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
   );
   const [selectCompany, setSelectCompany] = useLocalStorage(
     "selectedCompany",
-    companiesData[0]
+    {}  
   );
 
   function signup(email, password) {
@@ -79,6 +79,7 @@ export function AuthProvider({ children }) {
         });
         console.log(items);
         setCompaniesData(items);
+        setSelectedCompany(items[0]);
         items = [];
       });
     }
@@ -330,4 +331,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-
