@@ -54,12 +54,9 @@ export function AuthProvider({ children }) {
     setSelectCompany(company);
   }
 
-  async function UpdateGetSetCompany() {}
-
   async function getCompanies() {
-    setLoading(true);
-    var items = [];
     if (auth.currentUser) {
+      let items = [];
       console.log(userDetails);
 
       await db.collection("Companies").onSnapshot((temp) => {
@@ -102,8 +99,6 @@ export function AuthProvider({ children }) {
     endDate,
     description
   ) {
-    setLoading(true);
-
     var project = {
       uid: "" + auth.currentUser.uid,
       email: "" + auth.currentUser.email,
@@ -113,8 +108,7 @@ export function AuthProvider({ children }) {
       description: "" + description,
     };
     selectCompany.projects.push(project);
-    
-   
+
     companiesData.forEach((company) => {
       if (company.companyName === selectCompany.companyName) {
         company.users.forEach((user) => {
@@ -122,10 +116,12 @@ export function AuthProvider({ children }) {
             if (user.type === "owner") {
               db.collection("Companies")
                 .doc("" + selectCompany.id)
-                .set({companyName: selectCompany.companyName,
+                .set({
+                  companyName: selectCompany.companyName,
                   id: selectCompany.id,
                   users: selectCompany.users,
-                  projects: selectCompany.projects,})
+                  projects: selectCompany.projects,
+                })
                 .then(function () {
                   console.log("Document successfully written!");
                 })
@@ -159,8 +155,6 @@ export function AuthProvider({ children }) {
     phone,
     companyName
   ) {
-    setLoading(true);
-
     var details = {
       email: "" + auth.currentUser.email,
       firstName: "" + firstName,
@@ -183,14 +177,12 @@ export function AuthProvider({ children }) {
 
     await insertCompanyToFirestore(companyName[0]);
     await updateDetails();
-    setLoading(false);
   }
 
   async function updateDetails() {
     await fetchUserDetails();
     await getCompanies();
     await setSelectedCompany(selectCompany);
-    setLoading(false);
   }
 
   async function insertCompanyToFirestore(companyName) {
@@ -222,11 +214,10 @@ export function AuthProvider({ children }) {
         console.error("Error writing document: ", error);
       });
     setSelectedCompany(company);
+    setLoading(false);
   }
 
   async function fetchUserDetails() {
-    setLoading(true);
-
     var details = [];
 
     if (auth.currentUser) {
@@ -252,8 +243,7 @@ export function AuthProvider({ children }) {
   }
 
   async function checkUserExist() {
-    setLoading(true);
-    var exists = false;
+    var exists = -1;
     if (auth.currentUser) {
       await db
         .collection("Users")
@@ -263,17 +253,17 @@ export function AuthProvider({ children }) {
           const data = doc.data();
           console.log(data);
           if (data !== undefined) {
-            exists = true;
-            return exists;
+            exists = 1;
           } else {
+            exists = 0;
           }
         })
         .catch((error) => {
           console.log(error);
         });
-      setLoading(false);
-      return exists;
     }
+
+    return exists;
   }
 
   function authLogin() {
