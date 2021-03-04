@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
   );
   const [selectCompany, setSelectCompany] = useLocalStorage(
     "selectedCompany",
-    {}  
+    {}
   );
 
   function signup(email, password) {
@@ -191,7 +191,12 @@ export function AuthProvider({ children }) {
   async function updateDetails() {
     await fetchUserDetails();
     await getCompanies();
-    await setSelectedCompany(selectCompany);
+
+    for (let index = 0; index < companiesData.length; index++) {
+      if (companiesData[index].companyName === selectCompany.companyName) {
+        await setSelectedCompany(companiesData[index]);
+      }
+    }
   }
 
   async function insertCompanyToFirestore(companyName) {

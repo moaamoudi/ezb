@@ -8,10 +8,14 @@ import ScrollMenu from "react-horizontal-scrolling-menu";
 export default function Dashboard() {
   const [error, setError] = useState("");
   const [projectsFetched, setProjectsFetched] = useState(false);
-  const { logout, getUserProjects, setSelectedProject1 } = useAuth();
+  const {
+    logout,
+    getUserProjects,
+    setSelectedProject1,
+    selectCompany,
+  } = useAuth();
   const history = useHistory();
   const selectedCompany = JSON.parse(localStorage.getItem("selectedCompany"));
-  const projects = selectedCompany.projects;
 
   async function handleLogout() {
     setError("");
@@ -27,7 +31,9 @@ export default function Dashboard() {
   function viewDetails(project) {
     setSelectedProject1(project);
     history.push(
-      selectedCompany.companyName + "/projects/" + project.projectName
+      selectCompany.companyName +
+        "/projects/" +
+        selectCompany.project.projectName
     );
   }
 
@@ -41,7 +47,6 @@ export default function Dashboard() {
     );
   }
 
-
   return (
     <div style={{ width: "100%", textAlign: "center" }}>
       {error && <Alert variant="danger">{error}</Alert>}
@@ -51,13 +56,13 @@ export default function Dashboard() {
         </Button>
       </div>
 
-      {projects ? (
+      {selectCompany.projects ? (
         <div style={{ width: "100%", textAlign: "center" }}>
           <ScrollMenu
             wrapperStyle={{ width: "88%" }}
             alignCenter={false}
             itemStyle={{ outlineColor: "transparent" }}
-            data={projects.map((project) => (
+            data={selectCompany.projects.map((project) => (
               <Card
                 key={project.projectName}
                 className="main-shadow  m-3 text-center"

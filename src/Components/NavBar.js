@@ -5,7 +5,6 @@ import { Dropdown } from "semantic-ui-react";
 import "./styles/NavBar.css";
 import logo from "../imgs/logo.png";
 import { set } from "date-fns";
-import { useHistory } from "react-router-dom";
 
 function NavBar(props) {
   // collapsed,
@@ -14,7 +13,6 @@ function NavBar(props) {
   // handleToggleSidebar,
 
   const handleCollapsedChange = props.handleCollapsedChange;
-  const history = useHistory();
   const {
     currentUser,
     userDetails,
@@ -97,7 +95,6 @@ function NavBar(props) {
                         as="button"
                         onSelect={() => {
                           setSelectedCompany(company);
-                          history.push("/");
                         }}
                       >
                         {company.companyName}
