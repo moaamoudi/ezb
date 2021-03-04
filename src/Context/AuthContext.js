@@ -15,7 +15,10 @@ export function AuthProvider({ children }) {
   const [userDetails, setUserDetails] = useLocalStorage("userDetails", []);
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState();
-  const [selectedProject, setSelectedProject] = useState();
+  const [selectedProject, setSelectedProject] = useLocalStorage(
+    "selectedProject",
+    {}
+  );
   const [companiesData, setCompaniesData] = useLocalStorage(
     "companiesData",
     {}
@@ -34,6 +37,10 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    localStorage.removeItem("userDetails");
+    localStorage.removeItem("companiesData");
+    localStorage.removeItem("selectedCompany");
+    localStorage.removeItem("selectedProject");
     return auth.signOut();
   }
 
@@ -274,8 +281,8 @@ export function AuthProvider({ children }) {
   }
 
   function setSelectedProject1(project) {
-    // setProject(project);
-    // setSelectedProject(project);
+    setSelectedProject(project);
+    setLoading(false);
   }
 
   useEffect(() => {

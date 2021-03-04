@@ -10,7 +10,8 @@ export default function Dashboard() {
   const [projectsFetched, setProjectsFetched] = useState(false);
   const { logout, getUserProjects, setSelectedProject1 } = useAuth();
   const history = useHistory();
-  const { projects, companiesData } = useAuth();
+  const selectedCompany = JSON.parse(localStorage.getItem("selectedCompany"));
+  const projects = selectedCompany.projects;
 
   async function handleLogout() {
     setError("");
@@ -25,7 +26,9 @@ export default function Dashboard() {
 
   function viewDetails(project) {
     setSelectedProject1(project);
-    history.push("/projects/" + project.projectName);
+    history.push(
+      selectedCompany.companyName + "/projects/" + project.projectName
+    );
   }
 
   function calculateDateLeft(prStartDate, prEndDate) {
@@ -38,13 +41,13 @@ export default function Dashboard() {
     );
   }
 
-  useEffect(() => {
-    if (projectsFetched) {
-    } else {
-      getUserProjects();
-      setProjectsFetched(true);
-    }
-  }, [getUserProjects, projectsFetched]);
+  // useEffect(() => {
+  //   if (projectsFetched) {
+  //   } else {
+  //     getUserProjects();
+  //     setProjectsFetched(true);
+  //   }
+  // }, [getUserProjects, projectsFetched]);
 
   return (
     <div style={{ width: "100%", textAlign: "center" }}>

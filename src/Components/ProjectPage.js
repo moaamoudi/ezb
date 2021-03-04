@@ -3,16 +3,16 @@ import { useAuth } from "../Context/AuthContext";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import "./styles/tabs.css";
-import {Chart} from 'react-google-charts'
-import NPV from './Tabs/NPV.js'
+import { Chart } from "react-google-charts";
+import NPV from "./Tabs/NPV.js";
 
 export default function ProjectPage() {
-  const { project } = useAuth();
+  const project = JSON.parse(localStorage.getItem("selectedProject"));
 
   return (
-    <div style={{ width: "100%", textAlign: "left" }}>
+    <div style={{ width: "100%", textAlign: "left", margin:"20px" }}>
       <h1>{project.projectName}</h1>
-      <div >
+      <div>
         <Tabs>
           <TabList>
             <Tab>Current Work</Tab>
@@ -25,7 +25,7 @@ export default function ProjectPage() {
               <div style={{ width: "100%", height: "100%" }}>hello</div>
             </TabPanel>
             <TabPanel>
-              <div style={{ width: "100%", padding:"50px" }}>
+              <div style={{ width: "100%", padding: "50px" }}>
                 <Chart
                   width={"100%"}
                   height={"400px"}
@@ -91,7 +91,7 @@ export default function ProjectPage() {
                 />
               </div>
             </TabPanel>
-            <TabPanel >
+            <TabPanel>
               <NPV></NPV>
             </TabPanel>
             <TabPanel>

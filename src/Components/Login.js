@@ -19,15 +19,14 @@ export default function Login() {
       setError("");
       setLoading(true);
       await authLogin();
-      var exists = await checkUserExist()
+      var exists = await checkUserExist();
 
-      if (exists == 1) {
+      if (exists === 1) {
         await updateDetails();
         history.push("/");
-      } else if(exists == 0){
+      } else if (exists === 0) {
         history.push("/complete-details");
-      }else{
-        
+      } else {
       }
     } catch {
       setError("Failed to log in");

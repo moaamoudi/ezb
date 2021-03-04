@@ -12,8 +12,8 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./styles/App.css";
 import PublicRoute from "./PublicRoute";
 import ProjectPage from "./ProjectPage";
-import ClientsPage from './ClientsPage'
-import ContracsPage from './ContractsPage'
+import ClientsPage from "./ClientsPage";
+import ContracsPage from "./ContractsPage";
 
 function App() {
   return (
@@ -23,7 +23,10 @@ function App() {
           <Switch>
             <PrivateRoute exact path="/" component={Dashboard} />
             <PrivateRoute path="/update-profile" component={UpdateProfile} />
-            <PrivateRoute path="/projects/:project" component={ProjectPage} />
+            <PrivateRoute
+              path="/:company/projects/:project"
+              component={ProjectPage}
+            />
             <PrivateRoute path="/clients" component={ClientsPage} />
             <PrivateRoute path="/contracts" component={ContracsPage} />
             <InnerCompleteDetails
@@ -35,7 +38,6 @@ function App() {
             <PublicRoute path="/ezb" component={Login} />
             <PublicRoute path="/login" component={Login} />
             <PublicRoute path="/forgot-password" component={ForgotPassword} />
-
           </Switch>
         </AuthProvider>
       </Router>
