@@ -12,7 +12,7 @@ import { BrowserRouter as Router, Switch } from "react-router-dom";
 import "./styles/App.css";
 import PublicRoute from "./PublicRoute";
 import ProjectPage from "./ProjectPage";
-import ClientsPage from "./ClientsPage";
+import ContactsPage from "./ContactsPage";
 import ContracsPage from "./ContractsPage";
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
               path="/:company/projects/:project"
               component={ProjectPage}
             />
-            <PrivateRoute path="/clients" component={ClientsPage} />
+            <PrivateRoute path="/clients" component={ContactsPage} />
             <PrivateRoute path="/contracts" component={ContracsPage} />
             <InnerCompleteDetails
               path="/complete-details"

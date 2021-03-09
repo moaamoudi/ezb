@@ -1,11 +1,11 @@
 import React from "react";
 import { Paragraph } from "react-bootstrap-icons";
-import "./styles/ClientsPage.css";
+import "./styles/ContactsPage.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { Card, Button } from "react-bootstrap";
 
-export default function ClientsPage() {
+export default function ContactsPage() {
   const columns = [
     {
       dataField: "name",

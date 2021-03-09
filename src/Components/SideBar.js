@@ -92,7 +92,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
               </svg>
             }
           >
-            Clients <Link to="/clients" />
+            Contacts <Link to="/clients" />
           </MenuItem>
           <MenuItem
             style={{ fontSize: "24px" }}
