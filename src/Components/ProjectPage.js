@@ -5,12 +5,12 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "./styles/tabs.css";
 import { Chart } from "react-google-charts";
 import NPV from "./Tabs/NPV.js";
-
+import Inventory from "./Tabs/Inventory.js";
 export default function ProjectPage() {
   const project = JSON.parse(localStorage.getItem("selectedProject"));
 
   return (
-    <div style={{ width: "100%", textAlign: "left", margin:"20px" }}>
+    <div style={{ width: "100%", textAlign: "left", margin:"5px" }}>
       <h1>{project.projectName}</h1>
       <div>
         <Tabs>
@@ -92,10 +92,10 @@ export default function ProjectPage() {
               </div>
             </TabPanel>
             <TabPanel>
-              <NPV></NPV>
+              <NPV/>
             </TabPanel>
             <TabPanel>
-              <h2>Any content 4</h2>
+              <Inventory/>
             </TabPanel>
           </div>
         </Tabs>
