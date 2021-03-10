@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [userDetails, setUserDetails] = useLocalStorage("userDetails", []);
   const [loading, setLoading] = useState(true);
-  const [projects, setProjects] = useState();
+  const [projects, setProjects] = useLocalStorage("CompanyProjects", []);
   const [selectedProject, setSelectedProject] = useLocalStorage(
     "selectedProject",
     {}
@@ -88,9 +88,9 @@ export function AuthProvider({ children }) {
 
   //--------------------------------------------------------------------------------------
   //RECONSTRUCT
-  async function getUserProjects() {
+  async function getCompanyProjects() {
     if (currentUser) {
-      db.collection("Users/" + currentUser.uid + "/Projects").onSnapshot(
+      db.collection("Companies/" + selectCompany.id + "/Projects").onSnapshot(
         (temp) => {
           const items = [];
           temp.forEach((doc) => {
@@ -123,13 +123,19 @@ export function AuthProvider({ children }) {
         company.users.forEach((user) => {
           if (user.email === auth.currentUser.email) {
             if (user.type === "owner") {
-              db.collection("Companies")
-                .doc("" + selectCompany.id)
+              db.collection("Companies/"+selectCompany.id+"/projects")
+                .doc("" + projectName)
                 .set({
                   companyName: selectCompany.companyName,
                   id: selectCompany.id,
+                  uid: "" + auth.currentUser.uid,
+                  email: "" + auth.currentUser.email,
+                  projectName: "" + projectName,
+                  startDate: "" + startDate,
+                  endDate: "" + endDate,
+                  description: "" + description,
                   users: selectCompany.users,
-                  projects: selectCompany.projects,
+                  
                 })
                 .then(function () {
                   console.log("Document successfully written!");
@@ -315,7 +321,7 @@ export function AuthProvider({ children }) {
     updateProfile,
     insertDetailsToFirestore,
     insertProjectToFirestore,
-    getUserProjects,
+    getCompanyProjects,
     projects,
     selectedProject,
     setSelectedProject1,

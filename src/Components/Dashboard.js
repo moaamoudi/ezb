@@ -5,6 +5,7 @@ import { Button, Alert } from "react-bootstrap";
 import PopUp from "./PopUpProject";
 import { Card } from "react-bootstrap";
 import ScrollMenu from "react-horizontal-scrolling-menu";
+import TaskPopUp from "./popUptask";
 export default function Dashboard() {
   const [error, setError] = useState("");
   const [projectsFetched, setProjectsFetched] = useState(false);
@@ -83,7 +84,9 @@ export default function Dashboard() {
           />
           <div>
             <PopUp />
+            <TaskPopUp/>
           </div>
+          
         </div>
       ) : (
         <div></div>
