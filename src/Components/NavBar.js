@@ -2,6 +2,7 @@ import * as reactBootstrap from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Dropdown } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
 import "./styles/NavBar.css";
 import logo from "../imgs/logo.png";
 import { set } from "date-fns";
@@ -20,6 +21,8 @@ function NavBar(props) {
     selectCompany,
     setSelectedCompany,
   } = useAuth();
+
+  const history = useHistory();
 
   return (
     <reactBootstrap.Navbar
@@ -94,7 +97,9 @@ function NavBar(props) {
                       <reactBootstrap.Dropdown.Item
                         as="button"
                         onSelect={() => {
+                          console.log("dropdown onselect");
                           setSelectedCompany(company);
+                          history.push("/");
                         }}
                       >
                         {company.companyName}

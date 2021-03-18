@@ -56,49 +56,72 @@ export function AuthProvider({ children }) {
     return auth.currentUser.updatePassword(password);
   }
 
-  function setSelectedCompany(company) {
-    console.log("company changed");
-    setSelectCompany(company);
+  async function setSelectedCompany(company) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc("" + company.id)
+        .onSnapshot((querySnapshot) => {
+          console.log(querySnapshot.data());
+          console.log("company changed");
+          setSelectCompany(querySnapshot.data());
+          getCompanyProjects(querySnapshot.data().id);
+        });
+    }
   }
 
-  async function getCompanies() {
+  // async function setProjects1() {
+  //   let items = [];
+  //   if (auth.currentUser) {
+  //     items = [];
+  //     await db
+  //       .collection("Companies")
+  //       .doc("" + selectCompany.id)
+  //       .onSnapshot((querySnapshot) => {
+  //         querySnapshot.forEach((doc) => {
+  //           console.log(doc.data());
+  //         });
+  //       });
+  //   }
+  // }
+
+  async function initialGetCompanies() {
     let items = [];
     if (auth.currentUser) {
-      console.log(userDetails);
       items = [];
-      await db.collection("Companies").onSnapshot((temp) => {
-        temp.forEach((doc) => {
-          doc.data().users.forEach((user) => {
-            if (user.email === auth.currentUser.email) {
-              console.log(user.email);
-              var item = doc.data();
-              item.id = doc.id;
-              items.push(item);
-            }
+
+      await db
+        .collection("Companies")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            doc.data().users.forEach((user) => {
+              if (user.email === auth.currentUser.email) {
+                console.log(user.email);
+                items.push(doc.data());
+              }
+            });
           });
         });
-        console.log(items);
-        setCompaniesData(items);
-        setSelectedCompany(items[0]);
-        items = [];
-      });
+
+      setCompaniesData(items);
+      setSelectedCompany(items[0]);
+      items = [];
     }
     items = [];
   }
 
-  //--------------------------------------------------------------------------------------
-  //RECONSTRUCT
-  async function getCompanyProjects() {
+  async function getCompanyProjects(id) {
+    console.log("getCompanyProjects");
     if (currentUser) {
-      db.collection("Companies/" + selectCompany.id + "/Projects").onSnapshot(
-        (temp) => {
-          const items = [];
-          temp.forEach((doc) => {
-            items.push(doc.data());
-          });
-          setProjects(items);
-        }
-      );
+      db.collection("Companies/" + id + "/Projects").onSnapshot((temp) => {
+        const items = [];
+        temp.forEach((doc) => {
+          console.log(doc.data());
+          items.push(doc.data());
+        });
+        setProjects(items);
+      });
     }
   }
 
@@ -116,6 +139,7 @@ export function AuthProvider({ children }) {
       endDate: "" + endDate,
       description: "" + description,
     };
+
     selectCompany.projects.push(project);
 
     companiesData.forEach((company) => {
@@ -123,7 +147,7 @@ export function AuthProvider({ children }) {
         company.users.forEach((user) => {
           if (user.email === auth.currentUser.email) {
             if (user.type === "owner") {
-              db.collection("Companies/"+selectCompany.id+"/projects")
+              db.collection("Companies/" + selectCompany.id + "/Projects")
                 .doc("" + projectName)
                 .set({
                   companyName: selectCompany.companyName,
@@ -135,7 +159,6 @@ export function AuthProvider({ children }) {
                   endDate: "" + endDate,
                   description: "" + description,
                   users: selectCompany.users,
-                  
                 })
                 .then(function () {
                   console.log("Document successfully written!");
@@ -196,7 +219,7 @@ export function AuthProvider({ children }) {
 
   async function updateDetails() {
     await fetchUserDetails();
-    await getCompanies();
+    await initialGetCompanies();
 
     for (let index = 0; index < companiesData.length; index++) {
       if (companiesData[index].companyName === selectCompany.companyName) {
@@ -233,7 +256,43 @@ export function AuthProvider({ children }) {
       .catch(function (error) {
         console.error("Error writing document: ", error);
       });
+
+    let items = [];
+
+    await db
+      .collection("Companies")
+      .get()
+      .then((querySnapshot) => {
+        items = [];
+        querySnapshot.forEach((doc) => {
+          doc.data().users.forEach((user) => {
+            if (
+              user.email === auth.currentUser.email &&
+              companyName === doc.data().companyName
+            ) {
+              var item = doc.data();
+              item.id = doc.id;
+              items.push(item);
+            }
+          });
+        });
+      });
+
+    company.id = items[0].id;
+
+    await db
+      .collection("Companies/")
+      .doc(items[0].id)
+      .set(company)
+      .then(function () {
+        console.log("Document successfully written!");
+      })
+      .catch(function (error) {
+        console.error("Error writing document: ", error);
+      });
+
     setSelectedCompany(company);
+    items = [];
     setLoading(false);
   }
 
@@ -326,8 +385,6 @@ export function AuthProvider({ children }) {
     selectedProject,
     setSelectedProject1,
     insertCompanyToFirestore,
-    getCompanies,
-    // project,
     fetchUserDetails,
     userDetails,
     companiesData,
@@ -335,6 +392,7 @@ export function AuthProvider({ children }) {
     setSelectCompany,
     setSelectedCompany,
     updateDetails,
+    initialGetCompanies,
   };
   return (
     <AuthContext.Provider value={value}>

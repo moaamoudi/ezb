@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-
+import TaskPopUp from "./popUptask";
 import "./styles/tabs.css";
 import { Chart } from "react-google-charts";
 import NPV from "./Tabs/NPV.js";
@@ -10,7 +10,7 @@ export default function ProjectPage() {
   const project = JSON.parse(localStorage.getItem("selectedProject"));
 
   return (
-    <div style={{ width: "100%", textAlign: "left", margin:"5px" }}>
+    <div style={{ width: "100%", textAlign: "left", margin: "5px" }}>
       <h1>{project.projectName}</h1>
       <div>
         <Tabs>
@@ -23,6 +23,7 @@ export default function ProjectPage() {
           <div>
             <TabPanel>
               <div style={{ width: "100%", height: "100%" }}>hello</div>
+              <TaskPopUp />
             </TabPanel>
             <TabPanel>
               <div style={{ width: "100%", padding: "50px" }}>
@@ -92,10 +93,10 @@ export default function ProjectPage() {
               </div>
             </TabPanel>
             <TabPanel>
-              <NPV/>
+              <NPV />
             </TabPanel>
             <TabPanel>
-              <Inventory/>
+              <Inventory />
             </TabPanel>
           </div>
         </Tabs>

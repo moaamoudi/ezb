@@ -5,16 +5,10 @@ import { Button, Alert } from "react-bootstrap";
 import PopUp from "./PopUpProject";
 import { Card } from "react-bootstrap";
 import ScrollMenu from "react-horizontal-scrolling-menu";
-import TaskPopUp from "./popUptask";
 export default function Dashboard() {
   const [error, setError] = useState("");
   const [projectsFetched, setProjectsFetched] = useState(false);
-  const {
-    logout,
-    getUserProjects,
-    setSelectedProject1,
-    selectCompany,
-  } = useAuth();
+  const { logout, projects, setSelectedProject1, selectCompany } = useAuth();
   const history = useHistory();
   const selectedCompany = JSON.parse(localStorage.getItem("selectedCompany"));
 
@@ -31,7 +25,9 @@ export default function Dashboard() {
 
   function viewDetails(project) {
     setSelectedProject1(project);
-    history.push(selectCompany.companyName + "/projects/" + project);
+    history.push(
+      selectCompany.companyName + "/projects/" + project.projectName
+    );
   }
 
   function calculateDateLeft(prStartDate, prEndDate) {
@@ -53,13 +49,13 @@ export default function Dashboard() {
         </Button>
       </div>
 
-      {selectCompany.projects ? (
+      {projects ? (
         <div style={{ width: "100%", textAlign: "center" }}>
           <ScrollMenu
             wrapperStyle={{ width: "88%" }}
             alignCenter={false}
             itemStyle={{ outlineColor: "transparent" }}
-            data={selectCompany.projects.map((project) => (
+            data={projects.map((project) => (
               <Card
                 key={project.projectName}
                 className="main-shadow  m-3 text-center"
@@ -84,9 +80,8 @@ export default function Dashboard() {
           />
           <div>
             <PopUp />
-            <TaskPopUp/>
+            
           </div>
-          
         </div>
       ) : (
         <div></div>
