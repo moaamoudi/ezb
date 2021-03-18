@@ -4,7 +4,7 @@ import { useAuth } from "../Context/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import GoogleButton from "react-google-button";
 import "./styles/Login.css";
-import logo from "../imgs/logo.png";
+import logo from "../imgs/ezb3.png";
 
 export default function Login() {
   const emailRef = useRef();
@@ -56,7 +56,7 @@ export default function Login() {
           <img
             alt=""
             src={logo}
-            width="200vh"
+            width="210vh"
             height="100%"
             className="center-img mb-4"
           />

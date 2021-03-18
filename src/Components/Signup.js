@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
-import logo from "../imgs/logo.png";
+import logo from "../imgs/ezb3.png";
 
 export default function Signup() {
   const firstNameref = useRef();
@@ -70,7 +70,7 @@ export default function Signup() {
           <img
             alt=""
             src={logo}
-            width="200vh"
+            width="210vh"
             height="100%"
             className="center-img mb-4"
           />

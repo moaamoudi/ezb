@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../Context/AuthContext";
 import { Link } from "react-router-dom";
-import logo from "../imgs/logo.png";
+import logo from "../imgs/ezb3.png";
 
 export default function ForgotPassword() {
   const emailRef = useRef();
@@ -33,7 +33,7 @@ export default function ForgotPassword() {
           <img
             alt=""
             src={logo}
-            width="200vh"
+            width="210vh"
             height="100%"
             className="center-img mb-4"
           />

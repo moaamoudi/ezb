@@ -4,7 +4,7 @@ import { useAuth } from "../Context/AuthContext";
 import { Dropdown } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import "./styles/NavBar.css";
-import logo from "../imgs/logo.png";
+import logo from "../imgs/ezb3.png";
 import { set } from "date-fns";
 
 function NavBar(props) {
@@ -19,8 +19,20 @@ function NavBar(props) {
     userDetails,
     companiesData,
     selectCompany,
+    setCompanyChanged,
     setSelectedCompany,
+    userNotifications,
   } = useAuth();
+
+  function countNotification() {
+    let count = 0;
+    userNotifications.forEach((not) => {
+      if (not.read === false) {
+        count++;
+      }
+    });
+    return count;
+  }
 
   const history = useHistory();
 
@@ -62,7 +74,7 @@ function NavBar(props) {
         <img
           alt=""
           src={logo}
-          width="110vh"
+          width="100vh"
           height="100%"
           className="d-inline-block align-top ml-3"
         />
@@ -116,17 +128,37 @@ function NavBar(props) {
         </h2>
       </div>
 
-      <div style={{ marginRight: "48px", marginLeft: "auto" }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="26"
-          height="26"
-          fillRule="currentColor"
-          className="bi bi-bell"
-          viewBox="0 0 16 16"
-        >
-          <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
-        </svg>
+      <div style={{ marginRight: "32px", marginLeft: "auto" }}>
+        <reactBootstrap.Dropdown variant="menu" id="dropdown-menu-align-right">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="26"
+            height="26"
+            fillRule="currentColor"
+            className="bi bi-bell"
+            viewBox="0 0 16 16"
+          >
+            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
+          </svg>
+          <h3>{countNotification() > 0 ? countNotification() : <h3 />}</h3>
+          <reactBootstrap.DropdownButton
+            as="image"
+            key="left"
+            id="dropdown-button-drop-left"
+            drop="left"
+            variant="trasnparent"
+          >
+            {userNotifications.map((noti) => (
+              <div key={noti.id}>
+                <reactBootstrap.Dropdown.Item as="button">
+                  <div>
+                    <h3>{noti.message}</h3>
+                  </div>
+                </reactBootstrap.Dropdown.Item>
+              </div>
+            ))}
+          </reactBootstrap.DropdownButton>
+        </reactBootstrap.Dropdown>
       </div>
 
       <div style={{ marginRight: "1rem" }}>
