@@ -50,8 +50,9 @@ export default function PrivateRoute({ component: Component, ...rest }) {
                         quantity: 4,
                       },
                       repulse: {
-                        distance: 200,
+                        distance: 150,
                         duration: 0.4,
+                        speed: 0.1,
                       },
                     },
                   },
@@ -74,7 +75,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
                       enable: true,
                       outMode: "bounce",
                       random: false,
-                      speed: 6,
+                      speed: 4,
                       straight: false,
                     },
                     number: {

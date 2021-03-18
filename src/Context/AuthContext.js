@@ -38,10 +38,11 @@ export function AuthProvider({ children }) {
 
   function logout() {
     localStorage.removeItem("userDetails");
+    localStorage.removeItem("CompanyProjects");
     localStorage.removeItem("companiesData");
     localStorage.removeItem("selectedCompany");
     localStorage.removeItem("selectedProject");
-    localStorage.removeItem("CompanyProjects");
+
     return auth.signOut();
   }
 
