@@ -27,6 +27,10 @@ export function AuthProvider({ children }) {
     "selectedCompany",
     {}
   );
+  const [userNotifications, setUserNotifications] = useLocalStorage(
+    "notifications",
+    {}
+  );
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -42,6 +46,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("companiesData");
     localStorage.removeItem("selectedCompany");
     localStorage.removeItem("selectedProject");
+    localStorage.removeItem("notifications");
 
     return auth.signOut();
   }
@@ -59,6 +64,7 @@ export function AuthProvider({ children }) {
   }
 
   async function setSelectedCompany(company) {
+    let temp;
     if (auth.currentUser) {
       await db
         .collection("Companies")
@@ -67,25 +73,11 @@ export function AuthProvider({ children }) {
           console.log(querySnapshot.data());
           console.log("company changed");
           setSelectCompany(querySnapshot.data());
+
           getCompanyProjects(querySnapshot.data().id);
         });
     }
   }
-
-  // async function setProjects1() {
-  //   let items = [];
-  //   if (auth.currentUser) {
-  //     items = [];
-  //     await db
-  //       .collection("Companies")
-  //       .doc("" + selectCompany.id)
-  //       .onSnapshot((querySnapshot) => {
-  //         querySnapshot.forEach((doc) => {
-  //           console.log(doc.data());
-  //         });
-  //       });
-  //   }
-  // }
 
   async function initialGetCompanies() {
     let items = [];
@@ -108,6 +100,7 @@ export function AuthProvider({ children }) {
 
       setCompaniesData(items);
       setSelectedCompany(items[0]);
+      getCompanyProjects(items[0].id);
       items = [];
     }
     items = [];
@@ -140,6 +133,7 @@ export function AuthProvider({ children }) {
 
   async function getCompanyProjects(id) {
     console.log("getCompanyProjects");
+
     if (currentUser) {
       db.collection("Companies/" + id + "/Projects").onSnapshot((temp) => {
         const items = [];
@@ -243,7 +237,9 @@ export function AuthProvider({ children }) {
 
   async function initialUpdateDetails() {
     await fetchUserDetails();
+    await getUserNotifications();
     await initialGetCompanies();
+    await getCompanyProjects(selectCompany.id);
 
     for (let index = 0; index < companiesData.length; index++) {
       if (companiesData[index].companyName === selectCompany.companyName) {
@@ -374,6 +370,38 @@ export function AuthProvider({ children }) {
     return exists;
   }
 
+  async function createNotification() {
+    if (auth.currentUser) {
+      await db
+        .collection("Users/" + auth.currentUser.email + "/Notifications")
+        .doc()
+        .set({
+          message: "Create notification test",
+          creationDate: new Date(),
+          read: false,
+        })
+        .then(() => {
+          console.log("notification succesfully written");
+        });
+    }
+  }
+
+  async function getUserNotifications() {
+    if (auth.currentUser) {
+      let items = [];
+      await db
+        .collection("Users/" + auth.currentUser.email + "/Notifications")
+        .onSnapshot((doc) => {
+          items = [];
+          doc.forEach((temp) => {
+            console.log(temp.data());
+            items.push(temp.data());
+          });
+          setUserNotifications(items);
+        });
+    }
+  }
+
   function authLogin() {
     return auth
       .signInWithPopup(provider)
@@ -422,6 +450,8 @@ export function AuthProvider({ children }) {
     setSelectedCompany,
     updateDetails,
     initialUpdateDetails,
+    createNotification,
+    userNotifications,
   };
   return (
     <AuthContext.Provider value={value}>

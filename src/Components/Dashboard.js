@@ -8,9 +8,19 @@ import ScrollMenu from "react-horizontal-scrolling-menu";
 export default function Dashboard() {
   const [error, setError] = useState("");
   const [projectsFetched, setProjectsFetched] = useState(false);
-  const { logout, projects, setSelectedProject1, selectCompany } = useAuth();
+  const {
+    logout,
+    projects,
+    setSelectedProject1,
+    selectCompany,
+    createNotification,
+  } = useAuth();
   const history = useHistory();
   const selectedCompany = JSON.parse(localStorage.getItem("selectedCompany"));
+
+  async function handleCreateNotification() {
+    createNotification();
+  }
 
   async function handleLogout() {
     setError("");
@@ -80,7 +90,7 @@ export default function Dashboard() {
           />
           <div>
             <PopUp />
-            
+            <Button onClick={handleCreateNotification}>Add Notification</Button>
           </div>
         </div>
       ) : (
