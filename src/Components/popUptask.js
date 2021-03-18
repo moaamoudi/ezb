@@ -1,7 +1,7 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button, Card, Dropdown } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
@@ -9,31 +9,29 @@ import { add, format } from "date-fns";
 import "./styles/PopUp.css";
 
 export default function PopUptask() {
-  const taskName = useRef();
+  let [ref,setref] = useState([]);
+  let [subtasklist,setSubtasklist] = useState([]);
+  let taskName = useRef();
   const taskDiscription = useRef();
-  const [subTasks,setSubTasks]=useState([])
-  const [areatext,setAreatext]=useState([])
+  let subTaskName = useState();
   function handleSubmit(e) {
     e.preventDefault();
   }
-function addsub(){
-    console.log("start add")
-    console.log(subTasks)
-    setAreatext(areatext.concat(<Form.Group id="taskDiscription">
-   <Form.Label>SubTask name:</Form.Label>
-   <Form.Control
-     type="Name"
-     onKeyPress={Event=>{
-        if (Event.charCode === 13) {
-            subTasks.push(Event.target.value)
-            console.log(subTasks)
-        }
-     }}
-     className="form-control button-bg"
-   />
- </Form.Group>)) 
-}
+useEffect(() => {
+  
+}, [subtasklist])
+  function addItem() {
+    if (subTaskName.value !== "") {
+      setref(ref.concat({name:subTaskName.value}))
+      
+      setSubtasklist(...ref);
 
+      console.log(subtasklist);
+
+      subTaskName.value = "";
+    }
+  }
+  
   return (
     <Popup
       trigger={<button> add tasks</button>}
@@ -66,16 +64,60 @@ function addsub(){
                   className="form-control button-bg"
                 />
               </Form.Group>
-                    {areatext}
-                <Button variant="light" onClick={()=>addsub()}>add subtask</Button>
-              
+              <Form.Label style={{ display: "unset" }}>
+                SubTask name:
+              </Form.Label>
+              <Form.Group id="taskDiscription" style={{ display: "flex" }}>
+                <Form.Control
+                  ref={(a) => (subTaskName = a)}
+                  placeholder="enter task"
+                  className="form-control button-bg"
+                  style={{ width: "50%" }}
+                />
+
+                <Button
+                style={{ width: "50%" }}
+                  variant="light ml-2"
+                  onClick={(e) => {
+                    addItem();
+                  }}
+                >
+                  add subtask
+                </Button>
+              </Form.Group>
+              <Dropdown
+                alignRight={true}
+                variant="menu"
+                id="dropdown-menu-align-right"
+                title=""
+              >
+                <Dropdown.Toggle
+                  split
+                  variant="menu ml-2"
+                  id="dropdown-custom-2"
+                />
+
+                <Dropdown.Menu>
+                  {subtasklist.map((task) => (
+                    <div key={task}>
+                      <Dropdown.Item
+                       
+                      >
+                        {task.name } 
+
+                      </Dropdown.Item>
+                      <hr style={{ width: "100%", margin: "0" }} />
+                    </div>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
               <div className="text-center">
                 <Button
                   variant="light"
                   className="w-50 button-bg mt-3"
                   type="submit"
                 >
-                  Add
+                  submit
                 </Button>
               </div>
               <div className="text-center">
