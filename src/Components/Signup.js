@@ -16,7 +16,7 @@ export default function Signup() {
     signup,
     insertDetailsToFirestore,
     updateProfile,
-    updateDetails,
+    initialUpdateDetails,
   } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ export default function Signup() {
       );
       console.log("after fetch");
       console.log("before fetch");
-      await updateDetails();
+      await initialUpdateDetails();
       console.log("after fetch");
       history.push("/");
     } catch {

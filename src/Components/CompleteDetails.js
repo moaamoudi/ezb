@@ -10,12 +10,7 @@ export default function CompleteDetails() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const {
-    insertCompanyToFirestore,
-    checkUserExist,
-    getCompanies,
-    insertDetailsToFirestore,
-  } = useAuth();
+  const { insertDetailsToFirestore } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -27,7 +22,12 @@ export default function CompleteDetails() {
 
       var companies = [companyRef.current.value];
 
-      insertDetailsToFirestore(name[0], name[1], mobileRef.current.value, companies)
+      insertDetailsToFirestore(
+        name[0],
+        name[1],
+        mobileRef.current.value,
+        companies
+      );
       // await checkUserExist();
       // await getCompanies();
       history.push("/");

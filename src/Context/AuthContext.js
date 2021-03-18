@@ -41,6 +41,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("companiesData");
     localStorage.removeItem("selectedCompany");
     localStorage.removeItem("selectedProject");
+    localStorage.removeItem("CompanyProjects");
     return auth.signOut();
   }
 
@@ -111,13 +112,37 @@ export function AuthProvider({ children }) {
     items = [];
   }
 
+  async function getCompanies() {
+    let items = [];
+    if (auth.currentUser) {
+      items = [];
+
+      await db
+        .collection("Companies")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            doc.data().users.forEach((user) => {
+              if (user.email === auth.currentUser.email) {
+                console.log(user.email);
+                items.push(doc.data());
+              }
+            });
+          });
+        });
+
+      setCompaniesData(items);
+      items = [];
+    }
+    items = [];
+  }
+
   async function getCompanyProjects(id) {
     console.log("getCompanyProjects");
     if (currentUser) {
       db.collection("Companies/" + id + "/Projects").onSnapshot((temp) => {
         const items = [];
         temp.forEach((doc) => {
-          console.log(doc.data());
           items.push(doc.data());
         });
         setProjects(items);
@@ -139,8 +164,6 @@ export function AuthProvider({ children }) {
       endDate: "" + endDate,
       description: "" + description,
     };
-
-    selectCompany.projects.push(project);
 
     companiesData.forEach((company) => {
       if (company.companyName === selectCompany.companyName) {
@@ -214,10 +237,10 @@ export function AuthProvider({ children }) {
       });
 
     await insertCompanyToFirestore(companyName[0]);
-    await updateDetails();
+    await initialUpdateDetails();
   }
 
-  async function updateDetails() {
+  async function initialUpdateDetails() {
     await fetchUserDetails();
     await initialGetCompanies();
 
@@ -226,6 +249,11 @@ export function AuthProvider({ children }) {
         await setSelectedCompany(companiesData[index]);
       }
     }
+  }
+
+  async function updateDetails() {
+    await fetchUserDetails;
+    await getCompanies();
   }
 
   async function insertCompanyToFirestore(companyName) {
@@ -392,7 +420,7 @@ export function AuthProvider({ children }) {
     setSelectCompany,
     setSelectedCompany,
     updateDetails,
-    initialGetCompanies,
+    initialUpdateDetails,
   };
   return (
     <AuthContext.Provider value={value}>
