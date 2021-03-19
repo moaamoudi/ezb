@@ -32,7 +32,7 @@ export default function PopUptask() {
   
   return (
     <Popup
-      trigger={<button> add tasks</button>}
+      trigger={<button> Add Task</button>}
       position="center center"
       modal
       nested
@@ -40,7 +40,7 @@ export default function PopUptask() {
       {(close) => (
         <Card className="main-shadow" style={{ width: "400px" }}>
           <Card.Body>
-            <h2 className="text-center mb-4">Add task</h2>
+            <h2 className="text-center mb-4">Add Task</h2>
             {/* {error && <Alert variant="danger">{error}</Alert>} */}
             <Form onSubmit={handleSubmit}>
               <Form.Group id="taskName">
@@ -80,7 +80,7 @@ export default function PopUptask() {
                     addItem();
                   }}
                 >
-                  add subtask
+                  Add SubTask
                 </Button>
               </Form.Group>
               {subtasklist.length>0?(<DropdownButton
