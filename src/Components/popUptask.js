@@ -32,7 +32,7 @@ export default function PopUptask() {
   
   return (
     <Popup
-      trigger={<button> Add Task</button>}
+      trigger={<Button> Add Task</Button>}
       position="center center"
       modal
       nested

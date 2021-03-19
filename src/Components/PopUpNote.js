@@ -18,7 +18,7 @@ export default function PopUpNote() {
 
   return (
     <Popup
-      trigger={<button> Add Note</button>}
+      trigger={<Button> Add Note</Button>}
       position="center center"
       modal
       nested

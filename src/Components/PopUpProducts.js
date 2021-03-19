@@ -20,7 +20,7 @@ export default function PopUpProducts() {
 
   return (
     <Popup
-      trigger={<button> Add Product</button>}
+      trigger={<Button> Add Product</Button>}
       position="center center"
       modal
       nested

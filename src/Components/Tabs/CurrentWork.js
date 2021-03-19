@@ -29,7 +29,7 @@ export default function CurrentWork() {
       <Card className="main-shadow" style={{width:"30%", marginLeft:"55%" ,marginTop:"1%"}}>
         <Card.Body>
            <h4>Notes</h4>
-           <div style={{marginLeft:"80%"}}><NotePopUp /></div>
+           <div style={{marginLeft:"79.3%"}}><NotePopUp /></div>
         </Card.Body>
         
       </Card>
