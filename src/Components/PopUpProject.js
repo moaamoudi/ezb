@@ -34,7 +34,7 @@ export default function PopupProject() {
 
   return (
     <Popup
-      trigger={<button> PopUp</button>}
+      trigger={<button> Add Project</button>}
       position="center center"
       modal
       nested
