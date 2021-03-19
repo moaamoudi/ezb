@@ -11,6 +11,7 @@ export default function NPV() {
   const forthYear = useRef();
   const fifthYear = useRef();
   const [NPV , setNpv]  =useState(0);
+  const [Currency , setCurrency]  =useState("$");
   function calculateNpv() {
     var valArr=[firstYear.current.value,secYear.current.value,
       thirdYear.current.value,forthYear.current.value,fifthYear.current.value]
@@ -60,12 +61,14 @@ function handleSubmit(e){
                 className="mr-sm-2"
                 id="inlineFormCustomSelect"
                 custom
+                onChange={Event=>setCurrency(Event.target.value)}
                 required
-              >
-                <option value="0">Currency</option>
-                <option value="1">SR</option>
-                <option value="2">POUND</option>
-                <option value="3">DOLLAR</option>
+                >
+                <option value="Please select currency" >Currency</option>
+                <option value="SR">SR</option>
+                <option value="£">POUND</option>
+                <option value="$">DOLLAR</option>
+                <option value="€">EURO</option>
               </Form.Control>
             </InputGroup.Prepend>
           </InputGroup>
@@ -141,12 +144,13 @@ function handleSubmit(e){
               Calculate
             </Button>
           </div>
-          <div><p>NPV:{NPV}</p></div>
+          
           
         </Form>
         
       </div>
-      
+      <div className="form" style={{marginTop:"23%"}}><p>NPV: {NPV+" "+Currency}</p></div>
     </div>
+    
   );
 }

@@ -1,11 +1,12 @@
 import React from "react";
 import { useAuth } from "../Context/AuthContext";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import TaskPopUp from "./popUptask";
+
 import "./styles/tabs.css";
 import { Chart } from "react-google-charts";
 import NPV from "./Tabs/NPV.js";
 import Inventory from "./Tabs/Inventory.js";
+import CurrentWork from "./Tabs/CurrentWork.js";
 export default function ProjectPage() {
   const project = JSON.parse(localStorage.getItem("selectedProject"));
 
@@ -22,8 +23,7 @@ export default function ProjectPage() {
           </TabList>
           <div>
             <TabPanel>
-              <div style={{ width: "100%", height: "100%" }}>hello</div>
-              <TaskPopUp />
+              <CurrentWork/>
             </TabPanel>
             <TabPanel>
               <div style={{ width: "100%", padding: "50px" }}>

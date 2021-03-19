@@ -7,7 +7,7 @@ export default function Inventory() {
   return (
     <div>
       <div style={{ display: "inline-flex" }}>
-        <p className="ml-3">Products</p>
+        <h4 className="ml-3">Products</h4>
         <div style={{ position: "absolute" ,right:"50px"}}>
         <PopUpProducts />
       </div>
