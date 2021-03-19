@@ -1,7 +1,7 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
-import { Form, Button, Card, Dropdown } from "react-bootstrap";
+import { Form, Button, Card, Dropdown,DropdownButton } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
@@ -17,19 +17,17 @@ export default function PopUptask() {
   function handleSubmit(e) {
     e.preventDefault();
   }
-useEffect(() => {
-  
-}, [subtasklist])
   function addItem() {
     if (subTaskName.value !== "") {
-      setref(ref.concat({name:subTaskName.value}))
-      
-      setSubtasklist(...ref);
+      var joined = subtasklist.concat({ name: subTaskName.value });
 
-      console.log(subtasklist);
-
+      setSubtasklist(joined);
       subTaskName.value = "";
     }
+  }
+  function handleRemove(task) {
+    const newList = subtasklist.filter((Task) => Task.name !== task);
+    setSubtasklist(newList);
   }
   
   return (
@@ -85,32 +83,39 @@ useEffect(() => {
                   add subtask
                 </Button>
               </Form.Group>
-              <Dropdown
-                alignRight={true}
-                variant="menu"
-                id="dropdown-menu-align-right"
-                title=""
+              {subtasklist.length>0?(<DropdownButton
+                id="dropdown-button-drop-right"
+                drop="right"
+                variant="light"
+                title="SubTasks"
               >
-                <Dropdown.Toggle
-                  split
-                  variant="menu ml-2"
-                  id="dropdown-custom-2"
-                />
-
-                <Dropdown.Menu>
+                
                   {subtasklist.map((task) => (
-                    <div key={task}>
-                      <Dropdown.Item
-                       
-                      >
-                        {task.name } 
-
+                    <div key={task.name}>
+                      <Dropdown.Item >
+                        <div style={{display:'flex'}}>
+                          <div style={{width:"90%"}}>{task.name}</div>
+                          
+                          
+                        
+                          <Button
+                          variant="light"
+                          
+                          onClick={() => handleRemove(task.name)}
+                        >
+                          X
+                        </Button>
+                          
+                        </div>
+                        
+                        
                       </Dropdown.Item>
                       <hr style={{ width: "100%", margin: "0" }} />
                     </div>
                   ))}
-                </Dropdown.Menu>
-              </Dropdown>
+               
+              </DropdownButton>):(<div/>)}
+              
               <div className="text-center">
                 <Button
                   variant="light"
