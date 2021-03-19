@@ -1,10 +1,10 @@
 import React from "react";
-import { Paragraph } from "react-bootstrap-icons";
 import "./styles/ContactsPage.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { Card, Button } from "react-bootstrap";
-
+import PopUpAddEmployee from './PopUpAddEmployee';
+import PopUpAddClient from './PopUpClients'
 export default function ContactsPage() {
   const columns = [
     {
@@ -60,7 +60,7 @@ export default function ContactsPage() {
     <div>
       <div className="main">
         <div className="test" style={{ height: "fit-content" }}>
-          <Button className="Btn mb-2">Add</Button>
+          <PopUpAddEmployee />
           <Button className="mb-2"> delete</Button>
 
           <div>
@@ -81,7 +81,7 @@ export default function ContactsPage() {
 
         <div className="space"> </div>
         <div className="test" style={{ height: "fit-content" }}>
-          <Button className="Btn mb-2">Add</Button>
+          <PopUpAddClient className="Btn mb-2">Add</PopUpAddClient>
           <Button className="mb-2"> delete</Button>
           <div>
             <Card className="main-shadow">

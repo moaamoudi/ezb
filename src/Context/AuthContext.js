@@ -19,6 +19,10 @@ export function AuthProvider({ children }) {
     "selectedProject",
     {}
   );
+  const [selectedProjectTasks, setSelectedProjectTasks] = useLocalStorage(
+    "selectedProjectTasks",
+    {}
+  );
   const [companiesData, setCompaniesData] = useLocalStorage(
     "companiesData",
     {}
