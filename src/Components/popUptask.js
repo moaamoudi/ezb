@@ -1,7 +1,7 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
-import { Form, Button, Card, Dropdown,DropdownButton } from "react-bootstrap";
+import { Form, Button, Card, Dropdown, DropdownButton } from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
@@ -9,27 +9,40 @@ import { add, format } from "date-fns";
 import "./styles/PopUp.css";
 
 export default function PopUptask() {
-  let [ref,setref] = useState([]);
-  let [subtasklist,setSubtasklist] = useState([]);
+  let [ref, setref] = useState([]);
+  let [subtasklist, setSubtasklist] = useState([]);
+  const { insertTaskToFirestore } = useAuth();
   let taskName = useRef();
   const taskDiscription = useRef();
   let subTaskName = useState();
+
   function handleSubmit(e) {
     e.preventDefault();
+
+    insertTaskToFirestore(
+      taskName.current.value,
+      taskDiscription.current.value,
+      subtasklist
+    );
   }
+
   function addItem() {
     if (subTaskName.value !== "") {
-      var joined = subtasklist.concat({ name: subTaskName.value });
+      var joined = subtasklist.concat({
+        name: subTaskName.value,
+        complete: false,
+      });
 
       setSubtasklist(joined);
       subTaskName.value = "";
     }
   }
+
   function handleRemove(task) {
     const newList = subtasklist.filter((Task) => Task.name !== task);
     setSubtasklist(newList);
   }
-  
+
   return (
     <Popup
       trigger={<Button> Add Task</Button>}
@@ -74,7 +87,7 @@ export default function PopUptask() {
                 />
 
                 <Button
-                style={{ width: "50%" }}
+                  style={{ width: "50%" }}
                   variant="light ml-2"
                   onClick={(e) => {
                     addItem();
@@ -83,39 +96,35 @@ export default function PopUptask() {
                   Add SubTask
                 </Button>
               </Form.Group>
-              {subtasklist.length>0?(<DropdownButton
-                id="dropdown-button-drop-right"
-                drop="right"
-                variant="light"
-                title="SubTasks"
-              >
-                
+              {subtasklist.length > 0 ? (
+                <DropdownButton
+                  id="dropdown-button-drop-right"
+                  drop="right"
+                  variant="light"
+                  title="SubTasks"
+                >
                   {subtasklist.map((task) => (
                     <div key={task.name}>
-                      <Dropdown.Item >
-                        <div style={{display:'flex'}}>
-                          <div style={{width:"90%"}}>{task.name}</div>
-                          
-                          
-                        
+                      <Dropdown.Item>
+                        <div style={{ display: "flex" }}>
+                          <div style={{ width: "90%" }}>{task.name}</div>
+
                           <Button
-                          variant="light"
-                          
-                          onClick={() => handleRemove(task.name)}
-                        >
-                          X
-                        </Button>
-                          
+                            variant="light"
+                            onClick={() => handleRemove(task.name)}
+                          >
+                            X
+                          </Button>
                         </div>
-                        
-                        
                       </Dropdown.Item>
                       <hr style={{ width: "100%", margin: "0" }} />
                     </div>
                   ))}
-               
-              </DropdownButton>):(<div/>)}
-              
+                </DropdownButton>
+              ) : (
+                <div />
+              )}
+
               <div className="text-center">
                 <Button
                   variant="light"

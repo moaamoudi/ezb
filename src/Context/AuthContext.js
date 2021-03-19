@@ -196,6 +196,30 @@ export function AuthProvider({ children }) {
     await updateDetails();
   }
 
+  async function insertTaskToFirestore(taskName, taskDescripiton, subTasks) {
+    if (auth.currentUser) {
+      await db;
+      db.collection("Companies")
+        .doc("" + selectCompany.id)
+        .collection("Projects")
+        .doc("" + selectedProject.projectName)
+        .collection("Tasks")
+        .doc("" + taskName)
+        .set({
+          taskName: taskName,
+          taskDescripiton: taskDescripiton,
+          subTasks: subTasks,
+          complete: false,
+        })
+        .then(() => {
+          console.log("task written succesfully");
+        })
+        .catch((e) => {
+          console.error(e.message);
+        });
+    }
+  }
+
   async function updateProfile(firstName, lastName) {
     await auth.currentUser
       .updateProfile({
@@ -474,6 +498,7 @@ export function AuthProvider({ children }) {
     createNotification,
     userNotifications,
     setUserNotificationsRead,
+    insertTaskToFirestore,
   };
   return (
     <AuthContext.Provider value={value}>
