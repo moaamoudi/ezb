@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles/ContactsPage.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { Card, Button } from "react-bootstrap";
 import PopUpAddEmployee from './PopUpAddEmployee';
 import PopUpAddClient from './PopUpClients'
+import PopUpEmail from "./PopUpEmail"
 export default function ContactsPage() {
+  const [email,setEmail]=useState("");
   const columns = [
     {
       dataField: "name",
@@ -43,6 +45,10 @@ export default function ContactsPage() {
     mode: "checkbox",
     clickToSelect: true,
     style: { backgroundColor: "#f5a494" },
+    onSelect: (row, isSelect, rowIndex, e) => {
+      setEmail(row.Email)
+      
+    }
   };
 
   const data2 = [
@@ -76,7 +82,7 @@ export default function ContactsPage() {
               </Card.Body>
             </Card>
           </div>
-          <Button className="mt-2 ml-1"> Email</Button>
+          <PopUpEmail className="mt-2 ml-1" Email={email}></PopUpEmail>
         </div>
 
         <div className="space"> </div>
@@ -96,7 +102,7 @@ export default function ContactsPage() {
               </Card.Body>
             </Card>
           </div>
-          <Button className="mt-2 ml-1"> Email</Button>
+          <Button className="mt-2 ml-1" > Email</Button>
         </div>
       </div>
     </div>
