@@ -398,11 +398,28 @@ export function AuthProvider({ children }) {
         .onSnapshot((doc) => {
           items = [];
           doc.forEach((temp) => {
-            console.log(temp.data());
-            items.push(temp.data());
+            let item = temp.data();
+            item.id = temp.id;
+            items.push(item);
           });
           setUserNotifications(items);
         });
+    }
+  }
+
+  async function setUserNotificationsRead(items) {
+    if (auth.currentUser) {
+      await items.forEach((not) => {
+        db.collection("Users/" + auth.currentUser.email + "/Notifications")
+          .doc(not.id)
+          .set({
+            creationDate: not.creationDate,
+            message: not.message,
+            read: true,
+          });
+      });
+
+      getUserNotifications();
     }
   }
 
@@ -456,6 +473,7 @@ export function AuthProvider({ children }) {
     initialUpdateDetails,
     createNotification,
     userNotifications,
+    setUserNotificationsRead,
   };
   return (
     <AuthContext.Provider value={value}>
