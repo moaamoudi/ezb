@@ -1,7 +1,14 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
-import { Form, Button, Card, Dropdown, DropdownButton } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Card,
+  Dropdown,
+  DropdownButton,
+  Alert,
+} from "react-bootstrap";
 import React, { useEffect, useRef, useState } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
@@ -13,17 +20,27 @@ export default function PopUptask() {
   let [subtasklist, setSubtasklist] = useState([]);
   const { insertTaskToFirestore } = useAuth();
   let taskName = useRef();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const taskDiscription = useRef();
   let subTaskName = useState();
+  const [error, setError] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
 
+    if (startDate === undefined || endDate === undefined) {
+      return setError("Please Enter Date!");
+    }
     insertTaskToFirestore(
       taskName.current.value,
       taskDiscription.current.value,
+      startDate,
+      endDate,
       subtasklist
     );
+
+    setError("");
   }
 
   function addItem() {
@@ -35,6 +52,13 @@ export default function PopUptask() {
 
       setSubtasklist(joined);
       subTaskName.value = "";
+    }
+  }
+
+  function onDateChange(startDate, endDate) {
+    if (startDate && endDate) {
+      setStartDate(format(startDate, "MMM-dd-yyyy"));
+      setEndDate(format(endDate, "MMM-dd-yyyy"));
     }
   }
 
@@ -54,7 +78,7 @@ export default function PopUptask() {
         <Card className="main-shadow" style={{ width: "400px" }}>
           <Card.Body>
             <h2 className="text-center mb-4">Add Task</h2>
-            {/* {error && <Alert variant="danger">{error}</Alert>} */}
+            {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group id="taskName">
                 <Form.Label>Task Name:</Form.Label>
@@ -73,6 +97,24 @@ export default function PopUptask() {
                   ref={taskDiscription}
                   required
                   className="form-control button-bg"
+                />
+              </Form.Group>
+
+              <Form.Group id="ProjectDate">
+                <RangeDatePicker
+                  className="datePickerTask"
+                  onChange={(startDate, endDate) =>
+                    onDateChange(startDate, endDate)
+                  }
+                  minDate={new Date(1900, 0, 1)}
+                  maxDate={new Date(2100, 0, 1)}
+                  dateFormat="DD MM YYYY"
+                  monthFormat="MMM YYYY"
+                  startDatePlaceholder="Start Date"
+                  endDatePlaceholder="End Date"
+                  disabled={false}
+                  startWeekDay="sunday"
+                  highlightToday="true"
                 />
               </Form.Group>
               <Form.Label style={{ display: "unset" }}>
