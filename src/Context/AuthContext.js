@@ -196,7 +196,13 @@ export function AuthProvider({ children }) {
     await updateDetails();
   }
 
-  async function insertTaskToFirestore(taskName, taskDescripiton, subTasks) {
+  async function insertTaskToFirestore(
+    taskName,
+    taskDescripiton,
+    startDate,
+    endDate,
+    subTasks
+  ) {
     if (auth.currentUser) {
       await db;
       db.collection("Companies")
@@ -208,8 +214,10 @@ export function AuthProvider({ children }) {
         .set({
           taskName: taskName,
           taskDescripiton: taskDescripiton,
-          subTasks: subTasks,
+          startDate: startDate,
+          endDate: endDate,
           complete: false,
+          subTasks: subTasks,
         })
         .then(() => {
           console.log("task written succesfully");
@@ -217,6 +225,28 @@ export function AuthProvider({ children }) {
         .catch((e) => {
           console.error(e.message);
         });
+    }
+  }
+
+  async function getProjectTasks() {
+    let items = [];
+    if (auth.currentUser && selectedProject) {
+      items = [];
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.projectName)
+        .collection("Tasks")
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((task) => {
+            console.log(task.data());
+            items.push(task.data());
+          });
+          setSelectedProjectTasks(items);
+        });
+
+      items = [];
     }
   }
 
@@ -456,6 +486,7 @@ export function AuthProvider({ children }) {
 
   function setSelectedProject1(project) {
     setSelectedProject(project);
+    getProjectTasks();
     setLoading(false);
   }
 
@@ -499,6 +530,7 @@ export function AuthProvider({ children }) {
     userNotifications,
     setUserNotificationsRead,
     insertTaskToFirestore,
+    selectedProjectTasks,
   };
   return (
     <AuthContext.Provider value={value}>

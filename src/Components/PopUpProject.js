@@ -1,7 +1,7 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button, Card, Alert } from "react-bootstrap";
 import React, { useRef, useState } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
@@ -14,15 +14,21 @@ export default function PopupProject() {
   const { insertProjectToFirestore } = useAuth();
   const ProjectName = useRef();
   const ProjectDescription = useRef();
+  const [error, setError] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (startDate === undefined || endDate === undefined) {
+      return setError("Please Enter Date!");
+    }
+
     insertProjectToFirestore(
       ProjectName.current.value,
       startDate,
       endDate,
       ProjectDescription.current.value
     );
+    setError("");
   }
 
   function onDateChange(startDate, endDate) {
@@ -43,7 +49,7 @@ export default function PopupProject() {
         <Card className="main-shadow" style={{ width: "400px" }}>
           <Card.Body>
             <h2 className="text-center mb-4">Add Project</h2>
-            {/* {error && <Alert variant="danger">{error}</Alert>} */}
+            {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group id="ProjectName">
                 <Form.Label>Project Name:</Form.Label>
@@ -90,9 +96,9 @@ export default function PopupProject() {
                 >
                   Add
                 </Button>
-                
               </div>
-              <div className="text-center"><Button
+              <div className="text-center">
+                <Button
                   variant="light"
                   className="w-50 button-bg mt-3"
                   onClick={() => {
@@ -100,8 +106,8 @@ export default function PopupProject() {
                   }}
                 >
                   Cancel
-                </Button></div>
-              
+                </Button>
+              </div>
             </Form>
           </Card.Body>
         </Card>
