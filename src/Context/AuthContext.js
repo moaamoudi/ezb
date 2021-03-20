@@ -50,6 +50,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("companiesData");
     localStorage.removeItem("selectedCompany");
     localStorage.removeItem("selectedProject");
+    localStorage.removeItem("selectedProjectTasks");
     localStorage.removeItem("notifications");
 
     return auth.signOut();
@@ -221,6 +222,7 @@ export function AuthProvider({ children }) {
         })
         .then(() => {
           console.log("task written succesfully");
+          getProjectTasks();
         })
         .catch((e) => {
           console.error(e.message);
@@ -240,13 +242,30 @@ export function AuthProvider({ children }) {
         .collection("Tasks")
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((task) => {
-            console.log(task.data());
             items.push(task.data());
           });
           setSelectedProjectTasks(items);
+          items = [];
         });
 
       items = [];
+    }
+  }
+
+  async function handleSubTaskChange(task) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.projectName)
+        .collection("Tasks")
+        .doc(task.taskName)
+        .set(task)
+        .then(() => {
+          console.log("subtask succesfully edited");
+          getProjectTasks();
+        });
     }
   }
 
@@ -531,6 +550,7 @@ export function AuthProvider({ children }) {
     setUserNotificationsRead,
     insertTaskToFirestore,
     selectedProjectTasks,
+    handleSubTaskChange,
   };
   return (
     <AuthContext.Provider value={value}>
