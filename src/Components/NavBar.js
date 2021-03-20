@@ -23,6 +23,7 @@ function NavBar(props) {
     setSelectedCompany,
     userNotifications,
     setUserNotificationsRead,
+    logout,
   } = useAuth();
 
   function countNotification() {
@@ -42,6 +43,10 @@ function NavBar(props) {
       items.push(not);
     });
     setUserNotificationsRead(items);
+  }
+
+  function handleLogout() {
+    logout();
   }
 
   const history = useHistory();
@@ -185,37 +190,61 @@ function NavBar(props) {
             <div key={noti.id}>
               <reactBootstrap.Dropdown.Item as="button">
                 <div>
-                  <h3>{noti.message}</h3>
+                  <h6>{noti.message}</h6>
                 </div>
               </reactBootstrap.Dropdown.Item>
             </div>
-          ))}{" "}
+          ))}
         </reactBootstrap.Dropdown.Menu>
       </reactBootstrap.Dropdown>
 
       <div style={{ marginRight: "1rem" }}>
-        {currentUser.photoURL ? (
-          <img
-            style={{ borderRadius: "50%", width: "35px" }}
-            src={currentUser.photoURL}
-            alt="Profile_Picture"
-          ></img>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="35"
-            height="35"
-            fill="currentColor"
-            className="bi bi-person-circle"
-            viewBox="0 0 16 16"
+        <reactBootstrap.Dropdown
+          style={{ marginRight: "32px", marginLeft: "auto" }}
+          drop="left"
+        >
+          <reactBootstrap.Dropdown.Toggle
+            variant="transperant"
+            style={{ fontSize: "0px" }}
+            id="dropdown-basic"
           >
-            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-            <path
-              fillRule="evenodd"
-              d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-            />
-          </svg>
-        )}
+            {currentUser.photoURL ? (
+              <img
+                style={{ borderRadius: "50%", width: "35px" }}
+                src={currentUser.photoURL}
+                alt="Profile_Picture"
+              ></img>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="35"
+                height="35"
+                fill="currentColor"
+                className="bi bi-person-circle"
+                viewBox="0 0 16 16"
+              >
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                <path
+                  fillRule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                />
+              </svg>
+            )}
+          </reactBootstrap.Dropdown.Toggle>
+          <reactBootstrap.Dropdown.Menu>
+            <div>
+              <reactBootstrap.Dropdown.Item as="button">
+                <h6>Details</h6>
+              </reactBootstrap.Dropdown.Item>
+              <reactBootstrap.Dropdown.Item
+                as="button"
+                onClick={() => handleLogout()}
+              >
+                <h6>Logout</h6>
+              </reactBootstrap.Dropdown.Item>
+            </div>
+          </reactBootstrap.Dropdown.Menu>
+        </reactBootstrap.Dropdown>
       </div>
     </reactBootstrap.Navbar>
   );

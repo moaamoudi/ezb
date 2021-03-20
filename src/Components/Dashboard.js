@@ -21,17 +21,6 @@ export default function Dashboard() {
     createNotification();
   }
 
-  async function handleLogout() {
-    setError("");
-
-    try {
-      await logout();
-      history.push("/login");
-    } catch {
-      setError("Failed To Log Out");
-    }
-  }
-
   function viewDetails(project) {
     setSelectedProject1(project);
     history.push(
@@ -52,11 +41,6 @@ export default function Dashboard() {
   return (
     <div style={{ width: "100%", textAlign: "center" }}>
       {error && <Alert variant="danger">{error}</Alert>}
-      <div className="w-100 text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
-          Log Out
-        </Button>
-      </div>
 
       {projects ? (
         <div style={{ width: "100%", textAlign: "center" }}>
