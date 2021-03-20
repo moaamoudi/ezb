@@ -16,7 +16,6 @@ import { add, format } from "date-fns";
 import "./styles/PopUp.css";
 
 export default function PopUptask() {
-  let [ref, setref] = useState([]);
   let [subtasklist, setSubtasklist] = useState([]);
   const { insertTaskToFirestore } = useAuth();
   let taskName = useRef();
