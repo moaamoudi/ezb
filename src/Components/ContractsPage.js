@@ -6,8 +6,6 @@ import {
   Document,
   Page,
   Text,
-  View,
-  Image,
   StyleSheet,
   PDFViewer,
 } from "@react-pdf/renderer";
@@ -26,23 +24,6 @@ export default function ContractsPage() {
     <div style={{ display: "flex" }}>
       <div className=" ml-5" style={{marginRight:"15%"}}>
         <Form>
-          {/* <Form.Group id="header">
-            <Form.Label>Header:</Form.Label>
-            <Form.Control
-                style={{width:"400px"}}
-              as="textarea"
-              type="string"
-              onChange={(e) => {
-                if (e.target) {
-                  console.log(e.target.value);
-                  setHeader(e.target.value);
-                  setsave(false);
-                }
-              }}
-              required
-              className="button-bg"
-            />
-          </Form.Group> */}
           <Form.Group id="title">
             <Form.Label>Title:</Form.Label>
             <Form.Control

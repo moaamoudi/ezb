@@ -66,10 +66,8 @@ export default function ContactsPage() {
     <div>
       <div className="main">
         <div className="test" style={{ height: "fit-content" }}>
-          <PopUpAddEmployee />
-          <Button className="mb-2"> delete</Button>
-
-          <div>
+        
+          <div style={{marginTop:"46px"}}>
             <Card className="main-shadow">
               <Card.Body>
                 <BootstrapTable
@@ -83,12 +81,12 @@ export default function ContactsPage() {
             </Card>
           </div>
           <PopUpEmail className="mt-2 ml-1" Email={email}></PopUpEmail>
+          <Button className="mt-2 ml-1"> delete</Button>
         </div>
 
         <div className="space"> </div>
         <div className="test" style={{ height: "fit-content" }}>
           <PopUpAddClient className="Btn mb-2">Add</PopUpAddClient>
-          <Button className="mb-2"> delete</Button>
           <div>
             <Card className="main-shadow">
               <Card.Body>
@@ -102,7 +100,8 @@ export default function ContactsPage() {
               </Card.Body>
             </Card>
           </div>
-          <Button className="mt-2 ml-1" > Email</Button>
+          <PopUpEmail className="mt-2 ml-1" Email={email}></PopUpEmail>
+          <Button className="mt-2 ml-1"> delete</Button>
         </div>
       </div>
     </div>
