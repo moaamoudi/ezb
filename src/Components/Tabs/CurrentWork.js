@@ -220,7 +220,7 @@ export default function CurrentWork() {
                       {selectedProjectNotes.map((note) => (
                         <Container style={{ marginBottom: "10px" }}>
                           <Row>
-                            <Col md={2}>
+                            <Col md={3}>
                               <img
                                 style={{
                                   borderRadius: "50%",
@@ -231,11 +231,7 @@ export default function CurrentWork() {
                                 alt="Profile_Picture"
                               ></img>
                             </Col>
-                            <Col md={7}>{note.creator.name}</Col>
-
-                            <Col md={3}>
-                              <Row>{note.dateOfCreation}</Row>
-                            </Col>
+                            <Col md={9}>{note.creator.name}</Col>
 
                             <Col md={12} style={{ textAlign: "center" }}>
                               <hr
@@ -245,6 +241,13 @@ export default function CurrentWork() {
                                 }}
                               ></hr>
                               {note.msg}
+                            </Col>
+                            <Col md={8}></Col>
+                            <Col md={4} style={{ textAlign: "right" }}>
+                              <Row>{note.dateOfCreation} </Row>
+                            </Col>
+                            <Col md={12}>
+                              {" "}
                               <hr
                                 style={{
                                   marginTop: "-1px",
