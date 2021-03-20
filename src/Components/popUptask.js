@@ -44,14 +44,35 @@ export default function PopUptask() {
 
   function addItem() {
     if (subTaskName.value !== "") {
-      var joined = subtasklist.concat({
-        name: subTaskName.value,
-        complete: false,
-      });
+      var joined = [];
+      if (subtasklist.length > 0) {
+        var found = -1;
+        for (let index = 0; index < subtasklist.length; index++) {
+          if (subTaskName.value === subtasklist[index].name) {
+            found = 1;
+          }
+        }
+        if (found === -1) {
+          joined = subtasklist.concat({
+            name: subTaskName.value,
+            complete: false,
+          });
+          setSubtasklist(joined);
+          subTaskName.value = "";
+        }else{
+          return setError("Duplicate SubTask Was Entered!");
+        }
+      } else {
+        joined = subtasklist.concat({
+          name: subTaskName.value,
+          complete: false,
+        });
 
-      setSubtasklist(joined);
-      subTaskName.value = "";
+        setSubtasklist(joined);
+        subTaskName.value = "";
+      }
     }
+    setError("")
   }
 
   function onDateChange(startDate, endDate) {
@@ -180,6 +201,7 @@ export default function PopUptask() {
                   variant="light"
                   className="w-50 button-bg mt-3"
                   onClick={() => {
+                    setSubtasklist([]);
                     close();
                   }}
                 >

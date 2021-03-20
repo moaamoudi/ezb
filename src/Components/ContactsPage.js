@@ -57,8 +57,8 @@ export default function ContactsPage() {
       Email: "asdasd",
     },
     {
-      name: "saden mg",
-      Email: "Test@outlook.com",
+      name: "omar",
+      Email: "fast.omar@gmail.com",
     },
   ];
 

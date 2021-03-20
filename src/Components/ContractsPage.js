@@ -11,7 +11,6 @@ import {
 } from "@react-pdf/renderer";
 
 export default function ContractsPage() {
-  const [header, setHeader] = useState("");
   const [content, setcontent] = useState("");
   const [subtitle, setsubtitle] = useState("");
   const [title, settitle] = useState("");
