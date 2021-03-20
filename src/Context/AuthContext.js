@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { auth, db, provider } from "../firebase";
-
+import { format } from "date-fns";
 import { set } from "date-fns";
 import useLocalStorage from "../Components/useLocalStorage.js";
 
@@ -35,6 +35,10 @@ export function AuthProvider({ children }) {
     "notifications",
     {}
   );
+  const [selectedProjectNotes, setSelectedProjectNotes] = useLocalStorage(
+    "selectedProjectNotes",
+    {}
+  );
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -52,6 +56,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("selectedProject");
     localStorage.removeItem("selectedProjectTasks");
     localStorage.removeItem("notifications");
+    localStorage.removeItem("selectedProjectNotes");
 
     return auth.signOut();
   }
@@ -268,6 +273,55 @@ export function AuthProvider({ children }) {
           getProjectTasks(selectedProject);
         });
     }
+  }
+
+  async function insertNoteToFirestore(msg) {
+    if (auth.currentUser) {
+      let date = format(new Date(), "MMM-dd HH:m");
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.projectName)
+        .collection("Notes")
+        .doc()
+        .set({
+          msg: msg,
+          dateOfCreation: date,
+          creator: {
+            name: auth.currentUser.displayName,
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            photoURL: auth.currentUser.photoURL,
+          },
+        });
+      getProjectNotes(selectedProject);
+    }
+  }
+
+  async function getProjectNotes(project) {
+    let items = [];
+    if (auth.currentUser && project) {
+      items = [];
+
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(project.projectName)
+        .collection("Notes")
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((note) => {
+            let item = note.data();
+            item.id = note.id;
+            items.push(item);
+          });
+          setSelectedProjectNotes(items);
+          items = [];
+        });
+      items = [];
+    }
+    items = [];
   }
 
   async function updateProfile(firstName, lastName) {
@@ -508,8 +562,10 @@ export function AuthProvider({ children }) {
     setLoading(true);
     localStorage.removeItem("selectedProject");
     localStorage.removeItem("selectedProjectTasks");
+    localStorage.removeItem("selectedProjectNotes");
     await setSelectedProject(project);
-    await getProjectTasks(project);
+    getProjectTasks(project);
+    getProjectNotes(project);
   }
 
   useEffect(() => {
@@ -554,6 +610,8 @@ export function AuthProvider({ children }) {
     insertTaskToFirestore,
     selectedProjectTasks,
     handleSubTaskChange,
+    insertNoteToFirestore,
+    selectedProjectNotes,
   };
   return (
     <AuthContext.Provider value={value}>

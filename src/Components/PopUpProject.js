@@ -33,6 +33,7 @@ export default function PopupProject() {
 
   function onDateChange(startDate, endDate) {
     if (startDate && endDate) {
+      console.log(startDate);
       setStartDate(format(startDate, "MMM-dd-yyyy"));
       setEndDate(format(endDate, "MMM-dd-yyyy"));
     }

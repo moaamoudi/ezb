@@ -7,7 +7,7 @@ import { Card } from "react-bootstrap";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 export default function Dashboard() {
   const [error, setError] = useState("");
-  const [projectsFetched, setProjectsFetched] = useState(false);
+
   const {
     logout,
     projects,
@@ -16,7 +16,6 @@ export default function Dashboard() {
     createNotification,
   } = useAuth();
   const history = useHistory();
-  const selectedCompany = JSON.parse(localStorage.getItem("selectedCompany"));
 
   async function handleCreateNotification() {
     createNotification();

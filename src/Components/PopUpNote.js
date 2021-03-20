@@ -10,11 +10,11 @@ import "./styles/PopUp.css";
 
 export default function PopUpNote() {
   const note = useRef();
- 
+  const { insertNoteToFirestore } = useAuth();
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(note.current.value)
+    insertNoteToFirestore(note.current.value);
   }
 
   return (

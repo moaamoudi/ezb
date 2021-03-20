@@ -17,8 +17,11 @@ import { ListGroupCollapse } from "./ListGroupCollapse.js";
 
 export default function CurrentWork() {
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
-  const { selectedProjectTasks, handleSubTaskChange } = useAuth();
-  const [open, setOpen] = useState();
+  const {
+    selectedProjectTasks,
+    handleSubTaskChange,
+    selectedProjectNotes,
+  } = useAuth();
 
   function calculateProgress() {
     let counter = 0;
@@ -69,10 +72,6 @@ export default function CurrentWork() {
       }
     }
     return counter;
-  }
-
-  function isComplete() {
-    let counter = 0;
   }
 
   return (
@@ -191,7 +190,7 @@ export default function CurrentWork() {
             <Row>
               <Card
                 className="main-shadow"
-                style={{ width: "400px", height: "150px", marginTop: "20px" }}
+                style={{ width: "400px", height: "100px", marginTop: "20px" }}
               >
                 <Card.Body>
                   <h4>Project Description</h4>
@@ -204,13 +203,60 @@ export default function CurrentWork() {
                 className="main-shadow"
                 style={{
                   width: "400px",
-                  height: "350px",
+                  height: "400px",
                   marginBottom: "50px",
                   marginTop: "20px",
                 }}
               >
                 <Card.Body>
                   <h4>Notes</h4>
+                  <div>
+                    <div
+                      style={{
+                        overflow: "auto",
+                        maxHeight: "270px",
+                      }}
+                    >
+                      {selectedProjectNotes.map((note) => (
+                        <Container style={{ marginBottom: "10px" }}>
+                          <Row>
+                            <Col md={2}>
+                              <img
+                                style={{
+                                  borderRadius: "50%",
+                                  width: "35px",
+                                  padding: "4px",
+                                }}
+                                src={note.creator.photoURL}
+                                alt="Profile_Picture"
+                              ></img>
+                            </Col>
+                            <Col md={7}>{note.creator.name}</Col>
+
+                            <Col md={3}>
+                              <Row>{note.dateOfCreation}</Row>
+                            </Col>
+
+                            <Col md={12} style={{ textAlign: "center" }}>
+                              <hr
+                                style={{
+                                  marginTop: "-1px",
+                                  marginBottom: "-2px",
+                                }}
+                              ></hr>
+                              {note.msg}
+                              <hr
+                                style={{
+                                  marginTop: "-1px",
+                                  marginBottom: "-2px",
+                                }}
+                              ></hr>
+                            </Col>
+                          </Row>
+                        </Container>
+                      ))}
+                    </div>
+                  </div>
                   <div
                     style={{ position: "absolute", right: "5%", bottom: "5%" }}
                   >
