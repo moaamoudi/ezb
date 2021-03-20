@@ -13,7 +13,7 @@ import "./styles/App.css";
 import PublicRoute from "./PublicRoute";
 import ProjectPage from "./ProjectPage";
 import ContactsPage from "./ContactsPage";
-import ContracsPage from "./ContractsPage";
+import ContractsPage from "./ContractsPage";
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
               component={ProjectPage}
             />
             <PrivateRoute path="/clients" component={ContactsPage} />
-            <PrivateRoute path="/contracts" component={ContracsPage} />
+            <PrivateRoute path="/contracts" component={ContractsPage} />
             <InnerCompleteDetails
               path="/complete-details"
               component={CompleteDetails}
