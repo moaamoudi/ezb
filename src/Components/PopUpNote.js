@@ -14,6 +14,7 @@ export default function PopUpNote() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    console.log(note.current.value)
   }
 
   return (

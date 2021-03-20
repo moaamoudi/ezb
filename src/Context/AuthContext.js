@@ -222,7 +222,7 @@ export function AuthProvider({ children }) {
         })
         .then(() => {
           console.log("task written succesfully");
-          getProjectTasks();
+          getProjectTasks(selectedProject);
         })
         .catch((e) => {
           console.error(e.message);
@@ -230,15 +230,15 @@ export function AuthProvider({ children }) {
     }
   }
 
-  async function getProjectTasks() {
+  async function getProjectTasks(project) {
     let items = [];
-    if (auth.currentUser && selectedProject) {
+    if (auth.currentUser && project) {
       items = [];
       await db
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(selectedProject.projectName)
+        .doc(project.projectName)
         .collection("Tasks")
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((task) => {
@@ -250,6 +250,7 @@ export function AuthProvider({ children }) {
 
       items = [];
     }
+    setLoading(false);
   }
 
   async function handleSubTaskChange(task) {
@@ -264,7 +265,7 @@ export function AuthProvider({ children }) {
         .set(task)
         .then(() => {
           console.log("subtask succesfully edited");
-          getProjectTasks();
+          getProjectTasks(selectedProject);
         });
     }
   }
@@ -503,10 +504,12 @@ export function AuthProvider({ children }) {
       .catch((error) => {});
   }
 
-  function setSelectedProject1(project) {
-    setSelectedProject(project);
-    getProjectTasks();
-    setLoading(false);
+  async function setSelectedProject1(project) {
+    setLoading(true);
+    localStorage.removeItem("selectedProject");
+    localStorage.removeItem("selectedProjectTasks");
+    await setSelectedProject(project);
+    await getProjectTasks(project);
   }
 
   useEffect(() => {
