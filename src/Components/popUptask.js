@@ -166,7 +166,7 @@ export default function PopUptask() {
                   title="SubTasks"
                 >
                   {subtasklist.map((task) => (
-                    <div key={task.name}>
+                    <div key={task}>
                       <Dropdown.Item>
                         <div style={{ display: "flex" }}>
                           <div style={{ width: "90%" }}>{task.name}</div>
