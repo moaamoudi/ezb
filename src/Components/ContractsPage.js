@@ -93,15 +93,15 @@ export default function ContractsPage() {
               
               <Text style={styles.text}>
               
-                {save ? content : "this is the body of the page"}
+                {save ? content : "This is the body of the page"}
               </Text>
               <Text style={styles.text}>
               
-                {save ? "" : "Note!: it wont update unless you save and once you start editing again it will reverse the additions till you save again"}
+                {save ? "" : "Note: It wont update unless you save and once you start editing again it will reverse the additions till you save again"}
               </Text>
               <Text style={styles.text}>
               
-                {save ? "" : "Note!:you can write praragraphs inside the body and separate them with the KEY (ENTER)"}
+                {save ? "" : "Note: You can write praragraphs inside the body and separate them with the KEY (ENTER)"}
               </Text>
               
             </Page>
