@@ -41,11 +41,12 @@ export default function Login() {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
+      await initialUpdateDetails();
       history.push("/");
     } catch {
       setError("Failed to log in!");
     }
-    await initialUpdateDetails();
+
     setLoading(false);
   }
 

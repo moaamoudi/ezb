@@ -109,7 +109,8 @@ export function AuthProvider({ children }) {
 
       setCompaniesData(items);
       setSelectedCompany(items[0]);
-      getCompanyProjects(items[0].id);
+      await getCompanyProjects(items[0].id);
+
       items = [];
     }
     items = [];
@@ -143,7 +144,7 @@ export function AuthProvider({ children }) {
   async function getCompanyProjects(id) {
     console.log("getCompanyProjects");
 
-    if (currentUser) {
+    if (auth.currentUser) {
       db.collection("Companies/" + id + "/Projects").onSnapshot((temp) => {
         const items = [];
         temp.forEach((doc) => {
@@ -151,6 +152,20 @@ export function AuthProvider({ children }) {
         });
         setProjects(items);
       });
+    }
+  }
+
+  async function initialGetCompanyProjects() {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies/" + selectCompany.id + "/Projects")
+        .onSnapshot((temp) => {
+          const items = [];
+          temp.forEach((doc) => {
+            items.push(doc.data());
+          });
+          setProjects(items);
+        });
     }
   }
 
@@ -367,16 +382,14 @@ export function AuthProvider({ children }) {
   }
 
   async function initialUpdateDetails() {
+    setLoading(true);
     await fetchUserDetails();
     await getUserNotifications();
     await initialGetCompanies();
-    await getCompanyProjects(selectCompany.id);
+    await initialGetCompanyProjects();
+    console.log(auth.currentUser);
 
-    for (let index = 0; index < companiesData.length; index++) {
-      if (companiesData[index].companyName === selectCompany.companyName) {
-        await setSelectedCompany(companiesData[index]);
-      }
-    }
+    setLoading(false);
   }
 
   async function updateDetails() {
@@ -449,7 +462,6 @@ export function AuthProvider({ children }) {
 
     setSelectedCompany(company);
     items = [];
-    setLoading(false);
   }
 
   async function fetchUserDetails() {
