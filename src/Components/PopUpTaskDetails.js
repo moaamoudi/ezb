@@ -32,7 +32,7 @@ export function PopUpTaskDetails(props) {
   const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
   const handleSubTaskChange = props.handleSubTaskChange;
 
-  console.log(taskCopyFinal);
+  
   function handleClick(sub) {
     let check = true;
     let items = [];

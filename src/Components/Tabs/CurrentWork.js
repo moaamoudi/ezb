@@ -186,10 +186,13 @@ export default function CurrentWork() {
                           />
                         </Col>
 
-                        <PopUpTaskDetails
-                          task={task}
-                          handleSubTaskChange={handleSubTaskChange}
-                        ></PopUpTaskDetails>
+                        <div className="text-center mt-3">
+                          <PopUpTaskDetails
+                            task={task}
+                            handleSubTaskChange={handleSubTaskChange}
+                          ></PopUpTaskDetails>
+                        </div>
+
                         <hr />
                       </div>
                     ))}
