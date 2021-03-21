@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import html2pdf from "html2pdf.js";
+
 
 import {
   Document,

@@ -5,6 +5,14 @@ import { useAuth } from "../../Context/AuthContext.js";
 export const ListGroupCollapse = (props) => {
   const [open, setOpen] = useState(false);
 
+  // const click = document.getElementById("click").addEventListener(
+  //   "click",
+  //   (e) => {
+  //     console.log("test");
+  //   },
+  //   { passive: true }
+  // ) 
+
   return (
     <Col md={12} style={{ textAlign: "center", marginTop: "0px" }}>
       {open ? (

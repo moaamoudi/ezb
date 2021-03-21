@@ -3,6 +3,7 @@ import TaskPopUp from "../popUptask";
 import NotePopUp from "../PopUpNote";
 import LineChart from "../LineChart";
 import { auth } from "../../firebase.js";
+import { PopUpTaskDetails } from "../PopUpTaskDetails";
 import {
   Card,
   Col,
@@ -14,6 +15,7 @@ import {
 import { useAuth } from "../../Context/AuthContext";
 import "../styles/currentWork.css";
 import { ListGroupCollapse } from "./ListGroupCollapse.js";
+import { TabList } from "react-tabs";
 
 export default function CurrentWork() {
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
@@ -34,19 +36,33 @@ export default function CurrentWork() {
   }
 
   function handleClick(sub, task) {
+    let subTasksCopy = [];
+    task.subTasks.forEach((sub) => {
+      subTasksCopy.push(sub);
+    });
+    let taskCopy = {
+      complete: task.complete,
+      endDate: task.endDate,
+      startDate: task.startDate,
+      subTasks: subTasksCopy,
+      taskDescripiton: task.taskDescripiton,
+      taskName: task.taskName,
+    };
     let items = [];
     let check = true;
-    task.subTasks.forEach((temp) => {
+    console.log(task);
+
+    taskCopy.subTasks.forEach((temp) => {
       if (sub.name === temp.name) {
-        sub.complete = !sub.complete;
+        temp.complete = !sub.complete;
         console.log(auth.currentUser);
-        sub.lastModified = {
+        temp.lastModified = {
           name: auth.currentUser.displayName,
           uid: auth.currentUser.uid,
           email: auth.currentUser.email,
           photoURL: auth.currentUser.photoURL,
         };
-        items.push(sub);
+        items.push(temp);
       } else {
         items.push(temp);
       }
@@ -58,9 +74,9 @@ export default function CurrentWork() {
       }
     });
 
-    task.complete = check;
-    task.subTasks = items;
-    handleSubTaskChange(task);
+    taskCopy.complete = check;
+    taskCopy.subTasks = items;
+    handleSubTaskChange(taskCopy);
   }
 
   function calculateSubProgress(task) {
@@ -169,10 +185,11 @@ export default function CurrentWork() {
                             }
                           />
                         </Col>
-                        <ListGroupCollapse
+
+                        <PopUpTaskDetails
                           task={task}
-                          handleClick={handleClick}
-                        ></ListGroupCollapse>
+                          handleSubTaskChange={handleSubTaskChange}
+                        ></PopUpTaskDetails>
                         <hr />
                       </div>
                     ))}

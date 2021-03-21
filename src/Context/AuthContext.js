@@ -74,7 +74,6 @@ export function AuthProvider({ children }) {
   }
 
   async function setSelectedCompany(company) {
-    let temp;
     if (auth.currentUser) {
       await db
         .collection("Companies")

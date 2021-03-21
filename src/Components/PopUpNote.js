@@ -3,9 +3,7 @@ import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
 import { Form, Button, Card } from "react-bootstrap";
 import React, { useRef, useState } from "react";
-import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
-import { format } from "date-fns";
 import "./styles/PopUp.css";
 
 export default function PopUpNote() {
