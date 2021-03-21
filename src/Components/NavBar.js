@@ -129,7 +129,7 @@ function NavBar(props) {
                           history.push("/");
                         }}
                       >
-                        {company.companyName}
+                        {company.companyName.length>0?company.companyName.length:"<<Loading>>"}
                       </reactBootstrap.Dropdown.Item>
                       <hr style={{ width: "100%", margin: "0" }} />
                     </div>

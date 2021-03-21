@@ -53,8 +53,8 @@ export default function ContactsPage() {
 
   const data2 = [
     {
-      name: "ana anan",
-      Email: "asdasd",
+      name: "hesham amoudi",
+      Email: "hesham69mez@gmail.com",
     },
     {
       name: "omar",
@@ -66,8 +66,8 @@ export default function ContactsPage() {
     <div>
       <div className="main">
         <div className="test" style={{ height: "fit-content" }}>
-        
-          <div style={{marginTop:"46px"}}>
+        <PopUpAddEmployee  />
+          <div>
             <Card className="main-shadow">
               <Card.Body>
                 <BootstrapTable

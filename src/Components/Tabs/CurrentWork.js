@@ -119,7 +119,7 @@ export default function CurrentWork() {
                   }}
                 >
                   <div>
-                    {selectedProjectTasks.map((task) => (
+                    {selectedProjectTasks.length>0?selectedProjectTasks.map((task) => (
                       <div
                         style={{
                           width: "100%",
@@ -186,7 +186,7 @@ export default function CurrentWork() {
 
                         <hr />
                       </div>
-                    ))}
+                    )):<></>}
                   </div>
                 </div>
                 <div
@@ -205,7 +205,7 @@ export default function CurrentWork() {
               >
                 <Card.Body>
                   <h4>Project Description</h4>
-                  {selectedProject.description}
+                  {selectedProject.length>0?selectedProject.description:<></>}
                 </Card.Body>
               </Card>
             </Row>
@@ -228,7 +228,7 @@ export default function CurrentWork() {
                         maxHeight: "270px",
                       }}
                     >
-                      {selectedProjectNotes.map((note) => (
+                      {selectedProjectNotes.length>0?selectedProjectNotes.map((note) => (
                         <Container style={{ marginBottom: "10px" }}>
                           <Row>
                             <Col md={3}>
@@ -285,7 +285,7 @@ export default function CurrentWork() {
                             </Col>
                           </Row>
                         </Container>
-                      ))}
+                      )):<></>}
                     </div>
                   </div>
                   <div
