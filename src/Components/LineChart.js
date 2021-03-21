@@ -19,8 +19,6 @@ export default function LineChart() {
 
   formattedDateList = dateList.slice().sort((a, b) => a - b);
 
-  console.log(formattedDateList);
-
   let users = [];
   selectCompany.users.forEach((user) => {
     users.push(user.email);
@@ -30,8 +28,6 @@ export default function LineChart() {
   users.forEach((user) => {
     formattedData[0].push(user);
   });
-
-  console.log(formattedData);
 
   let test = (r, c) => [...Array(r)].map((x) => Array(c).fill());
   let tempData = test(formattedDateList.length, users.length);
@@ -54,10 +50,8 @@ export default function LineChart() {
                     selectedProjectTasks[k].subTasks[l].completionDate
                   ).getTime() === formattedDateList[i].getTime()
                 ) {
-                  console.log("date true");
                   counter++;
                 } else {
-                  console.log("date false");
                 }
               }
             } else {
@@ -82,11 +76,6 @@ export default function LineChart() {
       finalData[i + 1][j + 1] = tempData[i][j];
     }
   }
-
-  console.log(tempData);
-  console.log(formattedDateList);
-  console.log(formattedData);
-  console.log(finalData);
 
   return (
     <Chart
