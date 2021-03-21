@@ -101,7 +101,7 @@ export default function ContractsPage() {
               </Text>
               <Text style={styles.text}>
               
-                {save ? "" : "Note!:you can write praragraphs inside the body and separate them with the KEY (ENTER)"}
+                {save ? "" : "Note!:you can write praragraphs inside the body and separate them by pressing the KEY (ENTER)"}
               </Text>
               
             </Page>
