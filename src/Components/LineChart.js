@@ -37,35 +37,6 @@ export default function LineChart() {
   let tempData = test(formattedDateList.length, users.length);
   let finalData = test(formattedDateList.length + 1, users.length);
 
-  // let counter = 0;
-  // for (let i = 0; i < users.length; i++) {
-  //   counter = 0;
-  //   for (let k = 0; k < selectedProjectTasks.length; k++) {
-  //     for (let l = 0; l < selectedProjectTasks[k].subTasks.length; l++) {
-  //       if (selectedProjectTasks[k].subTasks[l].complete) {
-  //         if (
-  //           users[i] === selectedProjectTasks[k].subTasks[l].lastModified.email
-  //         ) {
-  //           for (let j = 0; j < formattedDateList.length; j++) {
-  //             if (
-  //               formattedDateList[j].getTime() ===
-  //               new Date(
-  //                 selectedProjectTasks[k].subTasks[l].completionDate
-  //               ).getTime()
-  //             ) {
-  //               counter++;
-  //             }
-  //           }
-  //         } else {
-  //           break;
-  //         }
-  //       } else {
-  //         break;
-  //       }
-  //     }
-  //   }
-  // }
-
   for (let i = 0; i < formattedDateList.length; i++) {
     let counter = 0;
     for (let j = 0; j < users.length; j++) {
@@ -116,30 +87,6 @@ export default function LineChart() {
   console.log(formattedDateList);
   console.log(formattedData);
   console.log(finalData);
-
-  // [
-  //   ["x", "mohammed", "tamer"],
-  //   [1, 0, 0],
-  //   [2, 10, 5],
-  //   [3, 23, 15],
-  //   [4, 17, 9],
-  //   [5, 18, 10],
-  //   [5, 9, 5],
-  //   [6, 11, 3],
-  //   [7, 27, 19],
-  //   [9, 27, 19],
-  //   [10, 27, 19],
-  //   [11, 27, 19],
-  //   [12, 27, 19],
-  //   [13, 27, 19],
-  //   [14, 27, 19],
-  //   [15, 27, 19],
-  //   [16, 27, 19],
-  //   [17, 27, 19],
-  //   [18, 27, 19],
-  //   [19, 27, 19],
-
-  // ]
 
   return (
     <Chart
