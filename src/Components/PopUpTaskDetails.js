@@ -28,8 +28,6 @@ export function PopUpTaskDetails(props) {
   const [copyMajorTask, setcopyMajorTask] = useState(task);
   const { handleSubTaskChange, selectedProjectTasks } = useAuth();
 
-  console.log(selectedProjectTasks);
-
   function handleClick(sub) {
     console.log("check is clicked");
     let check = true;
@@ -44,7 +42,7 @@ export function PopUpTaskDetails(props) {
           photoURL: auth.currentUser.photoURL,
         };
         if (sub.complete) {
-          temp.completionDate = format(new Date(), "MMM-dd-yyyy");
+          temp.completionDate = format(new Date(), "MMM-dd-yyyy HH:mm");
         } else {
           temp.completionDate = null;
         }

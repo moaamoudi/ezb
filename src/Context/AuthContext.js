@@ -18,12 +18,10 @@ export function AuthProvider({ children }) {
   const [selectedCompanyEmployee, setSelectedCompanyEmployee] = useLocalStorage(
     "selectedCompanyEmployee",
     {}
-    
-      );
+  );
   const [selectedCompanyClients, setSelectedCompanyClients] = useLocalStorage(
-"selectedCompanyClients",
-{}
-
+    "selectedCompanyClients",
+    {}
   );
   const [selectedProject, setSelectedProject] = useLocalStorage(
     "selectedProject",
@@ -49,6 +47,10 @@ export function AuthProvider({ children }) {
     "selectedProjectNotes",
     {}
   );
+  const [
+    selectedProjectInventory,
+    setSelectedProjectInventory,
+  ] = useLocalStorage("selectedProjectInventory", {});
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password);
@@ -67,6 +69,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("selectedProjectTasks");
     localStorage.removeItem("notifications");
     localStorage.removeItem("selectedProjectNotes");
+    localStorage.removeItem("selectedProjectInventory");
 
     return auth.signOut();
   }
@@ -348,6 +351,61 @@ export function AuthProvider({ children }) {
     items = [];
   }
 
+  async function insertProductToFirestore(
+    name,
+    price,
+    sellingPrice,
+    quantity,
+    unitsSold
+  ) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.projectName)
+        .collection("Inventory")
+        .doc()
+        .set({
+          productName: name,
+          productPrice: price,
+          productSellingPrice: sellingPrice,
+          productQuantity: quantity,
+          productUnitsSold: unitsSold,
+        });
+      getProjectInventory(selectedProject);
+    }
+  }
+
+  async function getProjectInventory(project) {
+    let items = [];
+    if (auth.currentUser && project) {
+      items = [];
+
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(project.projectName)
+        .collection("Inventory")
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((note) => {
+            let item = note.data();
+            item.id = note.id;
+            items.push(item);
+          });
+          setSelectedProjectInventory(items);
+          items = [];
+        });
+      items = [];
+    }
+    items = [];
+  }
+
+  function sortInventory(temp) {
+    setSelectedProjectInventory(temp);
+  }
+
   async function updateProfile(firstName, lastName) {
     await auth.currentUser
       .updateProfile({
@@ -523,78 +581,77 @@ export function AuthProvider({ children }) {
     return exists;
   }
 
-
-  async function insertClientToFirestore(ClientName,ClientEmail){
-
-    
+  async function insertClientToFirestore(ClientName, ClientEmail) {
     if (auth.currentUser) {
       await db
         .collection("Companies/" + selectCompany.id + "/Clients")
         .doc()
         .set({
-          ClientName:ClientName,
-          ClientEmail:ClientEmail,
-
+          ClientName: ClientName,
+          ClientEmail: ClientEmail,
         })
         .then(() => {
           console.log("notification succesfully written");
-          GetClients()
+          GetClients();
         });
-      }
-
+    }
   }
 
-  async function insertEmployeeToFirestore(EmployeeName,EmployeeEmail,EmployeeType){
-
-    
+  async function insertEmployeeToFirestore(
+    EmployeeName,
+    EmployeeEmail,
+    EmployeeType
+  ) {
     if (auth.currentUser) {
       await db
         .collection("Companies/" + selectCompany.id + "/Employee")
         .doc()
         .set({
-          EmployeeName:EmployeeName,
-          EmployeeEmail:EmployeeEmail,
-          EmployeeType:EmployeeType,
-
+          EmployeeName: EmployeeName,
+          EmployeeEmail: EmployeeEmail,
+          EmployeeType: EmployeeType,
         })
         .then(() => {
           console.log("notification succesfully written");
-          GetEmployee()
+          GetEmployee();
         });
-      }
-
-  }
-async function deleteEmployee(email){
-
-let temp;
-  selectedCompanyEmployee.forEach((employee) => {if(email === employee.EmployeeEmail){temp = employee}})
-
-  if (auth.currentUser) {
-    await db
-      .collection("Companies/" + selectCompany.id + "/Employee")
-      .doc(temp.id).delete()
-      GetEmployee()
-      
     }
+  }
+  async function deleteEmployee(email) {
+    let temp;
+    selectedCompanyEmployee.forEach((employee) => {
+      if (email === employee.EmployeeEmail) {
+        temp = employee;
+      }
+    });
 
-}
+    if (auth.currentUser) {
+      await db
+        .collection("Companies/" + selectCompany.id + "/Employee")
+        .doc(temp.id)
+        .delete();
+      GetEmployee();
+    }
+  }
 
-async function deleteClient(email){
+  async function deleteClient(email) {
+    let temp;
+    selectedCompanyClients.forEach((client) => {
+      if (email === client.ClientEmail) {
+        temp = client;
+      }
+    });
 
-  let temp;
-    selectedCompanyClients.forEach((client) => {if(email === client.ClientEmail){temp = client}})
-  
     if (auth.currentUser) {
       await db
         .collection("Companies/" + selectCompany.id + "/Clients")
-        .doc(temp.id).delete()
-        GetClients()
-        
-      }
-  
+        .doc(temp.id)
+        .delete();
+      GetClients();
+    }
   }
 
-  async function GetEmployee(){
+  async function GetEmployee() {
     let items = [];
     if (auth.currentUser) {
       items = [];
@@ -604,7 +661,6 @@ async function deleteClient(email){
         .doc(selectCompany.id)
         .collection("Employee")
 
-        
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((note) => {
             let item = note.data();
@@ -619,7 +675,7 @@ async function deleteClient(email){
     items = [];
   }
 
-  async function GetClients(){
+  async function GetClients() {
     let items = [];
     if (auth.currentUser) {
       items = [];
@@ -629,7 +685,6 @@ async function deleteClient(email){
         .doc(selectCompany.id)
         .collection("Clients")
 
-        
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((note) => {
             let item = note.data();
@@ -760,6 +815,10 @@ async function deleteClient(email){
     insertEmployeeToFirestore,
     deleteEmployee,
     deleteClient,
+    insertProductToFirestore,
+    getProjectInventory,
+    selectedProjectInventory,
+    sortInventory,
   };
   return (
     <AuthContext.Provider value={value}>

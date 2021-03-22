@@ -3,9 +3,9 @@ import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
 import { Form, Button, Card } from "react-bootstrap";
 import React, { useRef, useState } from "react";
-import { RangeDatePicker } from "react-google-flight-datepicker";
+
 import "react-google-flight-datepicker/dist/main.css";
-import { format } from "date-fns";
+
 import "./styles/PopUp.css";
 
 export default function PopUpProducts() {
@@ -14,8 +14,19 @@ export default function PopUpProducts() {
   const ProductSellingPrice = useRef();
   const ProductQuantity = useRef();
   const Productsold = useRef();
+
+  const { insertProductToFirestore } = useAuth();
+
   function handleSubmit(e) {
     e.preventDefault();
+
+    const name = ProductName.current.value;
+    const price = ProductPrice.current.value;
+    const sellingP = ProductSellingPrice.current.value;
+    const quantity = ProductQuantity.current.value;
+    const sold = Productsold.current.value;
+
+    insertProductToFirestore(name, price, sellingP, quantity, sold);
   }
 
   return (
