@@ -15,6 +15,16 @@ export function AuthProvider({ children }) {
   const [userDetails, setUserDetails] = useLocalStorage("userDetails", []);
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useLocalStorage("CompanyProjects", []);
+  const [selectedCompanyEmployee, setSelectedCompanyEmployee] = useLocalStorage(
+    "selectedCompanyEmployee",
+    {}
+    
+      );
+  const [selectedCompanyClients, setSelectedCompanyClients] = useLocalStorage(
+"selectedCompanyClients",
+{}
+
+  );
   const [selectedProject, setSelectedProject] = useLocalStorage(
     "selectedProject",
     {}
@@ -513,6 +523,127 @@ export function AuthProvider({ children }) {
     return exists;
   }
 
+
+  async function insertClientToFirestore(ClientName,ClientEmail){
+
+    
+    if (auth.currentUser) {
+      await db
+        .collection("Companies/" + selectCompany.id + "/Clients")
+        .doc()
+        .set({
+          ClientName:ClientName,
+          ClientEmail:ClientEmail,
+
+        })
+        .then(() => {
+          console.log("notification succesfully written");
+          GetClients()
+        });
+      }
+
+  }
+
+  async function insertEmployeeToFirestore(EmployeeName,EmployeeEmail,EmployeeType){
+
+    
+    if (auth.currentUser) {
+      await db
+        .collection("Companies/" + selectCompany.id + "/Employee")
+        .doc()
+        .set({
+          EmployeeName:EmployeeName,
+          EmployeeEmail:EmployeeEmail,
+          EmployeeType:EmployeeType,
+
+        })
+        .then(() => {
+          console.log("notification succesfully written");
+          GetEmployee()
+        });
+      }
+
+  }
+async function deleteEmployee(email){
+
+let temp;
+  selectedCompanyEmployee.forEach((employee) => {if(email === employee.EmployeeEmail){temp = employee}})
+
+  if (auth.currentUser) {
+    await db
+      .collection("Companies/" + selectCompany.id + "/Employee")
+      .doc(temp.id).delete()
+      GetEmployee()
+      
+    }
+
+}
+
+async function deleteClient(email){
+
+  let temp;
+    selectedCompanyClients.forEach((client) => {if(email === client.ClientEmail){temp = client}})
+  
+    if (auth.currentUser) {
+      await db
+        .collection("Companies/" + selectCompany.id + "/Clients")
+        .doc(temp.id).delete()
+        GetClients()
+        
+      }
+  
+  }
+
+  async function GetEmployee(){
+    let items = [];
+    if (auth.currentUser) {
+      items = [];
+
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Employee")
+
+        
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((note) => {
+            let item = note.data();
+            item.id = note.id;
+            items.push(item);
+          });
+          setSelectedCompanyEmployee(items);
+          items = [];
+        });
+      items = [];
+    }
+    items = [];
+  }
+
+  async function GetClients(){
+    let items = [];
+    if (auth.currentUser) {
+      items = [];
+
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Clients")
+
+        
+        .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((note) => {
+            let item = note.data();
+            item.id = note.id;
+            items.push(item);
+          });
+          setSelectedCompanyClients(items);
+          items = [];
+        });
+      items = [];
+    }
+    items = [];
+  }
+
   async function createNotification() {
     if (auth.currentUser) {
       await db
@@ -623,6 +754,12 @@ export function AuthProvider({ children }) {
     handleSubTaskChange,
     insertNoteToFirestore,
     selectedProjectNotes,
+    insertClientToFirestore,
+    selectedCompanyClients,
+    selectedCompanyEmployee,
+    insertEmployeeToFirestore,
+    deleteEmployee,
+    deleteClient,
   };
   return (
     <AuthContext.Provider value={value}>

@@ -6,36 +6,28 @@ import emailJS from 'emailjs-com';
 
 
 import "./styles/PopUp.css";
+import { useAuth } from "../Context/AuthContext";
 
 export default function PopUpAddEmployee() {
-const [Employee,setEmployee]=useState();
-const type=useRef("")
-const EmployeeName=useRef("")
-const EmployeeEmail=useRef("")
+
+const {insertEmployeeToFirestore} = useAuth()
+const [Employee,setEmployee]=useState("Administrator");
+const EmployeeType=useRef()
+const EmployeeName=useRef()
+const EmployeeEmail=useRef()
 const [ProjectsToBeAccessed,setAccessedProjects]=useState([])
 const user = JSON.parse(localStorage.getItem("userDetails"));
+
 function handleSubmit(e) {
   e.preventDefault();
-  var msg=""
-  var Name=user.firstName+" "+user.lastName
-  var Subject="guranteeing access"
-  var reciever=""
-   let variables= {msg: msg, Name: Name,
-        Subject: Subject,reciever:EmployeeEmail.current.value,
-       
-       }
-      //  console.log(variables)
-   emailJS.send('Gmail', 'Development_email', variables,"user_Ufgqez1YDtVtHo6gPiYox")
-   .then(function(response) {
-      console.log('SUCCESS!', response.status, response.text);
-   }, function(error) {
-      console.log('FAILED...', error);
-   });
-   e.target.reset()
+  insertEmployeeToFirestore(EmployeeName.current.value,EmployeeEmail.current.value,Employee);
 }
+      //  console.log(variables)
+
+
   return (
     <Popup
-      trigger={<Button className="mb-2" style={{marginRight:"60%"}}> Give Access</Button>}
+      trigger={<Button className="mb-2" style={{marginRight:"60%"}}> Add Employee</Button>}
       position="center center"
       modal
       nested
@@ -43,7 +35,7 @@ function handleSubmit(e) {
       {(close) => (
         <Card className="main-shadow" style={{ width: "500px" }}>
           <Card.Body>
-            <h2 className="text-center mb-4">Give Access to Employee</h2>
+            <h2 className="text-center mb-4">Add Employee to company</h2>
             <Form onSubmit={handleSubmit}>
               <Form.Group id="EmployeeName">
                 <Form.Label>Employee Name:</Form.Label>
@@ -56,6 +48,18 @@ function handleSubmit(e) {
                 />
              
               </Form.Group>
+              <Form.Group id="ProjectName">
+                <Form.Label>Employee Email: </Form.Label>
+                
+                <Form.Control
+                  type="Name"
+                  ref = {EmployeeEmail}
+                  required
+                  className="form-control button-bg "
+                />
+              
+              </Form.Group>
+
  <Form.Group id="Employeetype">
                 <Form.Label>Employee type:</Form.Label>
                 
@@ -65,7 +69,7 @@ function handleSubmit(e) {
                 className="mr-sm-2"
                 id="inlineFormCustomSelect"
                 custom
-                // onChange={Event=>setCurrency(Event.target.value)}
+                 onChange={Event=>setEmployee(Event.target.value)}
                 required
                 >
                 
@@ -75,17 +79,7 @@ function handleSubmit(e) {
               </Form.Control>
               
               </Form.Group>
-              <Form.Group id="ProjectName">
-                <Form.Label>Project to be accessed:</Form.Label>
-                
-                <Form.Control
-                  type="Name"
 
-                  required
-                  className="form-control button-bg "
-                />
-              
-              </Form.Group>
               
               <div className="text-center">
                 <Button
@@ -93,7 +87,7 @@ function handleSubmit(e) {
                   className="w-50 button-bg mt-3"
                   type="submit"
                 >
-                  Give Access
+                  Add Employee
                 </Button>
               </div>
               <div className="text-center">

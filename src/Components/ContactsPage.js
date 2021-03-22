@@ -2,42 +2,42 @@ import React, { useState } from "react";
 import "./styles/ContactsPage.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import { Card, Button } from "react-bootstrap";
+import { Card, Button,Col,Container,Row } from "react-bootstrap";
 import PopUpAddEmployee from './PopUpAddEmployee';
 import PopUpAddClient from './PopUpClients'
 import PopUpEmail from "./PopUpEmail"
+import { useAuth } from "../Context/AuthContext";
+
+
+
+
+
+
 export default function ContactsPage() {
+
+  const {selectedCompanyClients,selectedCompanyEmployee,deleteEmployee,deleteClient} = useAuth()
   const [email,setEmail]=useState("");
+  
   const columns = [
     {
-      dataField: "name",
+      dataField: "ClientName",
       text: "Client Name",
     },
     {
-      dataField: "Email",
+      dataField: "ClientEmail",
       text: "Email",
-    },
-  ];
-
-  const data = [
-    {
-      name: "ana anan",
-      Email: "asdasd",
-    },
-    {
-      name: "saden mg",
-      Email: "Test@outlook.com",
     },
   ];
 
   const col = [
     {
-      dataField: "name",
+      dataField: "EmployeeName",
       text: "Employee Name",
     },
     {
-      dataField: "Email",
+      dataField: "EmployeeEmail",
       text: "Email",
+      
     },
   ];
 
@@ -46,64 +46,96 @@ export default function ContactsPage() {
     clickToSelect: true,
     style: { backgroundColor: "#f5a494" },
     onSelect: (row, isSelect, rowIndex, e) => {
-      setEmail(row.Email)
+      setEmail(row.EmployeeEmail)
       
     }
+    
   };
+  const selectRow2 = {
+    mode: "checkbox",
+    clickToSelect: true,
+    style: { backgroundColor: "#f5a494" },
+    onSelect: (row, isSelect, rowIndex, e) => {
+      setEmail(row.ClientEmail)
+      
+    }
+    
+  };
+  function handledelete() {
+    
+    if(email){
+      deleteEmployee(email)
+      
+    }
+  }
+    function handledeleteClient() {
+      
+      if(email){
+        deleteClient(email)
+        
+      }
 
-  const data2 = [
-    {
-      name: "hesham amoudi",
-      Email: "hesham69mez@gmail.com",
-    },
-    {
-      name: "omar",
-      Email: "fast.omar@gmail.com",
-    },
-  ];
+  }
+
+  function condom(){
+    let temp =[...selectedCompanyClients] 
+    return temp
+  }
+
+  
 
   return (
-    <div>
-      <div className="main">
-        <div className="test" style={{ height: "fit-content" }}>
-        <PopUpAddEmployee  />
+    <Container fluid style = {{display:"inline-flex"}}>
+      
+        <Col md = {6}>
+       
           <div>
-            <Card className="main-shadow">
+    
+            <Card className="main-shadow" style = {{height:"800px"}}>
+            <PopUpAddEmployee/>
               <Card.Body>
-                <BootstrapTable
-                  keyField="Email"
-                  data={data2}
+                <BootstrapTable style = {{height: "650px"}}
+                  keyField="EmployeeEmail"
+                  data={selectedCompanyEmployee}
                   columns={col}
                   pagination={paginationFactory()}
                   selectRow={selectRow}
+                  
                 />
               </Card.Body>
+              <PopUpEmail className="mt-2 ml-1" Email={email}></PopUpEmail>
+          <Button className="mt-2 ml-1" onClick = {()=>{handledelete()}}> delete</Button>
             </Card>
-          </div>
-          <PopUpEmail className="mt-2 ml-1" Email={email}></PopUpEmail>
-          <Button className="mt-2 ml-1"> delete</Button>
-        </div>
 
-        <div className="space"> </div>
-        <div className="test" style={{ height: "fit-content" }}>
-          <PopUpAddClient className="Btn mb-2">Add</PopUpAddClient>
+          </div>
+
+        </Col>
+
+        
+        <Col md = {6}>
+          
           <div>
+
             <Card className="main-shadow">
+            <PopUpAddClient className="Btn mb-2">Add</PopUpAddClient>
               <Card.Body>
-                <BootstrapTable
-                  keyField="Email"
-                  data={data}
+                <BootstrapTable style = {{height: "650px"}}
+                  keyField="ClientEmail"
+                  data={condom()}
                   columns={columns}
                   pagination={paginationFactory()}
-                  selectRow={selectRow}
+                  selectRow={selectRow2}
                 />
               </Card.Body>
+              <PopUpEmail className="mt-2 ml-1" Email={email}></PopUpEmail>
+          <Button className="mt-2 ml-1" onClick = {()=>{handledeleteClient()}}> delete</Button>
             </Card>
+
           </div>
-          <PopUpEmail className="mt-2 ml-1" Email={email}></PopUpEmail>
-          <Button className="mt-2 ml-1"> delete</Button>
-        </div>
-      </div>
-    </div>
+
+
+        </Col>
+      
+    </Container>
   );
 }

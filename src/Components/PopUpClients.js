@@ -3,13 +3,18 @@ import "reactjs-popup/dist/index.css";
 import { Form, Button, Card } from "react-bootstrap";
 import React, { useState ,useRef} from "react";
 import "./styles/PopUp.css";
+import { useAuth } from "../Context/AuthContext";
 
 export default function PopUpAddClient() {
 const ClientName = useRef()
 const ClientEmail = useRef()
-  function handleSubmit(e) {
-    e.preventDefault();
-  }
+const {insertClientToFirestore} = useAuth()
+
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      insertClientToFirestore(ClientName.current.value,ClientEmail.current.value);
+    }
 
   return (
     <Popup
