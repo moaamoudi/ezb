@@ -27,7 +27,7 @@ function handleSubmit(e) {
 
   return (
     <Popup
-      trigger={<Button className="mb-2" style={{marginRight:"60%"}}> Add Employee</Button>}
+      trigger={<Button> Add Employee</Button>}
       position="center center"
       modal
       nested
