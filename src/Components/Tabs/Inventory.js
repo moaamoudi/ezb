@@ -196,7 +196,7 @@ export default function Inventory() {
           >
             <div className="container-fluid ">
               <div className="row justify-content-center">
-                {selectedProjectInventory.map((prod) => (
+                {selectedProjectInventory.length>0?selectedProjectInventory.map((prod) => (
                   <Card
                     style={{
                       width: "250px",
@@ -235,7 +235,7 @@ export default function Inventory() {
                       </Button>
                     </div>
                   </Card>
-                ))}
+                )):<div>{"<<loading>"}</div>}
               </div>
             </div>
           </div>
