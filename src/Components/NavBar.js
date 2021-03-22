@@ -103,7 +103,7 @@ function NavBar(props) {
         }}
       >
         <h2 style={{ display: "flex" }}>
-          {selectCompany.companyName}
+          {selectCompany.companyName.length>0?selectCompany.companyName:"<<Loading>>"}
           {companiesData.length > 1 ? (
             <div className="dropDown">
               <reactBootstrap.Dropdown
@@ -129,7 +129,7 @@ function NavBar(props) {
                           history.push("/");
                         }}
                       >
-                        {company.companyName.length>0?company.companyName.length:"<<Loading>>"}
+                        {company.companyName.length>0?company.companyName:"<<Loading>>"}
                       </reactBootstrap.Dropdown.Item>
                       <hr style={{ width: "100%", margin: "0" }} />
                     </div>

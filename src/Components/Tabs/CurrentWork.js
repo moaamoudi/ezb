@@ -26,50 +26,6 @@ export default function CurrentWork() {
     return counter;
   }
 
-  function handleClick(sub, task) {
-    let subTasksCopy = [];
-    task.subTasks.forEach((sub) => {
-      subTasksCopy.push(sub);
-    });
-    let taskCopy = {
-      complete: task.complete,
-      endDate: task.endDate,
-      startDate: task.startDate,
-      subTasks: subTasksCopy,
-      taskDescripiton: task.taskDescripiton,
-      taskName: task.taskName,
-    };
-    let items = [];
-    let check = true;
-    console.log(task);
-
-    taskCopy.subTasks.forEach((temp) => {
-      if (sub.name === temp.name) {
-        temp.complete = !sub.complete;
-        console.log(auth.currentUser);
-        temp.lastModified = {
-          name: auth.currentUser.displayName,
-          uid: auth.currentUser.uid,
-          email: auth.currentUser.email,
-          photoURL: auth.currentUser.photoURL,
-        };
-        items.push(temp);
-      } else {
-        items.push(temp);
-      }
-    });
-    items.forEach((item) => {
-      if (item.complete) {
-      } else {
-        check = false;
-      }
-    });
-
-    taskCopy.complete = check;
-    taskCopy.subTasks = items;
-    handleSubTaskChange(taskCopy);
-  }
-
   function calculateSubProgress(task) {
     let counter = 0;
 
