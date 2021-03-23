@@ -377,6 +377,47 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function deleteProduct(prod) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.projectName)
+        .collection("Inventory")
+        .doc(prod.id)
+        .delete();
+      getProjectInventory(selectedProject);
+    }
+  }
+
+  async function updateProduct(
+    prodId,
+    name,
+    quantity,
+    price,
+    sellingPrice,
+    units
+  ) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.projectName)
+        .collection("Inventory")
+        .doc(prodId)
+        .set({
+          productName: name,
+          productPrice: price,
+          productSellingPrice: sellingPrice,
+          productQuantity: quantity,
+          productUnitsSold: units,
+        });
+      getProjectInventory(selectedProject);
+    }
+  }
+
   async function getProjectInventory(project) {
     let items = [];
     if (auth.currentUser && project) {
@@ -819,6 +860,8 @@ export function AuthProvider({ children }) {
     getProjectInventory,
     selectedProjectInventory,
     sortInventory,
+    deleteProduct,
+    updateProduct,
   };
   return (
     <AuthContext.Provider value={value}>

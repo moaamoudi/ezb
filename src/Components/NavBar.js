@@ -103,7 +103,9 @@ function NavBar(props) {
         }}
       >
         <h2 style={{ display: "flex" }}>
-          {selectCompany.companyName.length>0?selectCompany.companyName:"<<Loading>>"}
+          {selectCompany.companyName.length > 0
+            ? selectCompany.companyName
+            : "<<Loading>>"}
           {companiesData.length > 1 ? (
             <div className="dropDown">
               <reactBootstrap.Dropdown
@@ -124,14 +126,18 @@ function NavBar(props) {
                       <reactBootstrap.Dropdown.Item
                         as="button"
                         onSelect={() => {
-                          localStorage.removeItem("selectedProject")
-                          localStorage.removeItem("selectedProjectNotes")
-                          localStorage.removeItem("selectedProjectTasks")
+                          localStorage.removeItem("selectedProject");
+                          localStorage.removeItem("selectedProjectNotes");
+                          localStorage.removeItem("selectedProjectTasks");
                           setSelectedCompany(company);
                           history.push("/");
                         }}
                       >
-                        {company.companyName.length>0?company.companyName:"<<Loading>>"}
+                        {company.companyName.length > 0 ? (
+                          <h6>{company.companyName}</h6>
+                        ) : (
+                          "<<Loading>>"
+                        )}
                       </reactBootstrap.Dropdown.Item>
                       <hr style={{ width: "100%", margin: "0" }} />
                     </div>
@@ -145,7 +151,7 @@ function NavBar(props) {
         </h2>
       </div>
       <reactBootstrap.Dropdown
-        style={{ marginRight: "10px", marginLeft: "auto",marginTop:"6px" }}
+        style={{ marginRight: "10px", marginLeft: "auto", marginTop: "6px" }}
         drop="left"
       >
         <reactBootstrap.Dropdown.Toggle

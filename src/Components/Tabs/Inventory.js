@@ -5,16 +5,19 @@ import {
   Dropdown,
   DropdownButton,
   Card,
-  Button,
 } from "react-bootstrap";
+
+import PopUpProductDetails from "../PopUpProductDetails.js";
 
 import { useAuth } from "../../Context/AuthContext";
 import PopUpProducts from "../PopUpProducts";
 export default function Inventory() {
   const [Selected, setSelected] = useState("");
-  const { selectedProjectInventory, sortInventory } = useAuth();
+  const { selectedProjectInventory, sortInventory, deleteProduct } = useAuth();
 
-  function handleClick(prod) {}
+  function handleDelete(prod) {
+    deleteProduct(prod);
+  }
 
   function handleSelect(sort) {
     setSelected(sort);
@@ -44,24 +47,11 @@ export default function Inventory() {
         temp = temp.sort(sortLeastQuantity);
         sortInventory(temp);
         break;
-
       default:
+        temp = temp.sort(sortBestSelling);
+        sortInventory(temp);
         break;
     }
-
-    // if (sort === "Best Selling") {
-    //   temp = temp.sort(sortBestSelling);
-    // } else if (sort === "Alphabetical") {
-    //   temp = temp.sort(sortAlphabetical);
-    // } else if (sort === "Highest Price") {
-    //   temp = temp.sort(sortHighestPrice);
-    // } else if (sort === "Lowest Price") {
-    //   temp = temp.sort(sortLowestPrice);
-    // } else if (sort === "Most Quantity") {
-    //   temp = temp.sort(sortMostQuantity);
-    // } else if (sort === "Least Quantity") {
-    //   temp = temp.sort(sortLeastQuantity);
-    // }
   }
 
   function sortBestSelling(a, b) {
@@ -93,29 +83,29 @@ export default function Inventory() {
   }
 
   function sortHighestPrice(a, b) {
-    if (a.productPrice > b.productPrice) return 1;
-    if (a.productPrice < b.productPrice) return -1;
-
-    return 0;
-  }
-
-  function sortLowestPrice(a, b) {
     if (a.productPrice < b.productPrice) return 1;
     if (a.productPrice > b.productPrice) return -1;
 
     return 0;
   }
 
+  function sortLowestPrice(a, b) {
+    if (a.productPrice > b.productPrice) return 1;
+    if (a.productPrice < b.productPrice) return -1;
+
+    return 0;
+  }
+
   function sortMostQuantity(a, b) {
-    if (a.productQuantity > b.productQuantity) return 1;
-    if (a.productQuantity < b.productQuantity) return -1;
+    if (a.productQuantity < b.productQuantity) return 1;
+    if (a.productQuantity > b.productQuantity) return -1;
 
     return 0;
   }
 
   function sortLeastQuantity(a, b) {
-    if (parseInt(a.productQuantity) > parseInt(b.productQuantity)) return 1;
-    if (parseInt(b.productQuantity) < parseInt(a.productQuantity)) return -1;
+    if (a.productQuantity > b.productQuantity) return 1;
+    if (a.productQuantity < b.productQuantity) return -1;
 
     return 0;
   }
@@ -155,7 +145,7 @@ export default function Inventory() {
             Best Selling
           </Dropdown.Item>
           <Dropdown.Item
-            eventKey="3"
+            eventKey="4"
             onSelect={() => {
               handleSelect("Highest Price");
             }}
@@ -163,7 +153,7 @@ export default function Inventory() {
             Highest Price
           </Dropdown.Item>
           <Dropdown.Item
-            eventKey="4"
+            eventKey="5"
             onSelect={() => {
               handleSelect("Lowest Price");
             }}
@@ -171,7 +161,7 @@ export default function Inventory() {
             Lowest Price
           </Dropdown.Item>
           <Dropdown.Item
-            eventKey="5"
+            eventKey="6"
             onSelect={() => {
               handleSelect("Most Quantity");
             }}
@@ -180,7 +170,7 @@ export default function Inventory() {
           </Dropdown.Item>
 
           <Dropdown.Item
-            eventKey="6"
+            eventKey="7"
             onSelect={() => {
               handleSelect("Least Quantity");
             }}
@@ -194,50 +184,95 @@ export default function Inventory() {
             className="text-center"
             style={{ overflow: "auto", height: "900px" }}
           >
-            <div className="container-fluid ">
-              <div className="row justify-content-center">
-                {selectedProjectInventory.length>0?selectedProjectInventory.map((prod) => (
-                  <Card
-                    style={{
-                      width: "250px",
-                      height: "350px",
-                      margin: "25px",
-                      padding: "10px",
-                    }}
-                  >
-                    <div className="mb-2">
-                      <h2>{prod.productName}</h2>
-                    </div>
-                    <div className="mb-2">
-                      <h5>Quantity: {prod.productQuantity}</h5>
-                    </div>
-                    <div className="mb-2">
-                      <h5>Price: ${prod.productPrice}</h5>
-                    </div>
-                    <div className="mb-2">
-                      <h5>Selling Price: ${prod.productSellingPrice}</h5>
-                    </div>
-                    <div className="mb-2">
-                      <h5>Units Sold: {prod.productUnitsSold}</h5>
-                    </div>
-                    <div className="mb-3">
-                      <h5>
-                        Profit: $
-                        {prod.productUnitsSold * prod.productSellingPrice}
-                      </h5>
-                    </div>
-                    <div className="mt-3">
-                      <Button
-                        style={{ width: "50%" }}
-                        onClick={() => handleClick(prod)}
+            {selectedProjectInventory.length > 0 ? (
+              <div className="container-fluid ">
+                <div className="row justify-content-center">
+                  {selectedProjectInventory.map((prod) => (
+                    <div>
+                      <Card
+                        style={{
+                          width: "250px",
+                          height: "350px",
+                          margin: "25px",
+                          padding: "10px",
+                        }}
                       >
-                        Edit
-                      </Button>
+                        <div
+                          style={{
+                            right: "-35px",
+                            top: "5px",
+                            position: "absolute",
+                          }}
+                        >
+                          <Dropdown
+                            style={{ marginRight: "32px", marginLeft: "auto" }}
+                            drop="down"
+                          >
+                            <Dropdown.Toggle
+                              variant="transperant"
+                              style={{ fontSize: "0px" }}
+                              id="dropdown-basic"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="20"
+                                height="20"
+                                fill="currentColor"
+                                className="bi bi-three-dots-vertical"
+                                viewBox="0 0 16 16"
+                              >
+                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                              </svg>
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                              <div>
+                                <Dropdown.Item
+                                  as="button"
+                                  onClick={() => {
+                                    handleDelete(prod);
+                                  }}
+                                >
+                                  <h6>Delete Product</h6>
+                                </Dropdown.Item>
+                              </div>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </div>
+                        <div className="mb-2">
+                          <h2>{prod.productName}</h2>
+                        </div>
+                        <div className="mb-2">
+                          <h5>Quantity: {prod.productQuantity}</h5>
+                        </div>
+                        <div className="mb-2">
+                          <h5>Price: ${prod.productPrice}</h5>
+                        </div>
+                        <div className="mb-2">
+                          <h5>Selling Price: ${prod.productSellingPrice}</h5>
+                        </div>
+                        <div className="mb-2">
+                          <h5>Units Sold: {prod.productUnitsSold}</h5>
+                        </div>
+                        <div className="mb-3">
+                          <h5>
+                            Profit: $
+                            {prod.productUnitsSold * prod.productSellingPrice}
+                          </h5>
+                        </div>
+                        <div className="mt-3">
+                          <PopUpProductDetails
+                            prod={prod}
+                            handleSelect={handleSelect}
+                          ></PopUpProductDetails>
+                        </div>
+                      </Card>
                     </div>
-                  </Card>
-                )):<div>{"<<loading>"}</div>}
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div></div>
+            )}
           </div>
         </Container>
       </div>
