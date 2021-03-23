@@ -14,25 +14,23 @@ import {
 import React, { useEffect, useState } from "react";
 
 import "react-google-flight-datepicker/dist/main.css";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import "./styles/PopUp.css";
 
 export function PopUpTaskDetails(props) {
-  let task = props.task;
-  let subtasks = task.subTasks;
+  const task = props.task;
   let updated = false;
+  let [taskCopy, setTaskCopy] = useState(task);
+  let [subtasklist, setSubtasklist] = useState(task.subTasks);
   let subTaskName = useState();
-  let [subtasklist, setSubtasklist] = useState([]);
   const [error, setError] = useState("");
-  const [copy, setCopy] = useState();
-  const [copyMajorTask, setcopyMajorTask] = useState(task);
-  const { handleSubTaskChange, selectedProjectTasks } = useAuth();
+  const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
+  const handleSubTaskChange = props.handleSubTaskChange;
 
   function handleClick(sub) {
-    console.log("check is clicked");
     let check = true;
     let items = [];
-    copyMajorTask.subTasks.forEach((temp) => {
+    taskCopy.subTasks.forEach((temp) => {
       if (sub.name === temp.name) {
         temp.complete = !sub.complete;
         temp.lastModified = {
@@ -51,31 +49,32 @@ export function PopUpTaskDetails(props) {
         items.push(temp);
       }
     });
-    subtasks.forEach((item) => {
+    taskCopy.subTasks.forEach((item) => {
       if (item.complete) {
       } else {
         check = false;
       }
     });
-    var newArr = copyMajorTask;
-    newArr.complete = check;
-    newArr.subTasks = items;
-    setcopyMajorTask(newArr);
+
+    taskCopy.complete = check;
+    setSubtasklist(items);
+    taskCopy.subTasks = subtasklist;
     updated = true;
+    setTaskCopyFinal(taskCopy);
   }
 
   function checkComplete() {
     let check = true;
 
-    copyMajorTask.subTasks.forEach((item) => {
+    taskCopy.subTasks.forEach((item) => {
       if (item.complete) {
       } else {
         check = false;
       }
     });
-    var newArr = copyMajorTask;
-    newArr.complete = check;
-    setcopyMajorTask(newArr);
+    taskCopy.complete = check;
+    updated = true;
+    setTaskCopyFinal(taskCopy);
   }
 
   function addItem() {
@@ -94,28 +93,27 @@ export function PopUpTaskDetails(props) {
             complete: false,
           });
           setSubtasklist(joined);
-          var majorSub = copyMajorTask;
-          majorSub.subTasks = joined;
-          console.log(majorSub);
-          setcopyMajorTask(majorSub);
+          taskCopy.subTasks = joined;
           updated = true;
+          setTaskCopyFinal(taskCopy);
           checkComplete();
           subTaskName.value = "";
         } else {
           return setError("Duplicate SubTask Was Entered!");
         }
       } else {
-        joined = subtasklist.concat({
+        joined = taskCopy.concat({
           name: subTaskName.value,
           complete: false,
         });
+
         setSubtasklist(joined);
-        var majorSub = copyMajorTask;
-        majorSub.subTasks = majorSub.subTasks.concat(joined);
-        setcopyMajorTask(majorSub);
+        taskCopy.subTasks = joined;
         updated = true;
-        checkComplete();
+        setTaskCopyFinal(taskCopy);
+
         subTaskName.value = "";
+        checkComplete();
       }
     }
 
@@ -123,27 +121,26 @@ export function PopUpTaskDetails(props) {
   }
 
   function handleRemove(sub) {
-    const filtered = copyMajorTask.subTasks.filter(
-      (subname) => subname.name !== sub.name
-    );
-    var majorSub = copyMajorTask;
-    majorSub.subTasks = filtered;
-    setcopyMajorTask(majorSub);
+    const subs = taskCopy.subTasks.filter((temp) => temp.name !== sub.name);
+    taskCopy.subTasks = subs;
+    taskCopyFinal.subTasks = subs;
+    setSubtasklist(subs);
     updated = true;
+    setTaskCopyFinal(taskCopy);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    handleSubTaskChange(copyMajorTask);
+    handleSubTaskChange(taskCopyFinal);
   }
 
   useEffect(() => {
     if (updated) {
-      setcopyMajorTask(copyMajorTask);
-      // setTaskCopyFinal(taskCopy);
+      setTaskCopy(taskCopy);
+      setTaskCopyFinal(taskCopy);
       updated = false;
     }
-  }, [copyMajorTask]);
+  }, []);
 
   return (
     <Popup
@@ -160,23 +157,32 @@ export function PopUpTaskDetails(props) {
         >
           <Card.Body>
             <div className="text-center">
-              <Button
+              <div
                 style={{
                   position: "absolute",
-                  marginTop: "0",
-                  top: "-15px",
-                  width: "10%",
-                  marginLeft: "40%",
-                  borderRadius: "100%",
+                  top: "0.5vh",
+                  right: "1vh",
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
                 }}
                 variant="light"
-                className="button-bg mt-3"
+                className="button-bg svgOnClick"
                 onClick={() => {
                   close();
                 }}
               >
-                X
-              </Button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  class="bi bi-x"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                </svg>
+              </div>
             </div>
             <Container fluid>
               <h2 className="text-center mb-4">Task Details</h2>
@@ -234,8 +240,8 @@ export function PopUpTaskDetails(props) {
                         }}
                       >
                         <hr></hr>
-                        {copyMajorTask.subTasks.length > 0 ? (
-                          copyMajorTask.subTasks.map((sub) => (
+                        {subtasklist.length > 0 ? (
+                          subtasklist.map((sub) => (
                             <Container
                               style={{
                                 display: "inline-flex",
@@ -349,9 +355,13 @@ export function PopUpTaskDetails(props) {
                         variant="light"
                         className="w-50 button-bg mt-3"
                         type="submit"
-                        onClick={() => setcopyMajorTask(task)}
+                        onClick={() => {
+                          setSubtasklist(props.task.subTasks);
+                          setTaskCopyFinal(props.task);
+                          setTaskCopy(props.task);
+                        }}
                       >
-                        cancel
+                        Reset
                       </Button>
                     </div>
                   </Col>

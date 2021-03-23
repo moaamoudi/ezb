@@ -124,7 +124,9 @@ function NavBar(props) {
                       <reactBootstrap.Dropdown.Item
                         as="button"
                         onSelect={() => {
-                          console.log("dropdown onselect");
+                          localStorage.removeItem("selectedProject")
+                          localStorage.removeItem("selectedProjectNotes")
+                          localStorage.removeItem("selectedProjectTasks")
                           setSelectedCompany(company);
                           history.push("/");
                         }}
