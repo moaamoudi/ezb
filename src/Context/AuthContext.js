@@ -70,6 +70,8 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("notifications");
     localStorage.removeItem("selectedProjectNotes");
     localStorage.removeItem("selectedProjectInventory");
+    localStorage.removeItem("selectedCompanyEmployee");
+    localStorage.removeItem("selectedCompanyClients");
 
     return auth.signOut();
   }
@@ -516,6 +518,8 @@ export function AuthProvider({ children }) {
     await getUserNotifications();
     await initialGetCompanies();
     await initialGetCompanyProjects();
+    await initialGetClients();
+    await initialGetEmployee();
     console.log(auth.currentUser);
 
     setLoading(false);
@@ -736,6 +740,29 @@ export function AuthProvider({ children }) {
     items = [];
   }
 
+  async function initialGetEmployee() {
+    let items = [];
+    if (auth.currentUser) {
+      items = [];
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Employee")
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((note) => {
+            let item = note.data();
+            item.id = note.id;
+            items.push(item);
+          });
+          setSelectedCompanyEmployee(items);
+          items = [];
+        });
+      items = [];
+    }
+    items = [];
+  }
+
   async function GetClients() {
     let items = [];
     if (auth.currentUser) {
@@ -747,6 +774,30 @@ export function AuthProvider({ children }) {
         .collection("Clients")
 
         .onSnapshot((querySnapshot) => {
+          querySnapshot.forEach((note) => {
+            let item = note.data();
+            item.id = note.id;
+            items.push(item);
+          });
+          setSelectedCompanyClients(items);
+          items = [];
+        });
+      items = [];
+    }
+    items = [];
+  }
+
+  async function initialGetClients() {
+    let items = [];
+    if (auth.currentUser) {
+      items = [];
+
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Clients")
+        .get()
+        .then((querySnapshot) => {
           querySnapshot.forEach((note) => {
             let item = note.data();
             item.id = note.id;
