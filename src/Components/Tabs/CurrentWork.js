@@ -18,7 +18,7 @@ export default function CurrentWork() {
 
   function calculateProgress() {
     let counter = 0;
-    if (selectedProjectTasks) {
+    if (selectedProjectTasks.length > 0) {
       selectedProjectTasks.forEach((temp) => {
         if (temp.complete) {
           counter++;

@@ -262,6 +262,26 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function deleteTask(task) {
+    if (auth.currentUser) {
+      await db;
+      db.collection("Companies")
+        .doc("" + selectCompany.id)
+        .collection("Projects")
+        .doc("" + selectedProject.projectName)
+        .collection("Tasks")
+        .doc("" + task.taskName)
+        .delete()
+        .then(() => {
+          console.log("task written succesfully");
+          getProjectTasks(selectedProject);
+        })
+        .catch((e) => {
+          console.error(e.message);
+        });
+    }
+  }
+
   async function getProjectTasks(project) {
     let items = [];
     if (auth.currentUser && project) {
@@ -862,6 +882,7 @@ export function AuthProvider({ children }) {
     sortInventory,
     deleteProduct,
     updateProduct,
+    deleteTask,
   };
   return (
     <AuthContext.Provider value={value}>

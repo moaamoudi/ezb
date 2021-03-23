@@ -10,6 +10,7 @@ import {
   Row,
   Container,
   Alert,
+  Dropdown,
 } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -23,6 +24,7 @@ export function PopUpTaskDetails(props) {
   let [taskCopy, setTaskCopy] = useState(task);
   let [subtasklist, setSubtasklist] = useState(task.subTasks);
   let subTaskName = useState();
+  const { deleteTask } = useAuth();
   const [error, setError] = useState("");
   const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
   const handleSubTaskChange = props.handleSubTaskChange;
@@ -120,6 +122,10 @@ export function PopUpTaskDetails(props) {
     setError("");
   }
 
+  function handleDelete(task) {
+    deleteTask(task);
+  }
+
   function handleRemove(sub) {
     const subs = taskCopy.subTasks.filter((temp) => temp.name !== sub.name);
     taskCopy.subTasks = subs;
@@ -153,36 +159,46 @@ export function PopUpTaskDetails(props) {
       {(close) => (
         <Card
           className="main-shadow"
-          style={{ width: "450px", height: "750px" }}
+          style={{ width: "450px", height: "770px" }}
         >
           <Card.Body>
-            <div className="text-center">
-              <div
-                style={{
-                  position: "absolute",
-                  top: "0.5vh",
-                  right: "1vh",
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                }}
-                variant="light"
-                className="button-bg svgOnClick"
-                onClick={() => {
-                  close();
-                }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="currentColor"
-                  class="bi bi-x"
-                  viewBox="0 0 16 16"
+            <div
+              style={{
+                right: "10px",
+                top: "10px",
+                position: "absolute",
+              }}
+            >
+              <Dropdown drop="down">
+                <Dropdown.Toggle
+                  variant="transperant"
+                  style={{ fontSize: "0px" }}
+                  id="dropdown-basic"
                 >
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                </svg>
-              </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                    className="bi bi-three-dots-vertical"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                  </svg>
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <div>
+                    <Dropdown.Item
+                      as="button"
+                      onClick={() => {
+                        handleDelete(task);
+                      }}
+                    >
+                      <h6>Delete Task</h6>
+                    </Dropdown.Item>
+                  </div>
+                </Dropdown.Menu>
+              </Dropdown>
             </div>
             <Container fluid>
               <h2 className="text-center mb-4">Task Details</h2>
@@ -219,8 +235,9 @@ export function PopUpTaskDetails(props) {
                       />
 
                       <Button
-                        style={{ width: "50%" }}
-                        variant="light ml-2"
+                        style={{ width: "40%", marginLeft: "10%" }}
+                        variant="light"
+                        className="button-bg"
                         onClick={(e) => {
                           addItem();
                         }}
@@ -362,6 +379,19 @@ export function PopUpTaskDetails(props) {
                         }}
                       >
                         Reset
+                      </Button>
+                    </div>
+
+                    <div className="text-center">
+                      <Button
+                        variant="light"
+                        className="w-50 button-bg mt-3"
+                        type="submit"
+                        onClick={() => {
+                          close();
+                        }}
+                      >
+                        Close
                       </Button>
                     </div>
                   </Col>
