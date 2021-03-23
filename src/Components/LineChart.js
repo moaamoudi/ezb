@@ -3,7 +3,8 @@ import React from "react";
 import { Chart } from "react-google-charts";
 import { useAuth } from "../Context/AuthContext.js";
 export default function LineChart() {
-  const { selectedProject, selectedProjectTasks, selectCompany } = useAuth();
+  const { selectedProjectTasks, selectCompany } = useAuth();
+
   let dateList = [];
   selectedProjectTasks.forEach((task) => {
     task.subTasks.forEach((sub) => {
@@ -62,7 +63,6 @@ export default function LineChart() {
         }
 
         tempData[i][j] = counter;
-        counter = 0;
       }
     }
   }
