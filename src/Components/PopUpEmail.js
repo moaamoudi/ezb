@@ -74,7 +74,7 @@ export default function PopUpAddEmployee(props) {
                 />
               </Form.Group>
               <Form.Group id="reciever">
-                <Form.Label>To:</Form.Label>
+                <Form.Label>Recipient:</Form.Label>
                 <Form.Control
                   type="string"
                   required

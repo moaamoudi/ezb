@@ -5,75 +5,81 @@ export default function LineChart() {
   const { selectedProjectTasks, selectCompany } = useAuth();
 
   let dateList = [];
-  selectedProjectTasks.forEach((task) => {
-    task.subTasks.forEach((sub) => {
-      if (sub.complete) {
-        if (sub.completionDate) {
-          dateList.push(new Date(sub.completionDate));
-        }
-      }
-    });
-  });
-
-  let formattedDateList = [];
-
-  formattedDateList = dateList.slice().sort((a, b) => a - b);
-
-  let users = [];
-  selectCompany.users.forEach((user) => {
-    users.push(user.email);
-  });
-
-  let formattedData = [["x"]];
-  users.forEach((user) => {
-    formattedData[0].push(user);
-  });
-
-  let test = (r, c) => [...Array(r)].map((x) => Array(c).fill());
-  let tempData = test(formattedDateList.length, users.length);
-  let finalData = test(formattedDateList.length + 1, users.length);
-
-  for (let i = 0; i < formattedDateList.length; i++) {
-    let counter = 0;
-    for (let j = 0; j < users.length; j++) {
-      counter = 0;
-      for (let k = 0; k < selectedProjectTasks.length; k++) {
-        for (let l = 0; l < selectedProjectTasks[k].subTasks.length; l++) {
-          if (selectedProjectTasks[k].subTasks[l].complete) {
-            if (
-              selectedProjectTasks[k].subTasks[l].lastModified.email ===
-              users[j]
-            ) {
-              if (selectedProjectTasks[k].subTasks[l].completionDate !== null) {
-                if (
-                  new Date(
-                    selectedProjectTasks[k].subTasks[l].completionDate
-                  ).getTime() === formattedDateList[i].getTime()
-                ) {
-                  counter++;
-                } else {
-                }
-              }
-            } else {
-            }
-          } else {
-            break;
+  let finalData = [];
+  if (selectedProjectTasks.length > 0) {
+    selectedProjectTasks.forEach((task) => {
+      task.subTasks.forEach((sub) => {
+        if (sub.complete) {
+          if (sub.completionDate) {
+            dateList.push(new Date(sub.completionDate));
           }
         }
+      });
+    });
 
-        tempData[i][j] = counter;
+    let formattedDateList = [];
+
+    formattedDateList = dateList.slice().sort((a, b) => a - b);
+
+    let users = [];
+    selectCompany.users.forEach((user) => {
+      users.push(user.email);
+    });
+
+    let formattedData = [["x"]];
+    users.forEach((user) => {
+      formattedData[0].push(user);
+    });
+
+    let test = (r, c) => [...Array(r)].map((x) => Array(c).fill(0));
+    let tempData = test(formattedDateList.length, users.length);
+    finalData = test(formattedDateList.length + 1, users.length);
+
+    for (let i = 0; i < formattedDateList.length; i++) {
+      let counter = 0;
+      for (let j = 0; j < users.length; j++) {
+        counter = 0;
+        for (let k = 0; k < selectedProjectTasks.length; k++) {
+          for (let l = 0; l < selectedProjectTasks[k].subTasks.length; l++) {
+            if (selectedProjectTasks[k].subTasks[l].complete) {
+              if (
+                selectedProjectTasks[k].subTasks[l].lastModified.email ===
+                users[j]
+              ) {
+                if (
+                  selectedProjectTasks[k].subTasks[l].completionDate !== null
+                ) {
+                  if (
+                    new Date(
+                      selectedProjectTasks[k].subTasks[l].completionDate
+                    ).getTime() === formattedDateList[i].getTime()
+                  ) {
+                    counter++;
+                  } else {
+                  }
+                }
+              } else {
+              }
+            } else {
+              break;
+            }
+          }
+
+          tempData[i][j] = counter;
+        }
       }
     }
-  }
-  finalData[0][0] = formattedData[0][0];
-  for (let i = 0; i < users.length; i++) {
-    finalData[0][i + 1] = formattedData[0][i + 1];
-  }
-  for (let j = 0; j < users.length; j++) {
-    for (let i = 0; i < formattedDateList.length; i++) {
-      finalData[i + 1][0] = formattedDateList[i];
-      finalData[i + 1][j + 1] = tempData[i][j];
+    finalData[0][0] = formattedData[0][0];
+    for (let i = 0; i < users.length; i++) {
+      finalData[0][i + 1] = formattedData[0][i + 1];
     }
+    for (let j = 0; j < users.length; j++) {
+      for (let i = 0; i < formattedDateList.length; i++) {
+        finalData[i + 1][0] = formattedDateList[i];
+        finalData[i + 1][j + 1] = tempData[i][j];
+      }
+    }
+    console.log(finalData);
   }
 
   return (

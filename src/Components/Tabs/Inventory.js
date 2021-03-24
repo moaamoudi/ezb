@@ -27,44 +27,46 @@ export default function Inventory() {
         temp = temp.sort(sortBestSelling);
         sortInventory(temp);
         break;
+
       case "Alphabetical":
         temp = temp.sort(sortAlphabetical);
         sortInventory(temp);
         break;
+
       case "Highest Price":
         temp = temp.sort(sortHighestPrice);
         sortInventory(temp);
         break;
+
       case "Lowest Price":
         temp = temp.sort(sortLowestPrice);
         sortInventory(temp);
         break;
+
       case "Most Quantity":
         temp = temp.sort(sortMostQuantity);
         sortInventory(temp);
         break;
+
       case "Least Quantity":
         temp = temp.sort(sortLeastQuantity);
         sortInventory(temp);
         break;
+      case "Highest Profit":
+        temp = temp.sort(sortHighestProfit);
+        sortInventory(temp);
+        break;
+
       default:
-        temp = temp.sort(sortBestSelling);
+        temp = temp.sort(sortAlphabetical);
         sortInventory(temp);
         break;
     }
   }
 
   function sortBestSelling(a, b) {
-    if (
-      a.productSellingPrice * a.productUnitsSold <
-      b.productSellingPrice * b.productUnitsSold
-    )
-      return 1;
-    if (
-      a.productSellingPrice * a.productUnitsSold >
-      b.productSellingPrice * b.productUnitsSold
-    )
-      return -1;
+    if (parseInt(a.productUnitsSold) < parseInt(b.productUnitsSold)) return 1;
+    if (parseInt(a.productUnitsSold) > parseInt(b.productUnitsSold)) return -1;
 
     return 0;
   }
@@ -97,15 +99,30 @@ export default function Inventory() {
   }
 
   function sortMostQuantity(a, b) {
-    if (a.productQuantity < b.productQuantity) return 1;
-    if (a.productQuantity > b.productQuantity) return -1;
+    if (parseInt(a.productQuantity) < parseInt(b.productQuantity)) return 1;
+    if (parseInt(a.productQuantity) > parseInt(b.productQuantity)) return -1;
 
     return 0;
   }
 
   function sortLeastQuantity(a, b) {
-    if (a.productQuantity > b.productQuantity) return 1;
-    if (a.productQuantity < b.productQuantity) return -1;
+    if (parseInt(a.productQuantity) > parseInt(b.productQuantity)) return 1;
+    if (parseInt(a.productQuantity) < parseInt(b.productQuantity)) return -1;
+
+    return 0;
+  }
+
+  function sortHighestProfit(a, b) {
+    if (
+      a.productSellingPrice * a.productUnitsSold <
+      b.productSellingPrice * b.productUnitsSold
+    )
+      return 1;
+    if (
+      a.productSellingPrice * a.productUnitsSold >
+      b.productSellingPrice * b.productUnitsSold
+    )
+      return -1;
 
     return 0;
   }
@@ -176,6 +193,14 @@ export default function Inventory() {
             }}
           >
             Least Quantity
+          </Dropdown.Item>
+          <Dropdown.Item
+            eventKey="8"
+            onSelect={() => {
+              handleSelect("Highest Profit");
+            }}
+          >
+            Highest Profit
           </Dropdown.Item>
         </DropdownButton>
 

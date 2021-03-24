@@ -2,7 +2,7 @@ import React from "react";
 import TaskPopUp from "../popUptask";
 import NotePopUp from "../PopUpNote";
 import LineChart from "../LineChart";
-import { PopUpTaskDetails } from "../PopUpTaskDetails";
+import PopUpTaskDetails from "../PopUpTaskDetails";
 import { Card, Col, Container, Row, ProgressBar } from "react-bootstrap";
 import { useAuth } from "../../Context/AuthContext";
 import "../styles/currentWork.css";

@@ -11,6 +11,8 @@ import {
   Container,
   Alert,
   Dropdown,
+  Tooltip,
+  OverlayTrigger,
 } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -18,7 +20,7 @@ import "react-google-flight-datepicker/dist/main.css";
 import { format } from "date-fns";
 import "./styles/PopUp.css";
 
-export function PopUpTaskDetails(props) {
+export default function PopUpTaskDetails(props) {
   const task = props.task;
   const [updated, setUpdated] = useState(false);
   let [taskCopy, setTaskCopy] = useState(task);
@@ -139,6 +141,12 @@ export function PopUpTaskDetails(props) {
     e.preventDefault();
     handleSubTaskChange(taskCopyFinal);
   }
+
+  const renderTooltip = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {props.sub.lastModified.name}
+    </Tooltip>
+  );
 
   useEffect(() => {
     if (updated) {
@@ -302,29 +310,51 @@ export function PopUpTaskDetails(props) {
                                 {sub.lastModified !== undefined ? (
                                   <div>
                                     {sub.lastModified.photoURL ? (
-                                      <img
-                                        style={{
-                                          borderRadius: "50%",
-                                          width: "35px",
-                                        }}
-                                        src={sub.lastModified.photoURL}
-                                        alt="Profile_Picture"
-                                      ></img>
-                                    ) : (
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="35"
-                                        height="35"
-                                        fill="currentColor"
-                                        className="bi bi-person-circle"
-                                        viewBox="0 0 16 16"
+                                      <OverlayTrigger
+                                        placement="right"
+                                        delay={{ show: 250, hide: 400 }}
+                                        overlay={
+                                          <Tooltip id="button-tooltip-2">
+                                            Last modified by:{" "}
+                                            {sub.lastModified.name}
+                                          </Tooltip>
+                                        }
                                       >
-                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                        <path
-                                          fillRule="evenodd"
-                                          d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                                        />
-                                      </svg>
+                                        <img
+                                          style={{
+                                            borderRadius: "50%",
+                                            width: "35px",
+                                          }}
+                                          src={sub.lastModified.photoURL}
+                                          alt="Profile_Picture"
+                                        ></img>
+                                      </OverlayTrigger>
+                                    ) : (
+                                      <OverlayTrigger
+                                        placement="right"
+                                        delay={{ show: 250, hide: 400 }}
+                                        overlay={
+                                          <Tooltip id="button-tooltip-2">
+                                            Last modified by:{" "}
+                                            {sub.lastModified.name}
+                                          </Tooltip>
+                                        }
+                                      >
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          width="35"
+                                          height="35"
+                                          fill="currentColor"
+                                          className="bi bi-person-circle"
+                                          viewBox="0 0 16 16"
+                                        >
+                                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                          <path
+                                            fillRule="evenodd"
+                                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                                          />
+                                        </svg>
+                                      </OverlayTrigger>
                                     )}
                                   </div>
                                 ) : (
@@ -386,7 +416,6 @@ export function PopUpTaskDetails(props) {
                       <Button
                         variant="light"
                         className="w-50 button-bg mt-3"
-                        type="submit"
                         onClick={() => {
                           close();
                         }}

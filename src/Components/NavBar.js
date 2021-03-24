@@ -148,7 +148,7 @@ function NavBar(props) {
         </h2>
       </div>
       <reactBootstrap.Dropdown
-        style={{ marginRight: "10px", marginLeft: "auto", marginTop: "6px" }}
+        style={{ marginRight: "10px", marginLeft: "auto" }}
         drop="left"
       >
         <reactBootstrap.Dropdown.Toggle
