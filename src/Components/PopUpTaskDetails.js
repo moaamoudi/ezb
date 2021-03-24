@@ -20,7 +20,7 @@ import "./styles/PopUp.css";
 
 export function PopUpTaskDetails(props) {
   const task = props.task;
-  let updated = false;
+  const [updated, setUpdated] = useState(false);
   let [taskCopy, setTaskCopy] = useState(task);
   let [subtasklist, setSubtasklist] = useState(task.subTasks);
   let subTaskName = useState();
@@ -61,7 +61,7 @@ export function PopUpTaskDetails(props) {
     taskCopy.complete = check;
     setSubtasklist(items);
     taskCopy.subTasks = subtasklist;
-    updated = true;
+    setUpdated(true);
     setTaskCopyFinal(taskCopy);
   }
 
@@ -75,7 +75,7 @@ export function PopUpTaskDetails(props) {
       }
     });
     taskCopy.complete = check;
-    updated = true;
+    setUpdated(true);
     setTaskCopyFinal(taskCopy);
   }
 
@@ -96,7 +96,7 @@ export function PopUpTaskDetails(props) {
           });
           setSubtasklist(joined);
           taskCopy.subTasks = joined;
-          updated = true;
+          setUpdated(true);
           setTaskCopyFinal(taskCopy);
           checkComplete();
           subTaskName.value = "";
@@ -111,7 +111,7 @@ export function PopUpTaskDetails(props) {
 
         setSubtasklist(joined);
         taskCopy.subTasks = joined;
-        updated = true;
+        setUpdated(true);
         setTaskCopyFinal(taskCopy);
 
         subTaskName.value = "";
@@ -131,7 +131,7 @@ export function PopUpTaskDetails(props) {
     taskCopy.subTasks = subs;
     taskCopyFinal.subTasks = subs;
     setSubtasklist(subs);
-    updated = true;
+    setUpdated(true);
     setTaskCopyFinal(taskCopy);
   }
 
@@ -144,9 +144,9 @@ export function PopUpTaskDetails(props) {
     if (updated) {
       setTaskCopy(taskCopy);
       setTaskCopyFinal(taskCopy);
-      updated = false;
+      setUpdated(false);
     }
-  }, []);
+  }, [updated, taskCopy]);
 
   return (
     <Popup

@@ -1,4 +1,3 @@
-import { set, setYear } from "date-fns";
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
 import "../styles/npv.css";
@@ -10,40 +9,38 @@ export default function NPV() {
   const thirdYear = useRef();
   const forthYear = useRef();
   const fifthYear = useRef();
-  const [NPV , setNpv]  =useState(0);
-  const [Currency , setCurrency]  =useState("$");
+  const [NPV, setNpv] = useState(0);
+  const [Currency, setCurrency] = useState("$");
   function calculateNpv() {
-    var valArr=[firstYear.current.value,secYear.current.value,
-      thirdYear.current.value,forthYear.current.value,fifthYear.current.value]
-    var npv=0
-    
-    const disc=Discount.current.value/100
-      for (let index = 0; index < valArr.length; index++) {
-        if(valArr[index]>0){
-          npv+=valArr[index]/(Math.pow((disc+1),(index+1)))
-          
-        }
-        
+    var valArr = [
+      firstYear.current.value,
+      secYear.current.value,
+      thirdYear.current.value,
+      forthYear.current.value,
+      fifthYear.current.value,
+    ];
+    var npv = 0;
+
+    const disc = Discount.current.value / 100;
+    for (let index = 0; index < valArr.length; index++) {
+      if (valArr[index] > 0) {
+        npv += valArr[index] / Math.pow(disc + 1, index + 1);
       }
-      npv=npv-Future.current.value;
-      
-      setNpv(npv.toFixed(2));
-     
+    }
+    npv = npv - Future.current.value;
+
+    setNpv(npv.toFixed(2));
   }
-useEffect(() => {
-  
-}, [NPV])
-function handleSubmit(e){
-  e.preventDefault();
-  calculateNpv();
-}
+  useEffect(() => {}, [NPV]);
+  function handleSubmit(e) {
+    e.preventDefault();
+    calculateNpv();
+  }
 
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <div className="text-center">
-        <Form className="form" 
-        onSubmit={handleSubmit}
-        >
+        <Form className="form" onSubmit={handleSubmit}>
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
               <InputGroup.Text>Initial investment:</InputGroup.Text>
@@ -61,10 +58,10 @@ function handleSubmit(e){
                 className="mr-sm-2"
                 id="inlineFormCustomSelect"
                 custom
-                onChange={Event=>setCurrency(Event.target.value)}
+                onChange={(Event) => setCurrency(Event.target.value)}
                 required
-                >
-                <option value="Please select currency" >Currency</option>
+              >
+                <option value="Please select currency">Currency</option>
                 <option value="SR">SR</option>
                 <option value="£">POUND</option>
                 <option value="$">DOLLAR</option>
@@ -76,7 +73,12 @@ function handleSubmit(e){
             <InputGroup.Prepend>
               <InputGroup.Text>Discount Rate:</InputGroup.Text>
             </InputGroup.Prepend>
-            <FormControl id="inlineFormInputGroup" placeholder="Ex:20%" ref={Discount} required />
+            <FormControl
+              id="inlineFormInputGroup"
+              placeholder="Ex:20%"
+              ref={Discount}
+              required
+            />
             <InputGroup.Prepend className="mr-2">
               <InputGroup.Text>%</InputGroup.Text>
             </InputGroup.Prepend>
@@ -144,13 +146,11 @@ function handleSubmit(e){
               Calculate
             </Button>
           </div>
-          
-          
         </Form>
-        
       </div>
-      <div className="form" style={{marginTop:"23%"}}><p>NPV: {NPV+" "+Currency}</p></div>
+      <div className="form" style={{ marginTop: "23%" }}>
+        <p>NPV: {NPV + " " + Currency}</p>
+      </div>
     </div>
-    
   );
 }

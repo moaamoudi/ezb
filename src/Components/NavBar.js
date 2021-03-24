@@ -1,11 +1,10 @@
 import * as reactBootstrap from "react-bootstrap";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useAuth } from "../Context/AuthContext";
-import { Dropdown } from "semantic-ui-react";
+// import { Dropdown } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import "./styles/NavBar.css";
 import logo from "../imgs/ezb3.png";
-import { set } from "date-fns";
 
 function NavBar(props) {
   // collapsed,
@@ -16,10 +15,8 @@ function NavBar(props) {
   const handleCollapsedChange = props.handleCollapsedChange;
   const {
     currentUser,
-    userDetails,
     companiesData,
     selectCompany,
-    setCompanyChanged,
     setSelectedCompany,
     userNotifications,
     setUserNotificationsRead,
@@ -188,7 +185,7 @@ function NavBar(props) {
                 {countNotification()}
               </h6>
             ) : (
-              <h6 />
+              <div></div>
             )}
           </div>
         </reactBootstrap.Dropdown.Toggle>
@@ -241,7 +238,10 @@ function NavBar(props) {
           </reactBootstrap.Dropdown.Toggle>
           <reactBootstrap.Dropdown.Menu>
             <div>
-              <reactBootstrap.Dropdown.Item as="button">
+              <reactBootstrap.Dropdown.Item
+                onClick={() => history.push("/profile-details")}
+                as="button"
+              >
                 <h6>Details</h6>
               </reactBootstrap.Dropdown.Item>
               <reactBootstrap.Dropdown.Item

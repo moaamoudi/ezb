@@ -14,6 +14,7 @@ import PublicRoute from "./PublicRoute";
 import ProjectPage from "./ProjectPage";
 import ContactsPage from "./ContactsPage";
 import ContractsPage from "./ContractsPage";
+import Calendar from "./Calendar.js";
 
 function App() {
   return (
@@ -22,11 +23,12 @@ function App() {
         <AuthProvider>
           <Switch>
             <PrivateRoute exact path="/" component={Dashboard} />
-            <PrivateRoute path="/update-profile" component={UpdateProfile} />
+            <PrivateRoute path="/calendar" component={Calendar} />
             <PrivateRoute
               path="/:company/projects/:project"
               component={ProjectPage}
             />
+            <PrivateRoute path="/profile-details" component={UpdateProfile} />
             <PrivateRoute path="/clients" component={ContactsPage} />
             <PrivateRoute path="/contracts" component={ContractsPage} />
             <InnerCompleteDetails

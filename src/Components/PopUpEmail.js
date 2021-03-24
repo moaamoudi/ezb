@@ -1,7 +1,7 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { Form, Button, Card } from "react-bootstrap";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import emailJS from "emailjs-com";
 import "./styles/PopUp.css";
 
@@ -40,7 +40,9 @@ export default function PopUpAddEmployee(props) {
 
   return (
     <Popup
-      trigger={<Button style={{width:"20%", margin:"50px"}}> Send Email</Button>}
+      trigger={
+        <Button style={{ width: "20%", margin: "50px" }}> Send Email</Button>
+      }
       position="center center"
       modal
       nested
@@ -62,7 +64,7 @@ export default function PopUpAddEmployee(props) {
               </Form.Group>
 
               <Form.Group id="from">
-                <Form.Label>From:</Form.Label>
+                <Form.Label>Name of Sender:</Form.Label>
                 <Form.Control
                   type="string"
                   required

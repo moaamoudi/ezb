@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./styles/ContactsPage.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
-import { Card, Button, Col, Container, Row } from "react-bootstrap";
+import { Card, Button, Col, Container } from "react-bootstrap";
 import PopUpAddEmployee from "./PopUpAddEmployee";
 import PopUpAddClient from "./PopUpClients";
 import PopUpEmail from "./PopUpEmail";

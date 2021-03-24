@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useAuth } from "../Context/AuthContext";
 import { useHistory } from "react-router-dom";
-import { Button, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import PopUp from "./PopUpProject";
 import { Card } from "react-bootstrap";
 import ScrollMenu from "react-horizontal-scrolling-menu";
 export default function Dashboard() {
-  const [error, setError] = useState("");
-
   const {
-    logout,
     projects,
     setSelectedProject1,
     selectCompany,
@@ -40,8 +37,6 @@ export default function Dashboard() {
 
   return (
     <div style={{ width: "100%", textAlign: "center" }}>
-      {error && <Alert variant="danger">{error}</Alert>}
-
       {projects ? (
         <div style={{ width: "100%", textAlign: "center" }}>
           <ScrollMenu

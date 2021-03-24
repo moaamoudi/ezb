@@ -1,6 +1,5 @@
-import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert } from "react-bootstrap";
-
+import React, { useState } from "react";
+import { Form, Button } from "react-bootstrap";
 
 import {
   Document,
@@ -21,12 +20,12 @@ export default function ContractsPage() {
   }
   return (
     <div style={{ display: "flex" }}>
-      <div className=" ml-5" style={{marginRight:"15%"}}>
+      <div className=" ml-5" style={{ marginRight: "15%" }}>
         <Form>
           <Form.Group id="title">
             <Form.Label>Title:</Form.Label>
             <Form.Control
-                style={{width:"400px"}}
+              style={{ width: "400px" }}
               as="textarea"
               type="string"
               onChange={(e) => {
@@ -43,7 +42,7 @@ export default function ContractsPage() {
           <Form.Group id="title">
             <Form.Label>Sub-Title:</Form.Label>
             <Form.Control
-                style={{width:"400px"}}
+              style={{ width: "400px" }}
               as="textarea"
               type="string"
               onChange={(e) => {
@@ -85,25 +84,29 @@ export default function ContractsPage() {
               {/* <Text style={styles.header} fixed>
                 {save ? header : "this is the page header"}
               </Text> */}
-              <Text style={styles.title} fixed>{save ? title : "this is the page title"}</Text>
-              <Text style={styles.author}>{save ? subtitle : "this is the Company Name"}</Text>
+              <Text style={styles.title} fixed>
+                {save ? title : "this is the page title"}
+              </Text>
+              <Text style={styles.author}>
+                {save ? subtitle : "this is the Company Name"}
+              </Text>
               <Text style={styles.author}>
                 ------------------------------------------------------------------
               </Text>
-              
+
               <Text style={styles.text}>
-              
                 {save ? content : "this is the body of the page"}
               </Text>
               <Text style={styles.text}>
-              
-                {save ? "" : "Note!: it wont update unless you save and once you start editing again it will reverse the additions till you save again"}
+                {save
+                  ? ""
+                  : "Note!: it wont update unless you save and once you start editing again it will reverse the additions till you save again"}
               </Text>
               <Text style={styles.text}>
-              
-                {save ? "" : "Note!:you can write praragraphs inside the body and separate them by pressing the KEY (ENTER)"}
+                {save
+                  ? ""
+                  : "Note!:you can write praragraphs inside the body and separate them by pressing the KEY (ENTER)"}
               </Text>
-              
             </Page>
           </Document>
         </PDFViewer>

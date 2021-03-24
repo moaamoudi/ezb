@@ -1,5 +1,4 @@
 import React from "react";
-import { useAuth } from "../Context/AuthContext";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 
 import "./styles/tabs.css";

@@ -1,24 +1,31 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { Form, Button, Card } from "react-bootstrap";
-import React, { useState ,useRef} from "react";
+import React, { useRef } from "react";
 import "./styles/PopUp.css";
 import { useAuth } from "../Context/AuthContext";
 
 export default function PopUpAddClient() {
-const ClientName = useRef()
-const ClientEmail = useRef()
-const {insertClientToFirestore} = useAuth()
+  const ClientName = useRef();
+  const ClientEmail = useRef();
+  const { insertClientToFirestore } = useAuth();
 
-
-    function handleSubmit(e) {
-      e.preventDefault();
-      insertClientToFirestore(ClientName.current.value,ClientEmail.current.value);
-    }
+  function handleSubmit(e) {
+    e.preventDefault();
+    insertClientToFirestore(
+      ClientName.current.value,
+      ClientEmail.current.value
+    );
+  }
 
   return (
     <Popup
-      trigger={<Button className="mb-2" style={{marginRight:"66%"}}> Add Client</Button>}
+      trigger={
+        <Button className="mb-2" style={{ marginRight: "66%" }}>
+          {" "}
+          Add Client
+        </Button>
+      }
       position="center center"
       modal
       nested
@@ -31,23 +38,22 @@ const {insertClientToFirestore} = useAuth()
               <Form.Group id="ClientName">
                 <Form.Label>Client Name:</Form.Label>
                 <Form.Control
-                type="Name"
-                ref={ClientName}
-                required
-                className="button-bg"
-              />
+                  type="Name"
+                  ref={ClientName}
+                  required
+                  className="button-bg"
+                />
               </Form.Group>
               <Form.Group id="ClientEmail">
                 <Form.Label>Client Email:</Form.Label>
                 <Form.Control
-                type="Name"
-                ref={ClientEmail}
-                required
-                className="button-bg"
-              />
+                  type="Name"
+                  ref={ClientEmail}
+                  required
+                  className="button-bg"
+                />
               </Form.Group>
-             
-              
+
               <div className="text-center">
                 <Button
                   variant="light"

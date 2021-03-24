@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { useAuth } from "../Context/AuthContext.js";
 
 export default function CompleteDetails() {

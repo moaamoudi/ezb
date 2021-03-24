@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { auth, db, provider } from "../firebase";
 import { format } from "date-fns";
-import { set } from "date-fns";
 import useLocalStorage from "../Components/useLocalStorage.js";
 
 const AuthContext = React.createContext();
@@ -190,15 +189,6 @@ export function AuthProvider({ children }) {
     endDate,
     description
   ) {
-    var project = {
-      uid: "" + auth.currentUser.uid,
-      email: "" + auth.currentUser.email,
-      projectName: "" + projectName,
-      startDate: "" + startDate,
-      endDate: "" + endDate,
-      description: "" + description,
-    };
-
     companiesData.forEach((company) => {
       if (company.companyName === selectCompany.companyName) {
         company.users.forEach((user) => {

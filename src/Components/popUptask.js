@@ -9,10 +9,10 @@ import {
   DropdownButton,
   Alert,
 } from "react-bootstrap";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "react-google-flight-datepicker/dist/main.css";
-import { add, format } from "date-fns";
+import { format } from "date-fns";
 import "./styles/PopUp.css";
 
 export default function PopUptask() {
@@ -59,7 +59,7 @@ export default function PopUptask() {
           });
           setSubtasklist(joined);
           subTaskName.value = "";
-        }else{
+        } else {
           return setError("Duplicate SubTask Was Entered!");
         }
       } else {
@@ -72,7 +72,7 @@ export default function PopUptask() {
         subTaskName.value = "";
       }
     }
-    setError("")
+    setError("");
   }
 
   function onDateChange(startDate, endDate) {

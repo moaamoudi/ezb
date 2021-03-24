@@ -18,7 +18,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
       breakPoint="md"
       onToggle={handleToggleSidebar}
       width="240px"
-      style={{zIndex:"1"}}
+      style={{ zIndex: "1" }}
     >
       {/* <SidebarHeader>
         <div
@@ -74,7 +74,7 @@ const Aside = ({ collapsed, toggled, handleToggleSidebar }) => {
             }
           >
             Calendar
-            <Link to="/update-profile" />
+            <Link to="/calendar" />
           </MenuItem>
           <MenuItem
             className="mb-3"
