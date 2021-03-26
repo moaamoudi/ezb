@@ -244,8 +244,6 @@ export default function PopUpTaskDetails(props) {
 
                       <Button
                         style={{ width: "40%", marginLeft: "10%" }}
-                        variant="light"
-                        className="button-bg"
                         onClick={(e) => {
                           addItem();
                         }}
@@ -390,8 +388,7 @@ export default function PopUpTaskDetails(props) {
                   <Col md={12}>
                     <div className="text-center">
                       <Button
-                        variant="light"
-                        className="w-50 button-bg mt-3"
+                        className="w-50  mt-3"
                         type="submit"
                       >
                         Save
@@ -399,8 +396,7 @@ export default function PopUpTaskDetails(props) {
                     </div>
                     <div className="text-center">
                       <Button
-                        variant="light"
-                        className="w-50 button-bg mt-3"
+                        className="w-50  mt-3"
                         type="submit"
                         onClick={() => {
                           setSubtasklist(props.task.subTasks);
@@ -414,8 +410,7 @@ export default function PopUpTaskDetails(props) {
 
                     <div className="text-center">
                       <Button
-                        variant="light"
-                        className="w-50 button-bg mt-3"
+                        className="w-50  mt-3"
                         onClick={() => {
                           close();
                         }}
