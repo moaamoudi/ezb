@@ -150,7 +150,6 @@ export default function PopUptask() {
 
                 <Button
                   style={{ width: "50%" }}
-                  variant="light ml-2"
                   onClick={(e) => {
                     addItem();
                   }}
@@ -162,7 +161,6 @@ export default function PopUptask() {
                 <DropdownButton
                   id="dropdown-button-drop-right"
                   drop="right"
-                  variant="light"
                   title="SubTasks"
                 >
                   {subtasklist.map((task) => (
@@ -172,7 +170,6 @@ export default function PopUptask() {
                           <div style={{ width: "90%" }}>{task.name}</div>
 
                           <Button
-                            variant="light"
                             onClick={() => handleRemove(task.name)}
                           >
                             X
@@ -189,8 +186,7 @@ export default function PopUptask() {
 
               <div className="text-center">
                 <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
+                  className="w-50  mt-3"
                   type="submit"
                 >
                   submit
@@ -198,8 +194,8 @@ export default function PopUptask() {
               </div>
               <div className="text-center">
                 <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
+                 
+                  className="w-50  mt-3"
                   onClick={() => {
                     setSubtasklist([]);
                     close();

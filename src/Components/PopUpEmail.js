@@ -98,8 +98,7 @@ export default function PopUpAddEmployee(props) {
 
               <div className="text-center">
                 <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
+                  className="w-50 mt-3"
                   type="submit"
                 >
                   Send
@@ -107,8 +106,7 @@ export default function PopUpAddEmployee(props) {
               </div>
               <div className="text-center">
                 <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
+                  className="w-50  mt-3"
                   onClick={() => {
                     Email = "";
                     close();
