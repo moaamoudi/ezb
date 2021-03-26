@@ -126,6 +126,8 @@ function NavBar(props) {
                           localStorage.removeItem("selectedProject");
                           localStorage.removeItem("selectedProjectNotes");
                           localStorage.removeItem("selectedProjectTasks");
+                          localStorage.removeItem("selectedCompanyEmployee");
+                          localStorage.removeItem("selectedCompanyClients");
                           setSelectedCompany(company);
                           history.push("/");
                         }}

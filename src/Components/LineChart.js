@@ -79,7 +79,6 @@ export default function LineChart() {
         finalData[i + 1][j + 1] = tempData[i][j];
       }
     }
-    console.log(finalData);
   }
 
   return (

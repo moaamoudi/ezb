@@ -87,7 +87,7 @@ const Content = withStyles(style, { name: "Content" })(
           <Room className={classes.icon} />
         </Grid>
         <Grid item xs={10}>
-          {appointmentData.lol}
+          {appointmentData.test}
         </Grid>
       </Grid>
     </AppointmentTooltip.Content>

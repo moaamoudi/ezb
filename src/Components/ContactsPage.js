@@ -16,6 +16,7 @@ export default function ContactsPage() {
     deleteClient,
   } = useAuth();
   const [email, setEmail] = useState("");
+  const [email1, setEmail1] = useState("");
 
   const columns = [
     {
@@ -40,7 +41,7 @@ export default function ContactsPage() {
   ];
 
   const selectRow = {
-    mode: "checkbox",
+    mode: "radio",
     clickToSelect: true,
     style: { backgroundColor: "#f5a494" },
     onSelect: (row, isSelect, rowIndex, e) => {
@@ -48,11 +49,11 @@ export default function ContactsPage() {
     },
   };
   const selectRow2 = {
-    mode: "checkbox",
+    mode: "radio",
     clickToSelect: true,
     style: { backgroundColor: "#f5a494" },
     onSelect: (row, isSelect, rowIndex, e) => {
-      setEmail(row.ClientEmail);
+      setEmail1(row.ClientEmail);
     },
   };
   function handledelete() {
@@ -61,15 +62,10 @@ export default function ContactsPage() {
     }
   }
   function handledeleteClient() {
-    if (email) {
-      deleteClient(email);
+    if (email1) {
+      deleteClient(email1);
     }
   }
-
-  // function condom(){
-  //   let temp =[...selectedCompanyClients]
-  //   return temp
-  // }
 
   return (
     <Container fluid style={{ display: "inline-flex" }}>
@@ -101,7 +97,9 @@ export default function ContactsPage() {
             >
               <PopUpEmail Email={email}></PopUpEmail>
               <Button
+                variant="danger"
                 style={{ width: "20%", margin: "50px" }}
+                disabled={email === ""}
                 onClick={() => {
                   handledelete();
                 }}
@@ -139,8 +137,17 @@ export default function ContactsPage() {
                 marginBottom: "20px",
               }}
             >
-              <PopUpEmail Email={email}></PopUpEmail>
+              <PopUpEmail Email={email1}></PopUpEmail>
               <Button
+                disabled={email1 === ""}
+                style={{ width: "20%", margin: "50px" }}
+                onClick={() => {}}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="danger"
+                disabled={email1 === ""}
                 style={{ width: "20%", margin: "50px" }}
                 onClick={() => {
                   handledeleteClient();

@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { auth, db, provider } from "../firebase";
 import { format } from "date-fns";
 import useLocalStorage from "../Components/useLocalStorage.js";
+import emailJS from "emailjs-com";
 
 const AuthContext = React.createContext();
 
@@ -104,6 +105,7 @@ export function AuthProvider({ children }) {
 
   async function initialGetCompanies() {
     let items = [];
+    let comp = [];
     if (auth.currentUser) {
       items = [];
 
@@ -111,15 +113,34 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .get()
         .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            doc.data().users.forEach((user) => {
+          querySnapshot.forEach((company) => {
+            let item = company.data();
+            item.id = company.id;
+            company.data().users.forEach((user) => {
               if (user.email === auth.currentUser.email) {
+                items.push(item);
                 console.log(user.email);
-                items.push(doc.data());
               }
             });
           });
         });
+      // comp.forEach((company) => {
+      //   db.collection("Companies")
+      //     .doc(company.id)
+      //     .collection("Employee")
+      //     .get()
+      //     .then((res) => {
+      //       console.log(res.data());
+      //       res.forEach((emp) => {
+      //         if (auth.currentUser.email === emp.data().EmployeeEmail) {
+      //           console.log("true");
+      //           items.push(company.data());
+      //         }
+      //       });
+      //     });
+      // });
+
+      console.log(items);
 
       setCompaniesData(items);
       setSelectedCompany(items[0]);
@@ -166,6 +187,9 @@ export function AuthProvider({ children }) {
         });
         setProjects(items);
       });
+
+      GetEmployee(id);
+      GetClients(id);
     }
   }
 
@@ -205,7 +229,7 @@ export function AuthProvider({ children }) {
                   startDate: "" + startDate,
                   endDate: "" + endDate,
                   description: "" + description,
-                  users: selectCompany.users,
+                  assigned: [],
                 })
                 .then(function () {
                   console.log("Document successfully written!");
@@ -510,6 +534,7 @@ export function AuthProvider({ children }) {
     await initialGetCompanyProjects();
     await initialGetClients();
     await initialGetEmployee();
+
     console.log(auth.currentUser);
 
     setLoading(false);
@@ -636,6 +661,29 @@ export function AuthProvider({ children }) {
     return exists;
   }
 
+  async function checkEmployeeExist(email) {
+    var exists = -1;
+    if (auth.currentUser) {
+      await db
+        .collection("Users")
+        .doc("" + email)
+        .get()
+        .then((doc) => {
+          const data = doc.data();
+          if (data !== undefined) {
+            exists = data;
+          } else {
+            exists = 0;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    return exists;
+  }
+
   async function insertClientToFirestore(ClientName, ClientEmail) {
     if (auth.currentUser) {
       await db
@@ -647,7 +695,7 @@ export function AuthProvider({ children }) {
         })
         .then(() => {
           console.log("notification succesfully written");
-          GetClients();
+          GetClients(selectCompany.id);
         });
     }
   }
@@ -655,23 +703,147 @@ export function AuthProvider({ children }) {
   async function insertEmployeeToFirestore(
     EmployeeName,
     EmployeeEmail,
-    EmployeeType
+    EmployeeType,
+    Projects
   ) {
     if (auth.currentUser) {
-      await db
-        .collection("Companies/" + selectCompany.id + "/Employee")
-        .doc()
-        .set({
-          EmployeeName: EmployeeName,
-          EmployeeEmail: EmployeeEmail,
-          EmployeeType: EmployeeType,
-        })
-        .then(() => {
-          console.log("notification succesfully written");
-          GetEmployee();
+      const exists = await checkEmployeeExist(EmployeeEmail);
+      console.log(exists);
+      if (exists === -1 || exists === 0) {
+        let temp = [];
+        Projects.forEach((project) => {
+          temp.push({ projectName: project.projectName, type: EmployeeType });
         });
+        await db
+          .collection("Companies/" + selectCompany.id + "/Employee")
+          .doc()
+          .set({
+            EmployeeName: EmployeeName,
+            EmployeeEmail: EmployeeEmail,
+            AssignedProjects: temp,
+          })
+          .then(() => {
+            console.log("employee successfuly inserted");
+          });
+        GetEmployee(selectCompany.id);
+        let name = EmployeeName.split(" ");
+        let user = {
+          firstName: name[0],
+          lastName: name[1],
+          type: EmployeeType,
+          email: EmployeeEmail,
+        };
+        Projects.forEach((project) => {
+          project.assigned.push(user);
+          db.collection("Companies")
+            .doc(selectCompany.id)
+            .collection("Projects")
+            .doc(project.projectName)
+            .set({
+              projectName: project.projectName,
+              companyName: project.companyName,
+              description: project.description,
+              uid: project.uid,
+              email: project.email,
+              id: project.id,
+              startDate: project.startDate,
+              endDate: project.endDate,
+              assigned: project.assigned,
+            });
+        });
+        let names = [];
+        Projects.forEach((project) => {
+          names.push(project.projectName);
+        });
+        let variables = {
+          msg:
+            "Hello " +
+            EmployeeName +
+            ", \n\n You have been invited by " +
+            currentUser.displayName +
+            ", to work at their company " +
+            selectCompany.companyName +
+            " as a/an " +
+            EmployeeType +
+            " for the following project/s: " +
+            names +
+            ".\n\nWe have noticed that you do not have an account at EZB Development, to accept the invitation please go to the following link: http://localhost:3000/ and signup\n\n Thank you.\n\n**PLEASE DO NOT REPLY TO THIS EMAIL",
+          Name: "EZB Development",
+          Subject: "Invitation to " + selectCompany.companyName,
+          reciever: EmployeeEmail,
+        };
+        emailJS
+          .send(
+            "Gmail",
+            "Development_email",
+            variables,
+            "user_Ufgqez1YDtVtHo6gPiYox"
+          )
+          .then(
+            function (response) {
+              console.log("SUCCESS!", response.status, response.text);
+            },
+            function (error) {
+              console.log("FAILED...", error);
+            }
+          );
+      } else {
+        let temp = [];
+        Projects.forEach((project) => {
+          temp.push({ projectName: project.projectName, type: EmployeeType });
+        });
+        await db
+          .collection("Companies/" + selectCompany.id + "/Employee")
+          .doc()
+          .set({
+            EmployeeName: exists.firstName + " " + exists.lastName,
+            EmployeeEmail: EmployeeEmail,
+            phone: exists.phone,
+            AssignedProjects: temp,
+          })
+          .then(() => {
+            console.log("employee successfuly inserted");
+          });
+        GetEmployee(selectCompany.id);
+
+        exists.type = EmployeeType;
+        exists.companyName = "";
+        Projects.forEach((project) => {
+          project.assigned.push(exists);
+          db.collection("Companies")
+            .doc(selectCompany.id)
+            .collection("Projects")
+            .doc(project.projectName)
+            .set({
+              projectName: project.projectName,
+              companyName: project.companyName,
+              description: project.description,
+              uid: project.uid,
+              email: project.email,
+              id: project.id,
+              startDate: project.startDate,
+              endDate: project.endDate,
+              assigned: project.assigned,
+            });
+        });
+        let names = [];
+        Projects.forEach((project) => {
+          names.push(project.projectName);
+        });
+        createNotification(
+          EmployeeEmail,
+          currentUser.displayName +
+            " Have added you to their company " +
+            selectCompany.companyName +
+            " as a " +
+            EmployeeType +
+            " at the following project/s: " +
+            names
+        );
+      }
     }
   }
+
   async function deleteEmployee(email) {
     let temp;
     selectedCompanyEmployee.forEach((employee) => {
@@ -685,7 +857,7 @@ export function AuthProvider({ children }) {
         .collection("Companies/" + selectCompany.id + "/Employee")
         .doc(temp.id)
         .delete();
-      GetEmployee();
+      GetEmployee(selectCompany.id);
     }
   }
 
@@ -702,18 +874,18 @@ export function AuthProvider({ children }) {
         .collection("Companies/" + selectCompany.id + "/Clients")
         .doc(temp.id)
         .delete();
-      GetClients();
+      GetClients(selectCompany.id);
     }
   }
 
-  async function GetEmployee() {
+  async function GetEmployee(id) {
     let items = [];
     if (auth.currentUser) {
       items = [];
 
       await db
         .collection("Companies")
-        .doc(selectCompany.id)
+        .doc(id)
         .collection("Employee")
 
         .onSnapshot((querySnapshot) => {
@@ -753,14 +925,14 @@ export function AuthProvider({ children }) {
     items = [];
   }
 
-  async function GetClients() {
+  async function GetClients(id) {
     let items = [];
     if (auth.currentUser) {
       items = [];
 
       await db
         .collection("Companies")
-        .doc(selectCompany.id)
+        .doc(id)
         .collection("Clients")
 
         .onSnapshot((querySnapshot) => {
@@ -801,13 +973,13 @@ export function AuthProvider({ children }) {
     items = [];
   }
 
-  async function createNotification() {
+  async function createNotification(email, message) {
     if (auth.currentUser) {
       await db
-        .collection("Users/" + auth.currentUser.email + "/Notifications")
+        .collection("Users/" + email + "/Notifications")
         .doc()
         .set({
-          message: "Create notification test",
+          message: message,
           creationDate: new Date(),
           read: false,
         })

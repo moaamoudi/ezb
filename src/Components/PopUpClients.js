@@ -55,18 +55,13 @@ export default function PopUpAddClient() {
               </Form.Group>
 
               <div className="text-center">
-                <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
-                  type="submit"
-                >
+                <Button className="w-50 mt-3" type="submit">
                   Add
                 </Button>
               </div>
               <div className="text-center">
                 <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
+                  className="w-50 mt-3"
                   onClick={() => {
                     close();
                   }}

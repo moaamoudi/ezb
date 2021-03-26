@@ -41,7 +41,13 @@ export default function PopUpAddEmployee(props) {
   return (
     <Popup
       trigger={
-        <Button style={{ width: "20%", margin: "50px" }}> Send Email</Button>
+        <Button
+          disabled={Email === ""}
+          style={{ width: "20%", margin: "50px" }}
+        >
+          {" "}
+          Send Email
+        </Button>
       }
       position="center center"
       modal
@@ -97,18 +103,13 @@ export default function PopUpAddEmployee(props) {
               </Form.Group>
 
               <div className="text-center">
-                <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
-                  type="submit"
-                >
+                <Button className="w-50 mt-3" type="submit">
                   Send
                 </Button>
               </div>
               <div className="text-center">
                 <Button
-                  variant="light"
-                  className="w-50 button-bg mt-3"
+                  className="w-50 mt-3"
                   onClick={() => {
                     Email = "";
                     close();
