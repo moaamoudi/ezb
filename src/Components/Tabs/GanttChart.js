@@ -1,11 +1,11 @@
-import React from "react";
+import React,{useRef} from "react";
 import {Button}from 'react-bootstrap'
 import { useAuth } from "../../Context/AuthContext.js";
 import { Chart } from "react-google-charts";
-
+import { exportComponentAsPNG } from 'react-component-export-image';
 export default function GanttChart() {
   const { selectedProject, selectedProjectTasks } = useAuth();
-
+  const componentRef = useRef();
   const defaultSettings = [
     { type: "string", label: "Task ID" },
     { type: "string", label: "Task Name" },
@@ -56,7 +56,8 @@ export default function GanttChart() {
     formattedData.push(formattedTask);
   });
   function handleClick(){
-
+    
+    // exportComponentAsPNG(img);
   }
   function calculateTaskProgress(task) {
     let counter = 0;
@@ -72,9 +73,9 @@ export default function GanttChart() {
 
   return (
     <div >
-      <div className='mr-3 mb-2' style={{textAlign:'right'}}><Button  onClick={()=>handleClick()}>Export as Image</Button></div>
+      <div className='mr-3 mb-2' style={{textAlign:'right'}}><Button  onClick={()=>exportComponentAsPNG(componentRef)}>Export as Image</Button></div>
       <h5>Gannt Chart of the project {selectedProject.projectName}</h5>
-      <div style={{ width: "100%",height:'1000px',overflow:'auto',marginBottom:'100px',paddingRight:'50px'}}>
+      <div ref={componentRef} style={{ width: "100%",height:'1000px',overflow:'auto',marginBottom:'100px',paddingRight:'50px'}}>
         
         <Chart
         width={"100%"}
