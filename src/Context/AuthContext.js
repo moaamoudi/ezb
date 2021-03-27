@@ -216,6 +216,12 @@ export function AuthProvider({ children }) {
     endDate,
     description
   ) {
+    const assigned = [];
+    assigned.push({
+      email: auth.currentUser.email,
+      name: auth.currentUser.displayName,
+      type: "owner",
+    });
     companiesData.forEach((company) => {
       if (company.companyName === selectCompany.companyName) {
         company.users.forEach((user) => {
@@ -232,7 +238,7 @@ export function AuthProvider({ children }) {
                   startDate: "" + startDate,
                   endDate: "" + endDate,
                   description: "" + description,
-                  assigned: [],
+                  assigned: assigned,
                 })
                 .then(function () {
                   console.log("Document successfully written!");
@@ -364,6 +370,23 @@ export function AuthProvider({ children }) {
           },
         });
       getProjectNotes(selectedProject);
+    }
+  }
+
+  async function deleteNote(note) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.projectName)
+        .collection("Notes")
+        .doc(note.id)
+        .delete()
+        .then(() => {
+          console.log("note deleted succesfully");
+          getProjectNotes(selectedProject);
+        });
     }
   }
 
@@ -1119,6 +1142,7 @@ export function AuthProvider({ children }) {
     deleteProduct,
     updateProduct,
     deleteTask,
+    deleteNote,
   };
   return (
     <AuthContext.Provider value={value}>
