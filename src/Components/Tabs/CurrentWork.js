@@ -3,7 +3,14 @@ import TaskPopUp from "../popUptask";
 import NotePopUp from "../PopUpNote";
 import LineChart from "../LineChart";
 import PopUpTaskDetails from "../PopUpTaskDetails";
-import { Card, Col, Container, Row, ProgressBar } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Container,
+  Row,
+  ProgressBar,
+  Dropdown,
+} from "react-bootstrap";
 import { useAuth } from "../../Context/AuthContext";
 import "../styles/currentWork.css";
 
@@ -13,8 +20,11 @@ export default function CurrentWork() {
     selectedProjectTasks,
     handleSubTaskChange,
     selectedProjectNotes,
+    deleteNote,
   } = useAuth();
-
+function handleDelete(note){
+  deleteNote(note)
+}
   function calculateProgress() {
     let counter = 0;
     if (selectedProjectTasks.length > 0) {
@@ -200,7 +210,43 @@ export default function CurrentWork() {
                       {selectedProjectNotes.length > 0 ? (
                         selectedProjectNotes.map((note) => (
                           <Container style={{ marginBottom: "10px" }}>
-                            <Row>
+                            
+                           
+
+                            <Row><Col md={12}>
+                               <div style={{textAlign:'right',top:'0',marginTop:'5px'}}>
+                              {" "}
+                              <Dropdown drop="down">
+                                <Dropdown.Toggle
+                                  variant="transperant"
+                                  style={{ fontSize: "0px" }}
+                                  id="dropdown-basic"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="20"
+                                    height="20"
+                                    fill="currentColor"
+                                    className="bi bi-three-dots-vertical"
+                                    viewBox="0 0 16 16"
+                                  >
+                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                  </svg>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  <div>
+                                    <Dropdown.Item
+                                      as="button"
+                                      onClick={() => {
+                                        handleDelete(note);
+                                      }}
+                                    >
+                                      <h6>Delete Note</h6>
+                                    </Dropdown.Item>
+                                  </div>
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </div></Col>
                               <Col md={3}>
                                 {note.creator.photoURL ? (
                                   <img
