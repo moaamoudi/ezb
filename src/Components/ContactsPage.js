@@ -31,11 +31,11 @@ export default function ContactsPage() {
 
   const col = [
     {
-      dataField: "EmployeeName",
+      dataField: "name",
       text: "Employee Name",
     },
     {
-      dataField: "EmployeeEmail",
+      dataField: "email",
       text: "Email",
     },
   ];
@@ -45,7 +45,7 @@ export default function ContactsPage() {
     clickToSelect: true,
     style: { backgroundColor: "#f5a494" },
     onSelect: (row, isSelect, rowIndex, e) => {
-      setEmail(row.EmployeeEmail);
+      setEmail(row.email);
     },
   };
   const selectRow2 = {
@@ -81,7 +81,7 @@ export default function ContactsPage() {
             <Card.Body>
               <BootstrapTable
                 style={{ maxHeight: "550px" }}
-                keyField="EmployeeEmail"
+                keyField="email"
                 data={selectedCompanyEmployee}
                 columns={col}
                 pagination={paginationFactory()}

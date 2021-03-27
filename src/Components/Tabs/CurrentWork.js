@@ -170,7 +170,7 @@ export default function CurrentWork() {
               >
                 <Card.Body>
                   <h4>Project Description</h4>
-                  {selectedProject.length > 0 ? (
+                  {selectedProject.description ? (
                     selectedProject.description
                   ) : (
                     <></>

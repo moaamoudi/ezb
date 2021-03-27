@@ -79,6 +79,11 @@ export default function LineChart() {
         finalData[i + 1][j + 1] = tempData[i][j];
       }
     }
+  } else {
+    finalData = [
+      ["x", "No Tasks"],
+      [new Date(), 0],
+    ];
   }
 
   return (
