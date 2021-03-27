@@ -13,6 +13,8 @@ import {
   Dropdown,
   Tooltip,
   OverlayTrigger,
+  DropdownButton,
+  ButtonGroup,
 } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -26,7 +28,7 @@ export default function PopUpTaskDetails(props) {
   let [taskCopy, setTaskCopy] = useState(task);
   let [subtasklist, setSubtasklist] = useState(task.subTasks);
   let subTaskName = useState();
-  const { deleteTask } = useAuth();
+  const { deleteTask, selectedProject } = useAuth();
   const [error, setError] = useState("");
   const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
   const handleSubTaskChange = props.handleSubTaskChange;
@@ -110,12 +112,10 @@ export default function PopUpTaskDetails(props) {
           return setError("Duplicate SubTask Was Entered!");
         }
       } else {
-        
-          joined = subtasklist.concat({
+        joined = subtasklist.concat({
           name: subTaskName.value,
           complete: false,
         });
-        
 
         setSubtasklist(joined);
         taskCopy.subTasks = joined;
@@ -173,7 +173,7 @@ export default function PopUpTaskDetails(props) {
       {(close) => (
         <Card
           className="main-shadow"
-          style={{ width: "450px", height: "770px" }}
+          style={{ width: "1000px", height: "770px" }}
         >
           <Card.Body>
             <div
@@ -214,7 +214,7 @@ export default function PopUpTaskDetails(props) {
                 </Dropdown.Menu>
               </Dropdown>
             </div>
-            <Container fluid>
+            <div>
               <h2 className="text-center mb-4">Task Details</h2>
               {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
@@ -228,15 +228,14 @@ export default function PopUpTaskDetails(props) {
                     <h5>{task.taskDescripiton}</h5>
                   </Col>
 
-                  <Col md={6}>
+                  <Col md={6} className="text-center">
                     <h6>Start: {task.startDate}</h6>
                   </Col>
-                  <Col md={6}>
+                  <Col md={6} className="text-center">
                     <h6>End: {task.endDate}</h6>
                   </Col>
 
-                  <Col md={12} className="mt-3">
-                    <hr></hr>
+                  <Col md={6} className="mt-3">
                     <Form.Group
                       id="taskDiscription"
                       style={{ display: "flex" }}
@@ -258,7 +257,51 @@ export default function PopUpTaskDetails(props) {
                       </Button>
                     </Form.Group>
                   </Col>
-                  <Container style={{ width: "420px", height: "300px" }}>
+                  <Col md={6} className="mt-3">
+                    <DropdownButton
+                      as={ButtonGroup}
+                      key="right"
+                      id={`dropdown-button-drop-right`}
+                      drop="right"
+                      style={{ width: "50%", margin: "20px" }}
+                      title={"alo"}
+                    >
+                      {selectedProject.assigned.length > 0 ? (
+                        <div>
+                          {selectedProject.assigned.map((temp) => (
+                            <Dropdown.Item
+                            // onSelect={() => {
+                            //   handleSelect(temp);
+                            // }}
+                            >
+                              <div style={{ display: "flex" }}>
+                                <div style={{ width: "90%" }}>{temp.name}</div>
+                              </div>
+                            </Dropdown.Item>
+                          ))}
+                        </div>
+                      ) : (
+                        <div></div>
+                      )}
+                    </DropdownButton>
+                  </Col>
+
+                  <Container
+                    fluid
+                    style={{
+                      width: "420px",
+                      height: "300px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <div style={{ display: "inline-flex" }}>
+                      <Col md={6} style={{ marginLeft: "-30px" }}>
+                        Subtask name
+                      </Col>
+                      <Col md={4}>Complete</Col>
+                      <Col md={5}>Last Modified</Col>
+                    </div>
+
                     <Row>
                       <div
                         style={{
@@ -385,10 +428,13 @@ export default function PopUpTaskDetails(props) {
                             </Container>
                           ))
                         ) : (
-                          <div className="text-center">there is no subtasks in this task</div>
+                          <div className="text-center">
+                            there is no subtasks in this task
+                          </div>
                         )}
                       </div>
                     </Row>
+                    <Row>TEST</Row>
                   </Container>
 
                   <Col md={12}>
@@ -424,7 +470,7 @@ export default function PopUpTaskDetails(props) {
                   </Col>
                 </Row>
               </Form>
-            </Container>
+            </div>
           </Card.Body>
         </Card>
       )}

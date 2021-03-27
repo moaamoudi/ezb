@@ -854,10 +854,13 @@ export function AuthProvider({ children }) {
 
         GetEmployee(selectCompany.id);
 
-        exists.type = EmployeeType;
-        exists.companyName = "";
+        let user1 = {
+          name: exists.firstName + " " + exists.lastName,
+          email: EmployeeEmail,
+          type: EmployeeType,
+        };
         Projects.forEach((project) => {
-          project.assigned.push(exists);
+          project.assigned.push(user1);
           db.collection("Companies")
             .doc(selectCompany.id)
             .collection("Projects")
