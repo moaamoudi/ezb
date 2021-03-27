@@ -34,51 +34,55 @@ export default function PopUpTaskDetails(props) {
   function handleClick(sub) {
     let check = true;
     let items = [];
-    taskCopy.subTasks.forEach((temp) => {
-      if (sub.name === temp.name) {
-        temp.complete = !sub.complete;
-        temp.lastModified = {
-          name: auth.currentUser.displayName,
-          uid: auth.currentUser.uid,
-          email: auth.currentUser.email,
-          photoURL: auth.currentUser.photoURL,
-        };
-        if (sub.complete) {
-          temp.completionDate = format(new Date(), "MMM-dd-yyyy HH:mm");
+    if (taskCopy.subTasks.length > 0) {
+      taskCopy.subTasks.forEach((temp) => {
+        if (sub.name === temp.name) {
+          temp.complete = !sub.complete;
+          temp.lastModified = {
+            name: auth.currentUser.displayName,
+            uid: auth.currentUser.uid,
+            email: auth.currentUser.email,
+            photoURL: auth.currentUser.photoURL,
+          };
+          if (sub.complete) {
+            temp.completionDate = format(new Date(), "MMM-dd-yyyy HH:mm");
+          } else {
+            temp.completionDate = null;
+          }
+          items.push(temp);
         } else {
-          temp.completionDate = null;
+          items.push(temp);
         }
-        items.push(temp);
-      } else {
-        items.push(temp);
-      }
-    });
-    taskCopy.subTasks.forEach((item) => {
-      if (item.complete) {
-      } else {
-        check = false;
-      }
-    });
-
-    taskCopy.complete = check;
-    setSubtasklist(items);
-    taskCopy.subTasks = subtasklist;
-    setUpdated(true);
-    setTaskCopyFinal(taskCopy);
+      });
+    }
+    if (taskCopy.subTasks.length > 0) {
+      taskCopy.subTasks.forEach((item) => {
+        if (item.complete) {
+        } else {
+          check = false;
+        }
+      });
+      taskCopy.complete = check;
+      setSubtasklist(items);
+      taskCopy.subTasks = subtasklist;
+      setUpdated(true);
+      setTaskCopyFinal(taskCopy);
+    }
   }
 
   function checkComplete() {
     let check = true;
-
-    taskCopy.subTasks.forEach((item) => {
-      if (item.complete) {
-      } else {
-        check = false;
-      }
-    });
-    taskCopy.complete = check;
-    setUpdated(true);
-    setTaskCopyFinal(taskCopy);
+    if (taskCopy.subTasks.length > 0) {
+      taskCopy.subTasks.forEach((item) => {
+        if (item.complete) {
+        } else {
+          check = false;
+        }
+      });
+      taskCopy.complete = check;
+      setUpdated(true);
+      setTaskCopyFinal(taskCopy);
+    }
   }
 
   function addItem() {
@@ -106,10 +110,12 @@ export default function PopUpTaskDetails(props) {
           return setError("Duplicate SubTask Was Entered!");
         }
       } else {
-        joined = taskCopy.concat({
+        
+          joined = subtasklist.concat({
           name: subTaskName.value,
           complete: false,
         });
+        
 
         setSubtasklist(joined);
         taskCopy.subTasks = joined;
@@ -379,7 +385,7 @@ export default function PopUpTaskDetails(props) {
                             </Container>
                           ))
                         ) : (
-                          <di>{"<<Loading>>"}</di>
+                          <div className="text-center">there is no subtasks in this task</div>
                         )}
                       </div>
                     </Row>
@@ -387,10 +393,7 @@ export default function PopUpTaskDetails(props) {
 
                   <Col md={12}>
                     <div className="text-center">
-                      <Button
-                        className="w-50  mt-3"
-                        type="submit"
-                      >
+                      <Button className="w-50  mt-3" type="submit">
                         Save
                       </Button>
                     </div>
