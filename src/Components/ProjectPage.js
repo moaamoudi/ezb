@@ -32,8 +32,8 @@ export default function ProjectPage() {
             <Tab>Users</Tab>
             <Tab>Settings</Tab>
           </TabList>
-          <div>
-            <TabPanel>
+          <div style={{height:'86vh',overflow:'auto'}}>
+            <TabPanel >
               <CurrentWork />
             </TabPanel>
             <TabPanel>

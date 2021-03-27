@@ -1,4 +1,5 @@
 import React from "react";
+import {Button}from 'react-bootstrap'
 import { useAuth } from "../../Context/AuthContext.js";
 import { Chart } from "react-google-charts";
 
@@ -54,7 +55,9 @@ export default function GanttChart() {
 
     formattedData.push(formattedTask);
   });
+  function handleClick(){
 
+  }
   function calculateTaskProgress(task) {
     let counter = 0;
 
@@ -68,15 +71,21 @@ export default function GanttChart() {
   }
 
   return (
-    <div style={{ width: "100%", padding: "50px" }}>
-      <Chart
+    <div >
+      <div className='mr-3 mb-2' style={{textAlign:'right'}}><Button  onClick={()=>handleClick()}>Export as Image</Button></div>
+      <h5>Gannt Chart of the project {selectedProject.projectName}</h5>
+      <div style={{ width: "100%",height:'1000px',overflow:'auto',marginBottom:'100px',paddingRight:'50px'}}>
+        
+        <Chart
         width={"100%"}
-        height={"1000px"}
+        height={"100%"}
         chartType="Gantt"
         loader={<div>Loading Chart</div>}
         data={formattedData}
         rootProps={{ "data-testid": "1" }}
-      />
+      /></div>
+      
+      
     </div>
   );
 }

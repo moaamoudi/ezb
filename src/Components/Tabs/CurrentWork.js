@@ -303,7 +303,7 @@ function handleDelete(note){
                           </Container>
                         ))
                       ) : (
-                        <></>
+                        <div className='text-center'> There are no Notes! </div>
                       )}
                     </div>
                   </div>

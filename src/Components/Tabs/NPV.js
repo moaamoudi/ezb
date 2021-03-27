@@ -87,7 +87,7 @@ export default function NPV() {
           {/* Years start------------------------------------------------ */}
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
-              <InputGroup.Text>Year 1: $</InputGroup.Text>
+              <InputGroup.Text>Year 1: {Currency}</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               id="inlineFormInputGroup"
@@ -98,7 +98,7 @@ export default function NPV() {
           </InputGroup>
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
-              <InputGroup.Text>Year 2: $</InputGroup.Text>
+              <InputGroup.Text>Year 2: {Currency}</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               id="inlineFormInputGroup"
@@ -108,7 +108,7 @@ export default function NPV() {
           </InputGroup>
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
-              <InputGroup.Text>Year 3: $</InputGroup.Text>
+              <InputGroup.Text>Year 3: {Currency}</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               id="inlineFormInputGroup"
@@ -118,7 +118,7 @@ export default function NPV() {
           </InputGroup>
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
-              <InputGroup.Text>Year 4: $</InputGroup.Text>
+              <InputGroup.Text>Year 4: {Currency}</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               id="inlineFormInputGroup"
@@ -128,7 +128,7 @@ export default function NPV() {
           </InputGroup>
           <InputGroup className="mb-2">
             <InputGroup.Prepend>
-              <InputGroup.Text>Year 5: $</InputGroup.Text>
+              <InputGroup.Text>Year 5: {Currency}</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               id="inlineFormInputGroup"
@@ -137,7 +137,7 @@ export default function NPV() {
             />
           </InputGroup>
           {/* Years Ends------------------------------------------------ */}
-          <div className="text-center">
+          <div className="text-center mb-1">
             <Button
               variant="light"
               className="w-50 button-bg mt-3"
@@ -148,8 +148,8 @@ export default function NPV() {
           </div>
         </Form>
       </div>
-      <div className="form" style={{ marginTop: "23%" }}>
-        <p>NPV: {NPV + " " + Currency}</p>
+      <div className="form text-center" style={{ marginTop: "23%" }}>
+        <p  style={{border:'2px solid gray',background:'white',borderRadius:"20px"}}>NPV: {NPV + " " + Currency}</p>
       </div>
     </div>
   );

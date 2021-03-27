@@ -17,7 +17,7 @@ import "./styles/PopUp.css";
 
 export default function PopUptask() {
   let [subtasklist, setSubtasklist] = useState([]);
-  const { insertTaskToFirestore } = useAuth();
+  const { insertTaskToFirestore,selectedProject } = useAuth();
   let taskName = useRef();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -30,6 +30,9 @@ export default function PopUptask() {
 
     if (startDate === undefined || endDate === undefined) {
       return setError("Please Enter Date!");
+    }
+    if(new Date(startDate).getTime()<new Date(selectedProject.startDate).getTime() || new Date(endDate).getTime()>new Date(selectedProject.endDate).getTime()){
+      return setError(<p>Please Enter Correct Dates!<br/>Note: Dates should be within Project period</p>);
     }
     insertTaskToFirestore(
       taskName.current.value,
