@@ -32,6 +32,8 @@ export default function PopUpTaskDetails(props) {
   const [error, setError] = useState("");
   const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
   const handleSubTaskChange = props.handleSubTaskChange;
+  const [dropDownText, setDropDownText] = useState("Select Worker");
+  const [selectedWorker, setSelectedWorker] = useState();
 
   function handleClick(sub) {
     let check = true;
@@ -130,6 +132,13 @@ export default function PopUpTaskDetails(props) {
     setError("");
   }
 
+  function handleRemoveWorker(worker) {
+    const subs = taskCopy.assigned.filter((temp) => temp.name !== worker.name);
+    taskCopy.assigned = subs;
+    setUpdated(true);
+    setTaskCopyFinal(taskCopy);
+  }
+
   function handleDelete(task) {
     deleteTask(task);
   }
@@ -148,11 +157,35 @@ export default function PopUpTaskDetails(props) {
     handleSubTaskChange(taskCopyFinal);
   }
 
-  const renderTooltip = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      {props.sub.lastModified.name}
-    </Tooltip>
-  );
+  function addWorker() {
+    if (selectedWorker !== undefined) {
+      var joined = [];
+      if (taskCopyFinal.assigned.length > 0) {
+        var found = -1;
+        for (let index = 0; index < taskCopyFinal.assigned.length; index++) {
+          if (selectedWorker.name === taskCopyFinal.assigned[index].name) {
+            found = 1;
+          }
+        }
+        if (found === -1) {
+          joined = taskCopyFinal.assigned.concat(selectedWorker);
+          taskCopy.assigned = joined;
+          setUpdated(true);
+          setTaskCopyFinal(taskCopy);
+        } else {
+          return setError("Duplicate Worker Was Entered!");
+        }
+      } else {
+        joined = taskCopyFinal.assigned.concat(selectedWorker);
+
+        taskCopy.assigned = joined;
+        setUpdated(true);
+        setTaskCopyFinal(taskCopy);
+      }
+    }
+
+    setError("");
+  }
 
   useEffect(() => {
     if (updated) {
@@ -173,7 +206,7 @@ export default function PopUpTaskDetails(props) {
       {(close) => (
         <Card
           className="main-shadow"
-          style={{ width: "1000px", height: "770px" }}
+          style={{ width: "1000px", height: "850px" }}
         >
           <Card.Body>
             <div
@@ -215,15 +248,10 @@ export default function PopUpTaskDetails(props) {
               </Dropdown>
             </div>
             <div>
-              <h2 className="text-center mb-4">Task Details</h2>
+              <h2 className="text-center mb-4">{task.taskName} Details</h2>
               {error && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleSubmit}>
                 <Row>
-                  <Col md={12}>
-                    <Form.Group className="text-center" id="TaskName">
-                      <h4>{task.taskName}</h4>
-                    </Form.Group>
-                  </Col>
                   <Col md={12} className="text-center">
                     <h5>{task.taskDescripiton}</h5>
                   </Col>
@@ -243,7 +271,7 @@ export default function PopUpTaskDetails(props) {
                       <Form.Control
                         ref={(a) => (subTaskName = a)}
                         placeholder="Enter Subtask Name"
-                        className="form-control button-bg"
+                        className="form-control "
                         style={{ width: "50%" }}
                       />
 
@@ -263,16 +291,17 @@ export default function PopUpTaskDetails(props) {
                       key="right"
                       id={`dropdown-button-drop-right`}
                       drop="right"
-                      style={{ width: "50%", margin: "20px" }}
-                      title={"alo"}
+                      style={{ width: "50%" }}
+                      title={dropDownText}
                     >
                       {selectedProject.assigned.length > 0 ? (
                         <div>
                           {selectedProject.assigned.map((temp) => (
                             <Dropdown.Item
-                            // onSelect={() => {
-                            //   handleSelect(temp);
-                            // }}
+                              onSelect={() => {
+                                setDropDownText(temp.name);
+                                setSelectedWorker(temp);
+                              }}
                             >
                               <div style={{ display: "flex" }}>
                                 <div style={{ width: "90%" }}>{temp.name}</div>
@@ -284,6 +313,14 @@ export default function PopUpTaskDetails(props) {
                         <div></div>
                       )}
                     </DropdownButton>
+                    <Button
+                      style={{ width: "40%", marginLeft: "10%" }}
+                      onClick={(e) => {
+                        addWorker();
+                      }}
+                    >
+                      Assign Worker
+                    </Button>
                   </Col>
 
                   <Container
@@ -434,9 +471,104 @@ export default function PopUpTaskDetails(props) {
                         )}
                       </div>
                     </Row>
-                    <Row>TEST</Row>
                   </Container>
-
+                  <Col className="text-center">
+                    <div style={{ display: "inline-flex" }}>
+                      <Col md={12}>Worker Name</Col>
+                    </div>
+                    <hr></hr>
+                    {taskCopyFinal.assigned.length > 0 ? (
+                      <div
+                        style={{
+                          height: "300px",
+                          overflow: "auto",
+                        }}
+                      >
+                        {taskCopyFinal.assigned.map((worker) => (
+                          <Container
+                            fluid
+                            style={{
+                              display: "inline-flex",
+                              padding: "0 50px 0 50px",
+                              margin: "0 0 20px 0",
+                            }}
+                          >
+                            <Col md={3}>
+                              <div>
+                                {worker.photoURL ? (
+                                  <OverlayTrigger
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                      <Tooltip id="button-tooltip-2">
+                                        {worker.name}
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <img
+                                      style={{
+                                        borderRadius: "50%",
+                                        width: "35px",
+                                      }}
+                                      src={worker.photoURL}
+                                      alt="Profile_Picture"
+                                    ></img>
+                                  </OverlayTrigger>
+                                ) : (
+                                  <OverlayTrigger
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                      <Tooltip id="button-tooltip-2">
+                                        {worker.name}
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="35"
+                                      height="35"
+                                      fill="currentColor"
+                                      className="bi bi-person-circle"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                                      />
+                                    </svg>
+                                  </OverlayTrigger>
+                                )}
+                              </div>
+                            </Col>
+                            <Col md={8}>
+                              <h6>{worker.name}</h6>
+                            </Col>
+                            <Col md={1}>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="22"
+                                height="22"
+                                fill="#F5A494"
+                                className="bi bi-trash svgOnClick"
+                                viewBox="0 0 16 16"
+                                onClick={() => handleRemoveWorker(worker)}
+                              >
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                                />
+                              </svg>
+                            </Col>
+                          </Container>
+                        ))}
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
+                  </Col>
                   <Col md={12}>
                     <div className="text-center">
                       <Button className="w-50  mt-3" type="submit">
@@ -449,8 +581,8 @@ export default function PopUpTaskDetails(props) {
                         type="submit"
                         onClick={() => {
                           setSubtasklist(props.task.subTasks);
-                          setTaskCopyFinal(props.task);
                           setTaskCopy(props.task);
+                          setTaskCopyFinal(props.task);
                         }}
                       >
                         Reset

@@ -193,15 +193,21 @@ function NavBar(props) {
         </reactBootstrap.Dropdown.Toggle>
 
         <reactBootstrap.Dropdown.Menu>
-          {userNotifications.map((noti) => (
-            <div key={noti.id}>
-              <reactBootstrap.Dropdown.Item as="button">
-                <div>
-                  <h6>{noti.message}</h6>
+          {userNotifications.length > 0 ? (
+            <div>
+              {userNotifications.map((noti) => (
+                <div key={noti.id}>
+                  <reactBootstrap.Dropdown.Item as="button">
+                    <div>
+                      <h6>{noti.message}</h6>
+                    </div>
+                  </reactBootstrap.Dropdown.Item>
                 </div>
-              </reactBootstrap.Dropdown.Item>
+              ))}
             </div>
-          ))}
+          ) : (
+            <div>Loading...</div>
+          )}
         </reactBootstrap.Dropdown.Menu>
       </reactBootstrap.Dropdown>
 

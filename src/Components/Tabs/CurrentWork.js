@@ -10,6 +10,8 @@ import {
   Row,
   ProgressBar,
   Dropdown,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import { useAuth } from "../../Context/AuthContext";
 import "../styles/currentWork.css";
@@ -22,9 +24,9 @@ export default function CurrentWork() {
     selectedProjectNotes,
     deleteNote,
   } = useAuth();
-function handleDelete(note){
-  deleteNote(note)
-}
+  function handleDelete(note) {
+    deleteNote(note);
+  }
   function calculateProgress() {
     let counter = 0;
     if (selectedProjectTasks.length > 0) {
@@ -55,15 +57,22 @@ function handleDelete(note){
         <LineChart />
       </div>
 
-      <Container style={{ padding: "10px" }}>
-        <Row style={{ width: "100%" }}>
-          <Col style={{ alignContent: "center" }}>
+      <Container
+        style={{
+          padding: "10px",
+          display: "inline-flex",
+          alignItems: "center",
+        }}
+        fluid
+      >
+        <Row style={{ width: "100%", alignContent: "center" }}>
+          <Col md={4} style={{ alignContent: "center" }}>
             <Card
               className="main-shadow"
               style={{
                 width: "400px",
                 height: "520px",
-                marginLeft: "-15px",
+                marginLeft: "15px",
                 marginTop: "20px",
               }}
             >
@@ -172,7 +181,7 @@ function handleDelete(note){
               </Card.Body>
             </Card>
           </Col>
-          <Col>
+          <Col md={4}>
             <Row>
               <Card
                 className="main-shadow"
@@ -210,43 +219,48 @@ function handleDelete(note){
                       {selectedProjectNotes.length > 0 ? (
                         selectedProjectNotes.map((note) => (
                           <Container style={{ marginBottom: "10px" }}>
-                            
-                           
-
-                            <Row><Col md={12}>
-                               <div style={{textAlign:'right',top:'0',marginTop:'5px'}}>
-                              {" "}
-                              <Dropdown drop="down">
-                                <Dropdown.Toggle
-                                  variant="transperant"
-                                  style={{ fontSize: "0px" }}
-                                  id="dropdown-basic"
+                            <Row>
+                              <Col md={12}>
+                                <div
+                                  style={{
+                                    textAlign: "right",
+                                    top: "0",
+                                    marginTop: "5px",
+                                  }}
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="20"
-                                    height="20"
-                                    fill="currentColor"
-                                    className="bi bi-three-dots-vertical"
-                                    viewBox="0 0 16 16"
-                                  >
-                                    <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                                  </svg>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                  <div>
-                                    <Dropdown.Item
-                                      as="button"
-                                      onClick={() => {
-                                        handleDelete(note);
-                                      }}
+                                  {" "}
+                                  <Dropdown drop="down">
+                                    <Dropdown.Toggle
+                                      variant="transperant"
+                                      style={{ fontSize: "0px" }}
+                                      id="dropdown-basic"
                                     >
-                                      <h6>Delete Note</h6>
-                                    </Dropdown.Item>
-                                  </div>
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </div></Col>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="20"
+                                        height="20"
+                                        fill="currentColor"
+                                        className="bi bi-three-dots-vertical"
+                                        viewBox="0 0 16 16"
+                                      >
+                                        <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                      </svg>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                      <div>
+                                        <Dropdown.Item
+                                          as="button"
+                                          onClick={() => {
+                                            handleDelete(note);
+                                          }}
+                                        >
+                                          <h6>Delete Note</h6>
+                                        </Dropdown.Item>
+                                      </div>
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                </div>
+                              </Col>
                               <Col md={3}>
                                 {note.creator.photoURL ? (
                                   <img
@@ -303,7 +317,7 @@ function handleDelete(note){
                           </Container>
                         ))
                       ) : (
-                        <div className='text-center'> There are no Notes! </div>
+                        <div className="text-center"> There are no Notes! </div>
                       )}
                     </div>
                   </div>
@@ -315,6 +329,111 @@ function handleDelete(note){
                 </Card.Body>
               </Card>
             </Row>
+          </Col>
+          <Col md={4} style={{ alignContent: "center" }}>
+            <Card
+              className="main-shadow"
+              style={{
+                width: "400px",
+                height: "520px",
+                marginLeft: "-15px",
+                marginTop: "20px",
+              }}
+            >
+              <Card.Body>
+                <h4>Assigned Workers</h4>
+                <div
+                  style={{
+                    overflow: "auto",
+                    maxHeight: "350px",
+                    padding: "25 px",
+                  }}
+                >
+                  <div>
+                    {selectedProject.assigned.length > 0 ? (
+                      selectedProject.assigned.map((worker) => (
+                        <div
+                          style={{
+                            width: "100%",
+
+                            marginTop: "15px",
+                          }}
+                        >
+                          <div style={{ display: "flex" }}>
+                            <Col md={2}>
+                              <div>
+                                {" "}
+                                {worker.photoURL ? (
+                                  <OverlayTrigger
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                      <Tooltip id="button-tooltip-2">
+                                        {worker.name}
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <img
+                                      style={{
+                                        borderRadius: "50%",
+                                        width: "35px",
+                                      }}
+                                      src={worker.photoURL}
+                                      alt="Profile_Picture"
+                                    ></img>
+                                  </OverlayTrigger>
+                                ) : (
+                                  <OverlayTrigger
+                                    placement="right"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={
+                                      <Tooltip id="button-tooltip-2">
+                                        {worker.name}
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      width="35"
+                                      height="35"
+                                      fill="currentColor"
+                                      className="bi bi-person-circle"
+                                      viewBox="0 0 16 16"
+                                    >
+                                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                                      />
+                                    </svg>
+                                  </OverlayTrigger>
+                                )}
+                              </div>
+                            </Col>
+                            <Col md={5}>
+                              {" "}
+                              <h6>{worker.name}</h6>
+                            </Col>
+                            <Col md={5}>{worker.type}</Col>
+                          </div>
+
+                          <Col
+                            style={{
+                              marginBottom: "-10px",
+                              marginTop: "-10px",
+                            }}
+                          ></Col>
+
+                          <hr />
+                        </div>
+                      ))
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       </Container>

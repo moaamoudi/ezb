@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import CalenderScheduler from "./CalendarScheduler.js";
+import { useAuth } from "../Context/AuthContext";
 
 export default function Calendar() {
+  const { allCompanyTasks } = useAuth();
   const schedulerData = [
     {
       title: "Website Re-Design Plan",
@@ -50,7 +52,7 @@ export default function Calendar() {
       id: 5,
       location: "Room 2",
       test: "test6",
-      lol:"lol"
+      lol: "lol",
     },
     {
       title: "Install New Database",
@@ -71,7 +73,7 @@ export default function Calendar() {
   ];
   return (
     <div>
-      <CalenderScheduler data={schedulerData}></CalenderScheduler>
+      <CalenderScheduler data={allCompanyTasks}></CalenderScheduler>
     </div>
   );
 }

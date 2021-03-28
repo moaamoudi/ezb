@@ -3,6 +3,7 @@ import { auth, db, provider } from "../firebase";
 import { format } from "date-fns";
 import useLocalStorage from "../Components/useLocalStorage.js";
 import emailJS from "emailjs-com";
+import { colors } from "../Components/styles/RandomColors.js";
 
 const AuthContext = React.createContext();
 
@@ -47,6 +48,12 @@ export function AuthProvider({ children }) {
     "selectedProjectNotes",
     {}
   );
+
+  const [allCompanyTasks, setAllCompanyTasks] = useLocalStorage(
+    "allCompanyTasks",
+    []
+  );
+
   const [
     selectedProjectInventory,
     setSelectedProjectInventory,
@@ -72,6 +79,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("selectedProjectInventory");
     localStorage.removeItem("selectedCompanyEmployee");
     localStorage.removeItem("selectedCompanyClients");
+    localStorage.removeItem("allCompanyTasks");
 
     return auth.signOut();
   }
@@ -221,6 +229,7 @@ export function AuthProvider({ children }) {
       email: auth.currentUser.email,
       name: auth.currentUser.displayName,
       type: "owner",
+      photoURL: auth.currentUser.photoURL,
     });
     companiesData.forEach((company) => {
       if (company.companyName === selectCompany.companyName) {
@@ -278,10 +287,12 @@ export function AuthProvider({ children }) {
           endDate: endDate,
           complete: false,
           subTasks: subTasks,
+          assigned: [],
         })
         .then(() => {
           console.log("task written succesfully");
           getProjectTasks(selectedProject);
+          getAllProjectsTasks();
         })
         .catch((e) => {
           console.error(e.message);
@@ -302,6 +313,7 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("task written succesfully");
           getProjectTasks(selectedProject);
+          getAllProjectsTasks();
         })
         .catch((e) => {
           console.error(e.message);
@@ -345,6 +357,7 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("subtask succesfully edited");
           getProjectTasks(selectedProject);
+          getAllProjectsTasks();
         });
     }
   }
@@ -537,6 +550,7 @@ export function AuthProvider({ children }) {
       phone: "" + phone,
       companyName: companyName,
       uid: "" + auth.currentUser.uid,
+      photoURL: auth.currentUser.photoURL,
     };
 
     await db
@@ -561,11 +575,50 @@ export function AuthProvider({ children }) {
     await initialGetCompanies();
     await initialGetCompanyProjects();
     await initialGetClients();
-    // await initialGetEmployee();
+    // await getAllProjectsTasks();
+    // await updateDetails();
 
     console.log(auth.currentUser);
 
     setLoading(false);
+  }
+
+  async function getAllProjectsTasks() {
+    let items = [];
+
+    if (auth.currentUser) {
+      items = [];
+      console.log(projects[0]);
+      for (let index = 0; index < projects.length; index++) {
+        await db
+          .collection("Companies")
+          .doc(selectCompany.id)
+          .collection("Projects")
+          .doc(projects[index].projectName)
+          .collection("Tasks")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((task) => {
+              let temp = task.data();
+              items.push({
+                assigned: temp.assigned,
+                complete: temp.complete,
+                endDate: temp.endDate,
+                startDate: temp.startDate,
+                subTasks: temp.subTasks,
+                taskDescripiton: temp.taskDescripiton,
+                title: temp.taskName,
+                color: colors[index],
+                belongsTo: projects[index],
+              });
+            });
+          });
+      }
+      setAllCompanyTasks(items);
+      console.log(items);
+      items = [];
+    }
+    items = [];
   }
 
   async function updateDetails() {
@@ -581,6 +634,7 @@ export function AuthProvider({ children }) {
         name: auth.currentUser.displayName,
         email: auth.currentUser.email,
         type: "owner",
+        photoURL: auth.currentUser.photoURL,
       },
     ];
 
@@ -834,6 +888,7 @@ export function AuthProvider({ children }) {
           email: EmployeeEmail,
           phone: exists.phone,
           AssignedProjects: temp,
+          photoURL: exists.photoURL,
         };
 
         await db
@@ -858,6 +913,7 @@ export function AuthProvider({ children }) {
           name: exists.firstName + " " + exists.lastName,
           email: EmployeeEmail,
           type: EmployeeType,
+          photoURL: exists.photoURL,
         };
         Projects.forEach((project) => {
           project.assigned.push(user1);
@@ -1146,6 +1202,7 @@ export function AuthProvider({ children }) {
     updateProduct,
     deleteTask,
     deleteNote,
+    allCompanyTasks,
   };
   return (
     <AuthContext.Provider value={value}>

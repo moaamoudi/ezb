@@ -49,29 +49,12 @@ const style = ({ palette }) => ({
   },
 });
 
-const getClassByLocation = (classes, location) => {
-  if (location === "Room 1") return classes.firstRoom;
-  if (location === "Room 2") return classes.secondRoom;
-  return classes.thirdRoom;
-};
+
 
 const Header = withStyles(style, { name: "Header" })(
   ({ children, appointmentData, classes, ...restProps }) => (
-    <AppointmentTooltip.Header
-      {...restProps}
-      className={classNames(
-        getClassByLocation(classes, appointmentData.location),
-        classes.header
-      )}
-      appointmentData={appointmentData}
-    >
-      <IconButton
-        /* eslint-disable-next-line no-alert */
-        onClick={() => alert(JSON.stringify(appointmentData))}
-        className={classes.commandButton}
-      >
-        <MoreIcon />
-      </IconButton>
+    <AppointmentTooltip.Header {...restProps} appointmentData={appointmentData}>
+    
     </AppointmentTooltip.Header>
   )
 );
@@ -82,14 +65,6 @@ const Content = withStyles(style, { name: "Content" })(
       {...restProps}
       appointmentData={appointmentData}
     >
-      <Grid container alignItems="center">
-        <Grid item xs={2} className={classes.textCenter}>
-          <Room className={classes.icon} />
-        </Grid>
-        <Grid item xs={10}>
-          {appointmentData.test}
-        </Grid>
-      </Grid>
     </AppointmentTooltip.Content>
   )
 );
@@ -99,7 +74,7 @@ const CommandButton = withStyles(style, {
 })(({ classes, ...restProps }) => (
   <AppointmentTooltip.CommandButton
     {...restProps}
-    className={classes.commandButton}
+    
   />
 ));
 
@@ -114,27 +89,35 @@ export default class CalendarScheduler extends React.PureComponent {
   render() {
     const { data } = this.state;
 
+    const Appointment = ({ children, style, ...restProps }) => (
+      <Appointments.Appointment
+        {...restProps}
+        style={{
+          ...style,
+          backgroundColor: restProps.data.color,
+          borderRadius: "4px",
+        }}
+      >
+        {children}
+      </Appointments.Appointment>
+    );
+
     return (
       <Paper>
         <Scheduler data={data} height="100%">
-          <ViewState
-            defaultCurrentDate="2018-06-26"
-            defaultCurrentViewName="Month"
-          />
+          <ViewState defaultCurrentViewName="Month" />
           <DayView />
           <WeekView />
-          <MonthView height="100%"/>
+          <MonthView height="100%" />
           <Toolbar />
           <ViewSwitcher />
           <DateNavigator />
           <TodayButton />
 
-          <Appointments />
+          <Appointments appointmentComponent={Appointment} />
 
           <AppointmentTooltip
-            headerComponent={Header}
             contentComponent={Content}
-            commandButtonComponent={CommandButton}
             showCloseButton
           />
         </Scheduler>
@@ -142,3 +125,4 @@ export default class CalendarScheduler extends React.PureComponent {
     );
   }
 }
+// headerComponent={Header}
