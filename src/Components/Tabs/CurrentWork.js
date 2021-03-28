@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TaskPopUp from "../popUptask";
 import NotePopUp from "../PopUpNote";
 import LineChart from "../LineChart";
 import PopUpTaskDetails from "../PopUpTaskDetails";
+import PopUpEmpDetailsAssigned from "../PopUpEmpDetailsAssigned";
 import {
   Card,
   Col,
@@ -23,10 +24,21 @@ export default function CurrentWork() {
     handleSubTaskChange,
     selectedProjectNotes,
     deleteNote,
+    userDetails,
   } = useAuth();
   function handleDelete(note) {
     deleteNote(note);
   }
+  const [currentUser, setCurrentUser] = useState("");
+
+  
+  useEffect(() => {
+    for (let index = 0; index < selectedProject.assigned.length; index++) {
+      if (selectedProject.assigned[index].email === userDetails.email) {
+        setCurrentUser(selectedProject.assigned[index]);
+      }
+    }
+  }, []);
   function calculateProgress() {
     let counter = 0;
     if (selectedProjectTasks.length > 0) {
@@ -415,6 +427,11 @@ export default function CurrentWork() {
                               <h6>{worker.name}</h6>
                             </Col>
                             <Col md={5}>{worker.type}</Col>
+                            {currentUser.type === "Worker" ? (
+                             <></>
+                            ) : (
+                              <PopUpEmpDetailsAssigned Emp={worker} />
+                            )}
                           </div>
 
                           <Col

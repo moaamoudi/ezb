@@ -55,10 +55,6 @@ export default function GanttChart() {
 
     formattedData.push(formattedTask);
   });
-  function handleClick(){
-    
-    // exportComponentAsPNG(img);
-  }
   function calculateTaskProgress(task) {
     let counter = 0;
 
