@@ -94,6 +94,7 @@ export default class CalendarScheduler extends React.PureComponent {
         {...restProps}
         style={{
           ...style,
+          height:'20px',
           backgroundColor: restProps.data.color,
           borderRadius: "4px",
         }}
