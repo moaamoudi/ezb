@@ -428,9 +428,10 @@ export default function CurrentWork() {
                             </Col>
                             <Col md={5}>{worker.type}</Col>
                             {currentUser.type === "Worker" ? (
-                             <></>
+                             <div>{worker.type ==='owner'?(<></>):(<PopUpEmpDetailsAssigned Emp={worker} />)}</div>
                             ) : (
-                              <PopUpEmpDetailsAssigned Emp={worker} />
+                             <></> 
+                              
                             )}
                           </div>
 

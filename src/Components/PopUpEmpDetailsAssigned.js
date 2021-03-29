@@ -39,7 +39,7 @@ export default function PopUpEmpDetailsAssigned(props) {
               Employee Name:{Emp.name}
             </h4></div>
             <div><h4>Employee Email:{Emp.email}</h4></div>
-            <div><h5>Assigned Tasks:</h5></div>
+            {Emp.type==='Administrator'?(<></>):(<div><h5>Assigned Tasks:</h5></div>)}
             
             {/* {mapping of tasks} */}
             <div className="text-center">
