@@ -57,8 +57,9 @@ export default function Signup() {
       await initialUpdateDetails();
       console.log("after fetch");
       history.push("/");
-    } catch {
-      setError("Failed to create an account!");
+    } catch (e) {
+      setError(e.message);
+      console.log(e);
     }
     setLoading(false);
   }

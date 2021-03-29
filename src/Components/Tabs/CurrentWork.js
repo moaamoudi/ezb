@@ -196,9 +196,9 @@ export default function CurrentWork() {
                               <div>
                                 {currentUser.type === "Worker" ? (
                                   <PopUpTaskDetailsWorker
-                                  task={task}
-                                  handleSubTaskChange={handleSubTaskChange}
-                                ></PopUpTaskDetailsWorker>
+                                    task={task}
+                                    handleSubTaskChange={handleSubTaskChange}
+                                  ></PopUpTaskDetailsWorker>
                                 ) : (
                                   <PopUpTaskDetails
                                     task={task}
@@ -459,12 +459,14 @@ export default function CurrentWork() {
                               <h6>{worker.name}</h6>
                             </Col>
                             <Col md={5}>{worker.type}</Col>
+
                             {currentUser.type === "Worker" ? (
                               <></>
                             ) : (
                               <div>
                                 {worker.type === "owner" ||
-                                currentUser.type !== "Worker" ? (
+                                currentUser.type === "Worker" ||
+                                currentUser.type === "owner" ? (
                                   <></>
                                 ) : (
                                   <PopUpEmpDetailsAssigned Emp={worker} />

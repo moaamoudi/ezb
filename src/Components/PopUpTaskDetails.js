@@ -72,6 +72,7 @@ export default function PopUpTaskDetails(props) {
       setUpdated(true);
       setTaskCopyFinal(taskCopy);
     }
+    setError("");
   }
 
   function checkComplete() {
@@ -132,11 +133,22 @@ export default function PopUpTaskDetails(props) {
     setError("");
   }
 
-  function handleRemoveWorker(worker) {
-    const subs = taskCopy.assigned.filter((temp) => temp.name !== worker.name);
-    taskCopy.assigned = subs;
+  function handleSelectWorker(sub, temp) {
+    for (let i = 0; i < taskCopy.subTasks.length; i++) {
+      if (taskCopy.subTasks[i].name === sub.name) {
+        if (temp === "Remove Assigned") {
+          delete taskCopy.subTasks[i].assigned;
+        } else {
+          taskCopy.subTasks[i].assigned = temp;
+        }
+      }
+    }
+
+    taskCopyFinal.subTasks = taskCopy.subTasks;
+    setSubtasklist(taskCopy.subTasks);
     setUpdated(true);
     setTaskCopyFinal(taskCopy);
+    setError("");
   }
 
   function handleDelete(task) {
@@ -150,40 +162,12 @@ export default function PopUpTaskDetails(props) {
     setSubtasklist(subs);
     setUpdated(true);
     setTaskCopyFinal(taskCopy);
+    setError("");
   }
 
   function handleSubmit(e) {
     e.preventDefault();
     handleSubTaskChange(taskCopyFinal);
-  }
-
-  function addWorker() {
-    if (selectedWorker !== undefined) {
-      var joined = [];
-      if (taskCopyFinal.assigned.length > 0) {
-        var found = -1;
-        for (let index = 0; index < taskCopyFinal.assigned.length; index++) {
-          if (selectedWorker.name === taskCopyFinal.assigned[index].name) {
-            found = 1;
-          }
-        }
-        if (found === -1) {
-          joined = taskCopyFinal.assigned.concat(selectedWorker);
-          taskCopy.assigned = joined;
-          setUpdated(true);
-          setTaskCopyFinal(taskCopy);
-        } else {
-          return setError("Duplicate Worker Was Entered!");
-        }
-      } else {
-        joined = taskCopyFinal.assigned.concat(selectedWorker);
-
-        taskCopy.assigned = joined;
-        setUpdated(true);
-        setTaskCopyFinal(taskCopy);
-      }
-    }
-
     setError("");
   }
 
@@ -206,7 +190,7 @@ export default function PopUpTaskDetails(props) {
       {(close) => (
         <Card
           className="main-shadow"
-          style={{ width: "1000px", height: "850px" }}
+          style={{ width: "800px", height: "780px" }}
         >
           <Card.Body>
             <div
@@ -263,7 +247,7 @@ export default function PopUpTaskDetails(props) {
                     <h6>End: {task.endDate}</h6>
                   </Col>
 
-                  <Col md={6} className="mt-3">
+                  <Col md={12} className="mt-3">
                     <Form.Group
                       id="taskDiscription"
                       style={{ display: "flex" }}
@@ -285,53 +269,16 @@ export default function PopUpTaskDetails(props) {
                       </Button>
                     </Form.Group>
                   </Col>
-                  <Col md={6} className="mt-3">
-                    <DropdownButton
-                      as={ButtonGroup}
-                      key="right"
-                      id={`dropdown-button-drop-right`}
-                      drop="right"
-                      style={{ width: "50%" }}
-                      title={dropDownText}
-                    >
-                      {selectedProject.assigned.length > 0 ? (
-                        <div>
-                          {selectedProject.assigned.map((temp) => (
-                            <Dropdown.Item
-                              onSelect={() => {
-                                setDropDownText(temp.name);
-                                setSelectedWorker(temp);
-                              }}
-                            >
-                              <div style={{ display: "flex" }}>
-                                <div style={{ width: "90%" }}>{temp.name}</div>
-                              </div>
-                            </Dropdown.Item>
-                          ))}
-                        </div>
-                      ) : (
-                        <div></div>
-                      )}
-                    </DropdownButton>
-                    <Button
-                      style={{ width: "40%", marginLeft: "10%" }}
-                      onClick={(e) => {
-                        addWorker();
-                      }}
-                    >
-                      Assign Worker
-                    </Button>
-                  </Col>
 
                   <Container
                     fluid
                     style={{
-                      width: "420px",
+                      width: "700px",
                       height: "300px",
                       marginBottom: "10px",
                     }}
                   >
-                    <div style={{ display: "inline-flex" }}>
+                    <div style={{ display: "flex" }}>
                       <Col md={6} style={{ marginLeft: "-30px" }}>
                         Subtask name
                       </Col>
@@ -339,211 +286,168 @@ export default function PopUpTaskDetails(props) {
                       <Col md={5}>Last Modified</Col>
                     </div>
 
-                    <Row>
-                      <div
-                        style={{
-                          marginBottom: "10px",
-                          height: "300px",
-                          overflow: "auto",
-                          width: "420px",
-                        }}
-                      >
-                        <hr></hr>
-                        {subtasklist.length > 0 ? (
-                          subtasklist.map((sub) => (
-                            <Container
-                              style={{
-                                display: "inline-flex",
-                                width: "235px",
-                                height: "30px",
-                                marginBottom: "20px",
-                              }}
-                            >
-                              <Col md={12}>{sub.name}</Col>
+                    <div
+                      style={{
+                        marginBottom: "10px",
+                        height: "300px",
+                        overflow: "auto",
+                        width: "700px",
+                      }}
+                    >
+                      <hr></hr>
+                      {subtasklist.length > 0 ? (
+                        subtasklist.map((sub) => (
+                          <Container
+                            style={{
+                              display: "inline-flex",
+                              width: "380px",
+                              height: "30px",
+                              marginBottom: "20px",
+                            }}
+                          >
+                            <Col md={6}>{sub.name}</Col>
 
-                              <Col md={3}>
-                                {sub.complete ? (
-                                  <div>
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="22"
-                                      height="22"
-                                      fill="#F5A494"
-                                      className="bi bi-check-square-fill svgOnClick"
-                                      viewBox="0 0 16 16"
-                                      onClick={() => handleClick(sub)}
-                                    >
-                                      <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
-                                    </svg>
-                                  </div>
-                                ) : (
+                            <Col md={3}>
+                              {sub.complete ? (
+                                <div>
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="22"
                                     height="22"
                                     fill="#F5A494"
-                                    className="bi bi-square svgOnClick"
+                                    className="bi bi-check-square-fill svgOnClick"
                                     viewBox="0 0 16 16"
                                     onClick={() => handleClick(sub)}
                                   >
-                                    <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                                    <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
                                   </svg>
-                                )}
-                              </Col>
-                              <Col md={3}>
-                                {sub.lastModified !== undefined ? (
-                                  <div>
-                                    {sub.lastModified.photoURL ? (
-                                      <OverlayTrigger
-                                        placement="right"
-                                        delay={{ show: 250, hide: 400 }}
-                                        overlay={
-                                          <Tooltip id="button-tooltip-2">
-                                            Last modified by:{" "}
-                                            {sub.lastModified.name}
-                                          </Tooltip>
-                                        }
-                                      >
-                                        <img
-                                          style={{
-                                            borderRadius: "50%",
-                                            width: "35px",
-                                          }}
-                                          src={sub.lastModified.photoURL}
-                                          alt="Profile_Picture"
-                                        ></img>
-                                      </OverlayTrigger>
-                                    ) : (
-                                      <OverlayTrigger
-                                        placement="right"
-                                        delay={{ show: 250, hide: 400 }}
-                                        overlay={
-                                          <Tooltip id="button-tooltip-2">
-                                            Last modified by:{" "}
-                                            {sub.lastModified.name}
-                                          </Tooltip>
-                                        }
-                                      >
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width="35"
-                                          height="35"
-                                          fill="currentColor"
-                                          className="bi bi-person-circle"
-                                          viewBox="0 0 16 16"
-                                        >
-                                          <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                          <path
-                                            fillRule="evenodd"
-                                            d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                                          />
-                                        </svg>
-                                      </OverlayTrigger>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <div></div>
-                                )}
-                              </Col>
-                              <Col md={1}>
+                                </div>
+                              ) : (
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   width="22"
                                   height="22"
                                   fill="#F5A494"
-                                  className="bi bi-trash svgOnClick"
+                                  className="bi bi-square svgOnClick"
                                   viewBox="0 0 16 16"
-                                  onClick={() => handleRemove(sub)}
+                                  onClick={() => handleClick(sub)}
                                 >
-                                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-                                  <path
-                                    fill-rule="evenodd"
-                                    d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
-                                  />
+                                  <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                                 </svg>
-                              </Col>
-                            </Container>
-                          ))
-                        ) : (
-                          <div className="text-center">
-                            there is no subtasks in this task
-                          </div>
-                        )}
-                      </div>
-                    </Row>
-                  </Container>
-                  <Col className="text-center">
-                    <div style={{ display: "inline-flex" }}>
-                      <Col md={12}>Worker Name</Col>
-                    </div>
-                    <hr></hr>
-                    {taskCopyFinal.assigned.length > 0 ? (
-                      <div
-                        style={{
-                          height: "300px",
-                          overflow: "auto",
-                        }}
-                      >
-                        {taskCopyFinal.assigned.map((worker) => (
-                          <Container
-                            fluid
-                            style={{
-                              display: "inline-flex",
-                              padding: "0 50px 0 50px",
-                              margin: "0 0 20px 0",
-                            }}
-                          >
-                            <Col md={3}>
-                              <div>
-                                {worker.photoURL ? (
-                                  <OverlayTrigger
-                                    placement="right"
-                                    delay={{ show: 250, hide: 400 }}
-                                    overlay={
-                                      <Tooltip id="button-tooltip-2">
-                                        {worker.name}
-                                      </Tooltip>
-                                    }
-                                  >
-                                    <img
-                                      style={{
-                                        borderRadius: "50%",
-                                        width: "35px",
-                                      }}
-                                      src={worker.photoURL}
-                                      alt="Profile_Picture"
-                                    ></img>
-                                  </OverlayTrigger>
-                                ) : (
-                                  <OverlayTrigger
-                                    placement="right"
-                                    delay={{ show: 250, hide: 400 }}
-                                    overlay={
-                                      <Tooltip id="button-tooltip-2">
-                                        {worker.name}
-                                      </Tooltip>
-                                    }
-                                  >
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      width="35"
-                                      height="35"
-                                      fill="currentColor"
-                                      className="bi bi-person-circle"
-                                      viewBox="0 0 16 16"
-                                    >
-                                      <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                                      <path
-                                        fillRule="evenodd"
-                                        d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-                                      />
-                                    </svg>
-                                  </OverlayTrigger>
-                                )}
-                              </div>
+                              )}
                             </Col>
-                            <Col md={8}>
-                              <h6>{worker.name}</h6>
+                            <Col md={3}>
+                              {sub.lastModified !== undefined ? (
+                                <div>
+                                  {sub.lastModified.photoURL ? (
+                                    <OverlayTrigger
+                                      placement="right"
+                                      delay={{ show: 250, hide: 400 }}
+                                      overlay={
+                                        <Tooltip id="button-tooltip-2">
+                                          Last modified by:{" "}
+                                          {sub.lastModified.name}
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <img
+                                        style={{
+                                          borderRadius: "50%",
+                                          width: "35px",
+                                        }}
+                                        src={sub.lastModified.photoURL}
+                                        alt="Profile_Picture"
+                                      ></img>
+                                    </OverlayTrigger>
+                                  ) : (
+                                    <OverlayTrigger
+                                      placement="right"
+                                      delay={{ show: 250, hide: 400 }}
+                                      overlay={
+                                        <Tooltip id="button-tooltip-2">
+                                          Last modified by:{" "}
+                                          {sub.lastModified.name}
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="35"
+                                        height="35"
+                                        fill="currentColor"
+                                        className="bi bi-person-circle"
+                                        viewBox="0 0 16 16"
+                                      >
+                                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                                        />
+                                      </svg>
+                                    </OverlayTrigger>
+                                  )}
+                                </div>
+                              ) : (
+                                <div></div>
+                              )}
+                            </Col>
+                            <Col md={8} className="">
+                              <DropdownButton
+                                as={ButtonGroup}
+                                key="right"
+                                id={`dropdown-button-drop-right`}
+                                drop="down"
+                                style={{ width: "30%" }}
+                                title={
+                                  sub.assigned !== undefined
+                                    ? sub.assigned.name
+                                    : "Select Worker"
+                                }
+                              >
+                                {selectedProject.assigned.length > 0 ? (
+                                  <div>
+                                    {sub.assigned !== undefined ? (
+                                      <Dropdown.Item
+                                        onSelect={() => {
+                                          handleSelectWorker(
+                                            sub,
+                                            "Remove Assigned"
+                                          );
+                                        }}
+                                      >
+                                        <div style={{ display: "flex" }}>
+                                          <div style={{ width: "40%" }}>
+                                            {"Remove Assigned"}
+                                          </div>
+                                        </div>
+                                      </Dropdown.Item>
+                                    ) : (
+                                      <></>
+                                    )}
+                                    {selectedProject.assigned.map((temp) => (
+                                      <>
+                                        {temp.type !== "owner" ? (
+                                          <Dropdown.Item
+                                            onSelect={() => {
+                                              handleSelectWorker(sub, temp);
+                                            }}
+                                          >
+                                            <div style={{ display: "flex" }}>
+                                              <div style={{ width: "40%" }}>
+                                                {temp.name}
+                                              </div>
+                                            </div>
+                                          </Dropdown.Item>
+                                        ) : (
+                                          <></>
+                                        )}
+                                      </>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <div></div>
+                                )}
+                              </DropdownButton>
                             </Col>
                             <Col md={1}>
                               <svg
@@ -553,7 +457,7 @@ export default function PopUpTaskDetails(props) {
                                 fill="#F5A494"
                                 className="bi bi-trash svgOnClick"
                                 viewBox="0 0 16 16"
-                                onClick={() => handleRemoveWorker(worker)}
+                                onClick={() => handleRemove(sub)}
                               >
                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
                                 <path
@@ -563,13 +467,16 @@ export default function PopUpTaskDetails(props) {
                               </svg>
                             </Col>
                           </Container>
-                        ))}
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
-                  </Col>
-                  <Col md={12}>
+                        ))
+                      ) : (
+                        <div className="text-center">
+                          there is no subtasks in this task
+                        </div>
+                      )}
+                    </div>
+                  </Container>
+
+                  <Col md={12} style={{ marginTop: "15px" }}>
                     <div className="text-center">
                       <Button className="w-50  mt-3" type="submit">
                         Save
