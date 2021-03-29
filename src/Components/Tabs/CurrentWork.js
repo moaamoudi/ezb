@@ -31,7 +31,6 @@ export default function CurrentWork() {
   }
   const [currentUser, setCurrentUser] = useState("");
 
-  
   useEffect(() => {
     for (let index = 0; index < selectedProject.assigned.length; index++) {
       if (selectedProject.assigned[index].email === userDetails.email) {
@@ -97,7 +96,16 @@ export default function CurrentWork() {
                     (calculateProgress() / selectedProjectTasks.length) * 100
                   }
                   label={
-                    calculateProgress() + "/" + selectedProjectTasks.length
+                    (calculateProgress() / selectedProjectTasks.length) *
+                      100 !==
+                    100
+                      ? (
+                          (calculateProgress() / selectedProjectTasks.length) *
+                          100
+                        ).toFixed(2) + "%"
+                      : (calculateProgress() / selectedProjectTasks.length) *
+                          100 +
+                        "%"
                   }
                 ></ProgressBar>
                 <div
@@ -163,9 +171,19 @@ export default function CurrentWork() {
                                 100
                               }
                               label={
-                                calculateSubProgress(task) +
-                                "/" +
-                                task.subTasks.length
+                                (calculateSubProgress(task) /
+                                  task.subTasks.length) *
+                                  100 !==
+                                100
+                                  ? (
+                                      (calculateSubProgress(task) /
+                                        task.subTasks.length) *
+                                      100
+                                    ).toFixed(2) + "%"
+                                  : (calculateSubProgress(task) /
+                                      task.subTasks.length) *
+                                      100 +
+                                    "%"
                               }
                             />
                           </Col>
@@ -428,10 +446,15 @@ export default function CurrentWork() {
                             </Col>
                             <Col md={5}>{worker.type}</Col>
                             {currentUser.type === "Worker" ? (
-                             <div>{worker.type ==='owner'?(<></>):(<PopUpEmpDetailsAssigned Emp={worker} />)}</div>
+                              <></>
                             ) : (
-                             <></> 
-                              
+                              <div>
+                                {worker.type === "owner" || currentUser.type !== "Worker" ? (
+                                  <></>
+                                ) : (
+                                  <PopUpEmpDetailsAssigned Emp={worker} />
+                                )}
+                              </div>
                             )}
                           </div>
 
