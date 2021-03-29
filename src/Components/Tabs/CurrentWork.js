@@ -16,6 +16,7 @@ import {
 } from "react-bootstrap";
 import { useAuth } from "../../Context/AuthContext";
 import "../styles/currentWork.css";
+import PopUpTaskDetailsWorker from "../PopUpTaskDetailsWorker";
 
 export default function CurrentWork() {
   const selectedProject = JSON.parse(localStorage.getItem("selectedProject"));
@@ -189,10 +190,23 @@ export default function CurrentWork() {
                           </Col>
 
                           <div className="text-center mt-3">
-                            <PopUpTaskDetails
-                              task={task}
-                              handleSubTaskChange={handleSubTaskChange}
-                            ></PopUpTaskDetails>
+                            {currentUser.type === "owner" ? (
+                              <></>
+                            ) : (
+                              <div>
+                                {currentUser.type === "Worker" ? (
+                                  <PopUpTaskDetailsWorker
+                                  task={task}
+                                  handleSubTaskChange={handleSubTaskChange}
+                                ></PopUpTaskDetailsWorker>
+                                ) : (
+                                  <PopUpTaskDetails
+                                    task={task}
+                                    handleSubTaskChange={handleSubTaskChange}
+                                  ></PopUpTaskDetails>
+                                )}
+                              </div>
+                            )}
                           </div>
 
                           <hr />
@@ -449,7 +463,8 @@ export default function CurrentWork() {
                               <></>
                             ) : (
                               <div>
-                                {worker.type === "owner" || currentUser.type !== "Worker" ? (
+                                {worker.type === "owner" ||
+                                currentUser.type !== "Worker" ? (
                                   <></>
                                 ) : (
                                   <PopUpEmpDetailsAssigned Emp={worker} />
