@@ -191,7 +191,12 @@ export default function CurrentWork() {
 
                           <div className="text-center mt-3">
                             {currentUser.type === "owner" ? (
-                              <></>
+                              <>
+                                <PopUpTaskDetails
+                                  task={task}
+                                  handleSubTaskChange={handleSubTaskChange}
+                                ></PopUpTaskDetails>
+                              </>
                             ) : (
                               <div>
                                 {currentUser.type === "Worker" ? (
