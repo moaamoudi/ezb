@@ -7,54 +7,60 @@ import "react-google-flight-datepicker/dist/main.css";
 import "./styles/PopUp.css";
 
 export default function PopUpEmpDetailsAssigned(props) {
-  const [Emp] = useState(props.Emp);
+  const [Emp,setEmp] = useState(props.Emp);
   const { selectedProjectTasks } = useAuth();
   const [tasks, setTasks] = useState([]);
+//   useEffect(() => {
+   
+    
+    
 
-  useEffect(() => {
-    for (let index = 0; index < selectedProjectTasks.length; index++) {
-      for (let j = 0; j < selectedProjectTasks[index].subTasks.length; j++) {
-        if (selectedProjectTasks[index].subTasks[j].assigned !== undefined) {
-          if (
-            selectedProjectTasks[index].subTasks[j].assigned.email === Emp.email
-          ) {
-            if (tasks.length < 1) {
-              var taskObj = {
-                name: selectedProjectTasks[index].subTasks[j].name,
-                complete: selectedProjectTasks[index].subTasks[j].complete,
-                completeDate:
-                  selectedProjectTasks[index].subTasks[j].completionDate,
-                majorTask: selectedProjectTasks[index].taskName,
-              };
-              setTasks(tasks.concat(taskObj));
-            } else {
-              var found = -1;
-              var taskObj = {
-                name: selectedProjectTasks[index].subTasks[j].name,
-                complete: selectedProjectTasks[index].subTasks[j].complete,
-                completeDate:
-                  selectedProjectTasks[index].subTasks[j].completionDate,
-                majorTask: selectedProjectTasks[index].taskName,
-              };
-              for (let dublicate = 0; dublicate < tasks.length; dublicate++) {
-                if (
-                  tasks[dublicate].majorTask === taskObj.majorTask &&
-                  tasks[dublicate].name === taskObj.name
-                ) {
-                  found = 1;
-                }
+    
+//   }, [tasks,Emp,props.Emp,selectedProjectTasks,props.project]);
+for (let i = 0; i < selectedProjectTasks.length; i++) {
+    for (let j = 0; j < selectedProjectTasks[i].subTasks.length; j++) {
+      if (selectedProjectTasks[i].subTasks[j].assigned !== undefined) {
+        if (
+          selectedProjectTasks[i].subTasks[j].assigned.email === Emp.email
+        ) {
+          if (tasks.length < 1) {
+            var taskObj = {
+              name: selectedProjectTasks[i].subTasks[j].name,
+              complete: selectedProjectTasks[i].subTasks[j].complete,
+              completeDate:
+                selectedProjectTasks[i].subTasks[j].completionDate,
+              majorTask: selectedProjectTasks[i].taskName,
+            };
+            var joined=tasks.concat(taskObj)
+            setTasks(joined);
+          } else {
+            var found = -1;
+            var taskObj = {
+              name: selectedProjectTasks[i].subTasks[j].name,
+              complete: selectedProjectTasks[i].subTasks[j].complete,
+              completeDate:
+                selectedProjectTasks[i].subTasks[j].completionDate,
+              majorTask: selectedProjectTasks[i].taskName,
+            };
+            for (let dublicate = 0; dublicate < tasks.length; dublicate++) {
+              if (
+                tasks[dublicate].majorTask === taskObj.majorTask 
+              ) {
+                  if(tasks[dublicate].name === taskObj.name){
+                       found = 1; 
+                  }
+              
               }
-              if (found === -1) {
-                var joined = tasks.concat(taskObj);
-                setTasks(joined);
-              }
+            }
+            if (found !== 1) {
+              var joined = tasks.concat(taskObj);
+              setTasks(joined);
             }
           }
         }
       }
     }
-  }, []);
-
+  }
   return (
     <Popup
       trigger={<Button style={{ margin: "0" }}>Details</Button>}

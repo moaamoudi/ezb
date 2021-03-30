@@ -31,14 +31,13 @@ export default function CurrentWork() {
     deleteNote(note);
   }
   const [currentUser, setCurrentUser] = useState("");
-
   useEffect(() => {
     for (let index = 0; index < selectedProject.assigned.length; index++) {
       if (selectedProject.assigned[index].email === userDetails.email) {
         setCurrentUser(selectedProject.assigned[index]);
       }
     }
-  }, []);
+  }, [selectedProject,userDetails.email,selectedProjectTasks]);
   function calculateProgress() {
     let counter = 0;
     if (selectedProjectTasks.length > 0) {
@@ -47,10 +46,10 @@ export default function CurrentWork() {
           counter++;
         }
       });
-    }
+    } 
     return counter;
   }
-
+ 
   function calculateSubProgress(task) {
     let counter = 0;
     if (selectedProjectTasks) {
@@ -474,7 +473,7 @@ export default function CurrentWork() {
                                 currentUser.type === "owner" ? (
                                   <></>
                                 ) : (
-                                  <PopUpEmpDetailsAssigned Emp={worker} />
+                                  <PopUpEmpDetailsAssigned Emp={worker}  />
                                 )}
                               </div>
                             )}
