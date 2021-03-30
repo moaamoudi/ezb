@@ -10,57 +10,57 @@ export default function PopUpEmpDetailsAssigned(props) {
   const [Emp,setEmp] = useState(props.Emp);
   const { selectedProjectTasks } = useAuth();
   const [tasks, setTasks] = useState([]);
-//   useEffect(() => {
-   
-    
-    
-
-    
-//   }, [tasks,Emp,props.Emp,selectedProjectTasks,props.project]);
-for (let i = 0; i < selectedProjectTasks.length; i++) {
-    for (let j = 0; j < selectedProjectTasks[i].subTasks.length; j++) {
-      if (selectedProjectTasks[i].subTasks[j].assigned !== undefined) {
-        if (
-          selectedProjectTasks[i].subTasks[j].assigned.email === Emp.email
-        ) {
-          if (tasks.length < 1) {
-            var taskObj = {
-              name: selectedProjectTasks[i].subTasks[j].name,
-              complete: selectedProjectTasks[i].subTasks[j].complete,
-              completeDate:
-                selectedProjectTasks[i].subTasks[j].completionDate,
-              majorTask: selectedProjectTasks[i].taskName,
-            };
-            var joined=tasks.concat(taskObj)
-            setTasks(joined);
-          } else {
-            var found = -1;
-            var taskObj = {
-              name: selectedProjectTasks[i].subTasks[j].name,
-              complete: selectedProjectTasks[i].subTasks[j].complete,
-              completeDate:
-                selectedProjectTasks[i].subTasks[j].completionDate,
-              majorTask: selectedProjectTasks[i].taskName,
-            };
-            for (let dublicate = 0; dublicate < tasks.length; dublicate++) {
-              if (
-                tasks[dublicate].majorTask === taskObj.majorTask 
-              ) {
-                  if(tasks[dublicate].name === taskObj.name){
-                       found = 1; 
-                  }
-              
-              }
-            }
-            if (found !== 1) {
-              var joined = tasks.concat(taskObj);
+  useEffect(() => {
+    for (let i = 0; i < selectedProjectTasks.length; i++) {
+      for (let j = 0; j < selectedProjectTasks[i].subTasks.length; j++) {
+        if (selectedProjectTasks[i].subTasks[j].assigned !== undefined) {
+          if (
+            selectedProjectTasks[i].subTasks[j].assigned.email === Emp.email
+          ) {
+            if (tasks.length < 1) {
+              var taskObj = {
+                name: selectedProjectTasks[i].subTasks[j].name,
+                complete: selectedProjectTasks[i].subTasks[j].complete,
+                completeDate:
+                  selectedProjectTasks[i].subTasks[j].completionDate,
+                majorTask: selectedProjectTasks[i].taskName,
+              };
+              var joined=tasks.concat(taskObj)
               setTasks(joined);
+            } else {
+              var found = -1;
+              var taskObj = {
+                name: selectedProjectTasks[i].subTasks[j].name,
+                complete: selectedProjectTasks[i].subTasks[j].complete,
+                completeDate:
+                  selectedProjectTasks[i].subTasks[j].completionDate,
+                majorTask: selectedProjectTasks[i].taskName,
+              };
+              for (let dublicate = 0; dublicate < tasks.length; dublicate++) {
+                if (
+                  tasks[dublicate].majorTask === taskObj.majorTask 
+                ) {
+                    if(tasks[dublicate].name === taskObj.name){
+                         found = 1; 
+                    }
+                
+                }
+              }
+              if (found !== 1) {
+                var joined = tasks.concat(taskObj);
+                setTasks(joined);
+              }
             }
           }
         }
       }
     }
-  }
+    
+    
+
+    
+  }, [tasks,Emp,props.Emp,selectedProjectTasks,props.project]);
+
   return (
     <Popup
       trigger={<Button style={{ margin: "0" }}>Details</Button>}
