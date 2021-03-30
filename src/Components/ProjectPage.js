@@ -48,7 +48,7 @@ export default function ProjectPage() {
             <TabPanel>
               <ProjectUsers />
             </TabPanel>
-            <TabPanel>
+            <TabPanel className="d-flex align-items-center justify-content-center">
               <ProjectSettings />
             </TabPanel>
           </div>
