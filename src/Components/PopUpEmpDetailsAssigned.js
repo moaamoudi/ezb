@@ -1,13 +1,13 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
-import { Form, Button, Card } from "react-bootstrap";
+import { Form, Button, Card, Row, Col, Container } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import "react-google-flight-datepicker/dist/main.css";
 import "./styles/PopUp.css";
 
 export default function PopUpEmpDetailsAssigned(props) {
-  const [Emp,setEmp] = useState(props.Emp);
+  const [Emp, setEmp] = useState(props.Emp);
   const { selectedProjectTasks } = useAuth();
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function PopUpEmpDetailsAssigned(props) {
                   selectedProjectTasks[i].subTasks[j].completionDate,
                 majorTask: selectedProjectTasks[i].taskName,
               };
-              var joined=tasks.concat(taskObj)
+              var joined = tasks.concat(taskObj);
               setTasks(joined);
             } else {
               var found = -1;
@@ -37,13 +37,10 @@ export default function PopUpEmpDetailsAssigned(props) {
                 majorTask: selectedProjectTasks[i].taskName,
               };
               for (let dublicate = 0; dublicate < tasks.length; dublicate++) {
-                if (
-                  tasks[dublicate].majorTask === taskObj.majorTask 
-                ) {
-                    if(tasks[dublicate].name === taskObj.name){
-                         found = 1; 
-                    }
-                
+                if (tasks[dublicate].majorTask === taskObj.majorTask) {
+                  if (tasks[dublicate].name === taskObj.name) {
+                    found = 1;
+                  }
                 }
               }
               if (found !== 1) {
@@ -55,11 +52,7 @@ export default function PopUpEmpDetailsAssigned(props) {
         }
       }
     }
-    
-    
-
-    
-  }, [tasks,Emp,props.Emp,selectedProjectTasks,props.project]);
+  }, []);
 
   return (
     <Popup
@@ -76,28 +69,48 @@ export default function PopUpEmpDetailsAssigned(props) {
           <Card.Body>
             <h2 className="text-center mb-4">Employee Details</h2>
             <div>
-              <h4>Employee Name:{Emp.name}</h4>
+              <h6>Employee Name: {Emp.name}</h6>
             </div>
             <div>
-              <h4>Employee Email:{Emp.email}</h4>
+              <h6>Employee Email: {Emp.email}</h6>
             </div>
-            {Emp.type !== "Administrator" ? (
-              <div>
-                <h5>Assigned Tasks:</h5>
-                {tasks.length !== 0 ? (
-                  tasks.map((task) => (
-                    <div>
-                      {console.log(tasks)}
-                      {task.name}
-                    </div>
-                  ))
+            <h6 className="ml-2">Assigned Tasks:</h6>
+            <Container className=" text-center" fluid >
+              <Row>
+                <Col md={4}>{"Major Task:"}</Col>
+                <Col md={4}>{"Sub Task:"}</Col>
+                <Col md={4}>{"Completed:"}</Col>
+              </Row>
+              
+             
+             
+                {Emp.type !== "Administrator" ? (
+                  <div>
+                    {tasks.length !== 0 ? (
+                      tasks.map((task) => (
+                        <Row>
+                          <Col md={4}>
+                            <p>{task.majorTask}</p>
+                          </Col>
+                          <Col md={4}>
+                            <p>{task.name}</p>
+                          </Col>
+                          <Col md={4}>
+                            <p>{task.complete=== true?("Complete"):("Incomplete")}</p>
+                          </Col>
+                      </Row>
+                      ))
+                    ) : (
+                      <div>this employee is not assigned to any task</div>
+                    )}
+                  </div>
                 ) : (
-                  <div>this employee is not assigned to any task</div>
+                  <div></div>
                 )}
-              </div>
-            ) : (
-              <div></div>
-            )}
+              
+            
+            </Container>
+            
 
             <div className="text-center">
               <Button

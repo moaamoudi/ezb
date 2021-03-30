@@ -112,7 +112,7 @@ const [startDate, setStartDate] = useState(format(new Date(selectedProject.start
             <Button className="w-40  mt-3" type="submit">
               Update
             </Button>
-            <Button className="w-40 ml-2 mt-3" variant="danger" type="submit"
+            <Button className="w-40 ml-2 mt-3" variant="danger" 
             onClick={()=>handleDelete}
             >
               Delete

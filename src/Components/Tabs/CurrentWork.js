@@ -37,7 +37,7 @@ export default function CurrentWork() {
         setCurrentUser(selectedProject.assigned[index]);
       }
     }
-  }, [selectedProject,userDetails.email,selectedProjectTasks]);
+  }, []);
   function calculateProgress() {
     let counter = 0;
     if (selectedProjectTasks.length > 0) {
