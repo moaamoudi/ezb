@@ -7,6 +7,7 @@ import "react-google-flight-datepicker/dist/main.css";
 import "./styles/PopUp.css";
 
 export default function PopUpEmpDetailsAssigned(props) {
+    const data=props.Emp
   const [Emp, setEmp] = useState(props.Emp);
   const { selectedProjectTasks } = useAuth();
   const [tasks, setTasks] = useState([]);
@@ -44,7 +45,8 @@ export default function PopUpEmpDetailsAssigned(props) {
                 }
               }
               if (found !== 1) {
-                var joined = tasks.concat(taskObj);
+                var joined=[]
+                 joined = tasks.concat(taskObj);
                 setTasks(joined);
               }
             }
@@ -52,7 +54,8 @@ export default function PopUpEmpDetailsAssigned(props) {
         }
       }
     }
-  }, []);
+    setEmp(data)
+  }, [tasks,data,selectedProjectTasks]);
 
   return (
     <Popup
