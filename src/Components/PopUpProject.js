@@ -16,8 +16,8 @@ export default function PopupProject() {
   const ProjectDescription = useRef();
   const [error, setError] = useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
+    
     if (startDate === undefined || endDate === undefined) {
       return setError("Please Enter Date!");
     }
@@ -91,8 +91,11 @@ export default function PopupProject() {
               </Form.Group>
               <div className="text-center">
                 <Button
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
                   className="w-50  mt-3"
-                  type="submit"
                 >
                   Add
                 </Button>

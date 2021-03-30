@@ -575,8 +575,8 @@ export function AuthProvider({ children }) {
     await initialGetCompanies();
     await initialGetCompanyProjects();
     await initialGetClients();
-    // await getAllProjectsTasks();
-    // await updateDetails();
+    await getAllProjectsTasks();
+    await updateDetails();
 
     console.log(auth.currentUser);
 

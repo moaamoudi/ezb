@@ -13,13 +13,19 @@ import {
   AppointmentTooltip,
 } from "@devexpress/dx-react-scheduler-material-ui";
 import { ViewState } from "@devexpress/dx-react-scheduler";
-import IconButton from "@material-ui/core/IconButton";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import Grid from "@material-ui/core/Grid";
-import Room from "@material-ui/icons/Room";
+
 import { withStyles } from "@material-ui/core/styles";
-import classNames from "clsx";
-import PopUptask from "./popUptask.js";
+
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
 
 const style = ({ palette }) => ({
   icon: {
@@ -49,33 +55,44 @@ const style = ({ palette }) => ({
   },
 });
 
+function calculateProgress(temp) {
+  let counter = 0;
 
+  temp.subTasks.forEach((sub) => {
+    if (sub.complete) {
+      counter++;
+    }
+  });
 
-const Header = withStyles(style, { name: "Header" })(
-  ({ children, appointmentData, classes, ...restProps }) => (
-    <AppointmentTooltip.Header {...restProps} appointmentData={appointmentData}>
-    
-    </AppointmentTooltip.Header>
-  )
-);
+  return counter;
+}
 
-const Content = withStyles(style, { name: "Content" })(
-  ({ children, appointmentData, classes, ...restProps }) => (
-    <AppointmentTooltip.Content
-      {...restProps}
-      appointmentData={appointmentData}
+const Header = withStyles(style, {
+  name: "Header",
+})(({ children, appointmentData, classes, ...restProps }) => (
+  <AppointmentTooltip.Header {...restProps} appointmentData={appointmentData}>
+    <Container
+      fluid
+      style={{
+        backgroundColor: appointmentData.color,
+        textAlign: "center",
+        borderRadius: "4px",
+        margin: "5px",
+      }}
     >
-    </AppointmentTooltip.Content>
-  )
-);
-
-const CommandButton = withStyles(style, {
-  name: "CommandButton",
-})(({ classes, ...restProps }) => (
-  <AppointmentTooltip.CommandButton
-    {...restProps}
-    
-  />
+      <Row style={{ textAlign: "center" }}>
+        <Col md={12} style={{ marginBottom: "-10px" }}>
+          <p style={{ color: "white" }}>
+            {appointmentData.belongsTo.projectName}
+          </p>
+        </Col>
+        {/* <hr style={{ color: "black", width: "100%" }} /> */}
+        <Col md={12} style={{ marginTop: "-5px", marginBottom: "-12px" }}>
+          <p style={{ color: "white" }}>{appointmentData.title}</p>
+        </Col>
+      </Row>
+    </Container>
+  </AppointmentTooltip.Header>
 ));
 
 export default class CalendarScheduler extends React.PureComponent {
@@ -83,18 +100,180 @@ export default class CalendarScheduler extends React.PureComponent {
     super(props);
     this.state = {
       data: this.props.data,
+      viewDetails: this.props.data,
     };
   }
 
   render() {
     const { data } = this.state;
+    const { viewDetails } = this.state;
+
+    const Content = withStyles(style, {
+      name: "Content",
+    })(({ children, appointmentData, classes, ...restProps }) => (
+      <Container fluid>
+        <Row>
+          <Col md={12}>
+            <div style={{ width: "75px", height: "75px" }}>
+              <CircularProgressbar
+                value={
+                  appointmentData.subTasks.length > 0
+                    ? (
+                        (calculateProgress(appointmentData) /
+                          appointmentData.subTasks.length) *
+                        100
+                      ).toFixed(2)
+                    : 0
+                }
+                text={
+                  appointmentData.subTasks.length > 0
+                    ? (
+                        (calculateProgress(appointmentData) /
+                          appointmentData.subTasks.length) *
+                        100
+                      ).toFixed(2) + "%"
+                    : "No sub tasks"
+                }
+                styles={buildStyles({
+                  rotation: 0.25,
+                  strokeLinecap: "butt",
+                  textSize: "16px",
+                  pathColor: appointmentData.color,
+                  textColor: appointmentData.color,
+                  trailColor: "#dcdcdc",
+                })}
+              />
+            </div>
+          </Col>
+          <Col md={12}>
+            <Row className="mb-2">
+              <Col md={4}>Subtask Name</Col>
+              <Col md={4}>Completed</Col>
+              <Col md={4}>Assigned to</Col>
+            </Row>
+            {appointmentData.subTasks.length > 0 ? (
+              <div
+                style={{
+                  height: "100px",
+                  width: "100%",
+                  overflow: "auto",
+                  marginTop: "10px",
+                }}
+              >
+                {appointmentData.subTasks.map((sub) => (
+                  <Row style={{ width: "99%", marginBottom: "10px" }}>
+                    <Col md={6}>{sub.name}</Col>
+                    <Col md={4}>
+                      {sub.complete ? (
+                        <div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="22"
+                            fill="#F5A494"
+                            className="bi bi-check-square-fill"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
+                          </svg>
+                        </div>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="22"
+                          height="22"
+                          fill="#F5A494"
+                          className="bi bi-square"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                        </svg>
+                      )}
+                    </Col>
+                    <Col md={2}>
+                      {sub.assigned !== undefined ? (
+                        <div>
+                          {sub.assigned.photoURL ? (
+                            <OverlayTrigger
+                              placement="right"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={
+                                <Tooltip
+                                  id="button-tooltip-2"
+                                  style={{ zIndex: "1500" }}
+                                >
+                                  Assigned to: {sub.assigned.name}
+                                </Tooltip>
+                              }
+                            >
+                              <img
+                                style={{
+                                  borderRadius: "50%",
+                                  width: "30px",
+                                }}
+                                src={sub.assigned.photoURL}
+                                alt="Profile_Picture"
+                              ></img>
+                            </OverlayTrigger>
+                          ) : (
+                            <OverlayTrigger
+                              placement="right"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={
+                                <Tooltip
+                                  id="button-tooltip-2"
+                                  style={{ zIndex: "1500" }}
+                                >
+                                  Assigned to: {sub.assigned.name}
+                                </Tooltip>
+                              }
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="30"
+                                height="30"
+                                fill="currentColor"
+                                className="bi bi-person-circle"
+                                viewBox="0 0 16 16"
+                              >
+                                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                                <path
+                                  fillRule="evenodd"
+                                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+                                />
+                              </svg>
+                            </OverlayTrigger>
+                          )}
+                        </div>
+                      ) : (
+                        <div></div>
+                      )}
+                    </Col>
+                  </Row>
+                ))}
+              </div>
+            ) : (
+              <div>No sub tasks</div>
+            )}
+          </Col>
+          <Col md={12} className="text-center">
+            <Button
+              className="mt-3 mb-3"
+              onClick={() => this.props.viewDetails(appointmentData.belongsTo)}
+            >
+              Go to project page
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    ));
 
     const Appointment = ({ children, style, ...restProps }) => (
       <Appointments.Appointment
         {...restProps}
         style={{
           ...style,
-          height:'20px',
+          height: "20px",
           backgroundColor: restProps.data.color,
           borderRadius: "4px",
         }}
@@ -119,6 +298,7 @@ export default class CalendarScheduler extends React.PureComponent {
 
           <AppointmentTooltip
             contentComponent={Content}
+            headerComponent={Header}
             showCloseButton
           />
         </Scheduler>

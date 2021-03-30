@@ -1,79 +1,78 @@
-import React, { useState } from "react";
+import React from "react";
 import CalenderScheduler from "./CalendarScheduler.js";
 import { useAuth } from "../Context/AuthContext";
 
+import { useHistory } from "react-router-dom";
+
 export default function Calendar() {
-  const { allCompanyTasks } = useAuth();
-  const schedulerData = [
-    {
-      title: "Website Re-Design Plan",
-      startDate: new Date(2018, 5, 25, 9, 35),
-      endDate: new Date(2018, 5, 25, 11, 30),
-      id: 0,
-      location: "Room 1",
-      test: "test1",
-    },
-    {
-      title: "Book Flights to San Fran for Sales Trip",
-      startDate: new Date(2018, 5, 25, 12, 11),
-      endDate: new Date(2018, 5, 25, 13, 0),
-      id: 1,
-      location: "Room 1",
-      test: "test2",
-    },
-    {
-      title: "Install New Router in Dev Room",
-      startDate: new Date(2018, 5, 25, 14, 30),
-      endDate: new Date(2018, 5, 25, 15, 35),
-      id: 2,
-      location: "Room 2",
-      test: "test3",
-    },
-    {
-      title: "Approve Personal Computer Upgrade Plan",
-      startDate: new Date(2018, 5, 25, 10, 0),
-      endDate: new Date(2018, 5, 28, 11, 0),
-      id: 3,
-      location: "Room 2",
-      test: "test4",
-    },
-    {
-      title: "Final Budget Review",
-      startDate: new Date(2018, 5, 26, 12, 0),
-      endDate: new Date(2018, 5, 26, 13, 35),
-      id: 4,
-      location: "Room 2",
-      test: "test5",
-    },
-    {
-      title: "New Brochures",
-      startDate: new Date(2018, 5, 26, 14, 30),
-      endDate: new Date(2018, 5, 26, 15, 45),
-      id: 5,
-      location: "Room 2",
-      test: "test6",
-      lol: "lol",
-    },
-    {
-      title: "Install New Database",
-      startDate: new Date(2018, 5, 27, 9, 45),
-      endDate: new Date(2018, 5, 27, 11, 15),
-      id: 6,
-      location: "Room 1",
-      test: "test7",
-    },
-    {
-      title: "Approve New Online Marketing Strategy",
-      startDate: new Date(2018, 5, 27, 12, 0),
-      endDate: new Date(2018, 5, 27, 14, 0),
-      id: 7,
-      location: "Room 3",
-      test: "test8",
-    },
-  ];
+  const {
+    allCompanyTasks,
+    userDetails,
+    selectCompany,
+    setSelectedProject1,
+    projects,
+  } = useAuth();
+  let currentUser = {};
+  let projectsTemp = [];
+  let taskTemp = [];
+  const history = useHistory();
+
+  for (let i = 0; i < allCompanyTasks.length; i++) {
+    for (let j = 0; j < allCompanyTasks[i].belongsTo.assigned.length; j++) {
+      if (
+        allCompanyTasks[i].belongsTo.assigned[j].email === userDetails.email
+      ) {
+        currentUser = allCompanyTasks[i].belongsTo.assigned[j];
+      }
+    }
+  }
+  for (let i = 0; i < projects.length; i++) {
+    if (currentUser) {
+      if (currentUser.type === "owner") {
+        projectsTemp.push(projects[i]);
+      } else {
+        for (let j = 0; j < projects[i].assigned.length; j++) {
+          if (currentUser.email === projects[i].assigned[j].email) {
+            projectsTemp.push(projects[i]);
+          }
+        }
+      }
+    }
+  }
+
+  let temp1 = [];
+  for (let i = 0; i < allCompanyTasks.length; i++) {
+    for (let j = 0; j < projectsTemp.length; j++) {
+      if (
+        allCompanyTasks[i].belongsTo.projectName === projectsTemp[j].projectName
+      ) {
+        if (currentUser.type === "Worker") {
+          temp1.push(allCompanyTasks[i]);
+        } else {
+          temp1.push(allCompanyTasks[i]);
+        }
+      }
+    }
+  }
+  taskTemp = temp1;
+
+  function viewDetails(project) {
+    setSelectedProject1(project);
+    history.push(
+      selectCompany.companyName + "/projects/" + project.projectName
+    );
+  }
+
   return (
     <div>
-      <CalenderScheduler data={allCompanyTasks}></CalenderScheduler>
+      {taskTemp.length > 0 ? (
+        <CalenderScheduler
+          data={taskTemp}
+          viewDetails={viewDetails}
+        ></CalenderScheduler>
+      ) : (
+        <CalenderScheduler viewDetails={viewDetails}></CalenderScheduler>
+      )}
     </div>
   );
 }
