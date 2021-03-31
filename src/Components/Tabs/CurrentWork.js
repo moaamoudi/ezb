@@ -27,10 +27,13 @@ export default function CurrentWork() {
     deleteNote,
     userDetails,
   } = useAuth();
+
   function handleDelete(note) {
     deleteNote(note);
   }
+
   const [currentUser, setCurrentUser] = useState("");
+
   useEffect(() => {
     for (let index = 0; index < selectedProject.assigned.length; index++) {
       if (selectedProject.assigned[index].email === userDetails.email) {
@@ -38,6 +41,7 @@ export default function CurrentWork() {
       }
     }
   }, []);
+  
   function calculateProgress() {
     let counter = 0;
     if (selectedProjectTasks.length > 0) {

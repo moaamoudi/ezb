@@ -106,7 +106,6 @@ export default class CalendarScheduler extends React.PureComponent {
 
   render() {
     const { data } = this.state;
-    const { viewDetails } = this.state;
 
     const Content = withStyles(style, {
       name: "Content",

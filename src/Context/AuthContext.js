@@ -194,13 +194,12 @@ export function AuthProvider({ children }) {
       db.collection("Companies/" + id + "/Projects").onSnapshot((temp) => {
         const items = [];
         temp.forEach((doc) => {
-          items.push(doc.data());
+          let item = doc.data();
+          item.id = doc.id;
+          items.push(item);
         });
         setProjects(items);
       });
-
-      // GetEmployee(id);
-      // GetClients(id);
     }
   }
 
@@ -237,7 +236,7 @@ export function AuthProvider({ children }) {
           if (user.email === auth.currentUser.email) {
             if (user.type === "owner") {
               db.collection("Companies/" + selectCompany.id + "/Projects")
-                .doc("" + projectName)
+                .doc()
                 .set({
                   companyName: selectCompany.companyName,
                   id: selectCompany.id,
@@ -265,6 +264,40 @@ export function AuthProvider({ children }) {
     await updateDetails();
   }
 
+  async function updateProject(project) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.id)
+        .set(project)
+        .then(() => {
+          updateDetails();
+          setSelectedProject(project);
+        });
+    }
+  }
+
+  async function deleteProject(project) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(project.id)
+        .delete()
+        .then(() => {
+          updateDetails();
+          allCompanyTasks();
+          localStorage.removeItem("selectedProjectNotes");
+          localStorage.removeItem("selectedProjectInventory");
+          localStorage.removeItem("selectedProjectTasks");
+          localStorage.removeItem("selectedProject");
+        });
+    }
+  }
+
   async function insertTaskToFirestore(
     taskName,
     taskDescripiton,
@@ -277,7 +310,7 @@ export function AuthProvider({ children }) {
       db.collection("Companies")
         .doc("" + selectCompany.id)
         .collection("Projects")
-        .doc("" + selectedProject.projectName)
+        .doc("" + selectedProject.id)
         .collection("Tasks")
         .doc("" + taskName)
         .set({
@@ -306,7 +339,7 @@ export function AuthProvider({ children }) {
       db.collection("Companies")
         .doc("" + selectCompany.id)
         .collection("Projects")
-        .doc("" + selectedProject.projectName)
+        .doc("" + selectedProject.id)
         .collection("Tasks")
         .doc("" + task.taskName)
         .delete()
@@ -329,7 +362,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(project.projectName)
+        .doc(project.id)
         .collection("Tasks")
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((task) => {
@@ -350,7 +383,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(selectedProject.projectName)
+        .doc(selectedProject.id)
         .collection("Tasks")
         .doc(task.taskName)
         .set(task)
@@ -369,7 +402,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(selectedProject.projectName)
+        .doc(selectedProject.id)
         .collection("Notes")
         .doc()
         .set({
@@ -392,7 +425,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(selectedProject.projectName)
+        .doc(selectedProject.id)
         .collection("Notes")
         .doc(note.id)
         .delete()
@@ -412,7 +445,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(project.projectName)
+        .doc(project.id)
         .collection("Notes")
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((note) => {
@@ -440,7 +473,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(selectedProject.projectName)
+        .doc(selectedProject.id)
         .collection("Inventory")
         .doc()
         .set({
@@ -460,7 +493,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(selectedProject.projectName)
+        .doc(selectedProject.id)
         .collection("Inventory")
         .doc(prod.id)
         .delete();
@@ -481,7 +514,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(selectedProject.projectName)
+        .doc(selectedProject.id)
         .collection("Inventory")
         .doc(prodId)
         .set({
@@ -504,7 +537,7 @@ export function AuthProvider({ children }) {
         .collection("Companies")
         .doc(selectCompany.id)
         .collection("Projects")
-        .doc(project.projectName)
+        .doc(project.id)
         .collection("Inventory")
         .onSnapshot((querySnapshot) => {
           querySnapshot.forEach((note) => {
@@ -594,7 +627,7 @@ export function AuthProvider({ children }) {
           .collection("Companies")
           .doc(selectCompany.id)
           .collection("Projects")
-          .doc(projects[index].projectName)
+          .doc(projects[index].id)
           .collection("Tasks")
           .get()
           .then((querySnapshot) => {
@@ -614,8 +647,7 @@ export function AuthProvider({ children }) {
             });
           });
       }
-      setAllCompanyTasks(items);
-      console.log(items);
+      await setAllCompanyTasks(items);
       items = [];
     }
     items = [];
@@ -624,6 +656,7 @@ export function AuthProvider({ children }) {
   async function updateDetails() {
     await fetchUserDetails;
     await getCompanies();
+    await getCompanyProjects(selectCompany.id);
   }
 
   async function insertCompanyToFirestore(companyName) {
@@ -827,7 +860,7 @@ export function AuthProvider({ children }) {
           db.collection("Companies")
             .doc(selectCompany.id)
             .collection("Projects")
-            .doc(project.projectName)
+            .doc(project.id)
             .set({
               projectName: project.projectName,
               companyName: project.companyName,
@@ -920,7 +953,7 @@ export function AuthProvider({ children }) {
           db.collection("Companies")
             .doc(selectCompany.id)
             .collection("Projects")
-            .doc(project.projectName)
+            .doc(project.id)
             .set({
               projectName: project.projectName,
               companyName: project.companyName,
@@ -1203,6 +1236,8 @@ export function AuthProvider({ children }) {
     deleteTask,
     deleteNote,
     allCompanyTasks,
+    updateProject,
+    deleteProject,
   };
   return (
     <AuthContext.Provider value={value}>

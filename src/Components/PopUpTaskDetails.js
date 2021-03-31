@@ -32,8 +32,6 @@ export default function PopUpTaskDetails(props) {
   const [error, setError] = useState("");
   const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
   const handleSubTaskChange = props.handleSubTaskChange;
-  const [dropDownText, setDropDownText] = useState("Select Worker");
-  const [selectedWorker, setSelectedWorker] = useState();
 
   function handleClick(sub) {
     let check = true;
@@ -175,9 +173,13 @@ export default function PopUpTaskDetails(props) {
     if (updated) {
       setTaskCopy(taskCopy);
       setTaskCopyFinal(taskCopy);
+      setSubtasklist(taskCopy.subTasks);
       setUpdated(false);
     }
-  }, [updated, taskCopy]);
+    setTaskCopy(task);
+    setTaskCopyFinal(task);
+    setSubtasklist(task.subTasks);
+  }, [updated, taskCopy, task]);
 
   return (
     <Popup
