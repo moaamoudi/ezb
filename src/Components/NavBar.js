@@ -21,6 +21,7 @@ function NavBar(props) {
     userNotifications,
     setUserNotificationsRead,
     logout,
+    deleteNotification,
   } = useAuth();
 
   function countNotification() {
@@ -40,6 +41,10 @@ function NavBar(props) {
       items.push(not);
     });
     setUserNotificationsRead(items);
+  }
+
+  function handleDeleteNotification(noti) {
+    deleteNotification(noti);
   }
 
   function handleLogout() {
@@ -193,21 +198,45 @@ function NavBar(props) {
         </reactBootstrap.Dropdown.Toggle>
 
         <reactBootstrap.Dropdown.Menu>
-          {userNotifications.length > 0 ? (
-            <div>
-              {userNotifications.map((noti) => (
-                <div key={noti.id}>
-                  <reactBootstrap.Dropdown.Item as="button">
-                    <div>
-                      <h6>{noti.message}</h6>
-                    </div>
-                  </reactBootstrap.Dropdown.Item>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div>Loading...</div>
-          )}
+          <reactBootstrap.Container
+            style={{ width: "420px", maxHeight: "350px" }}
+            fluid
+          >
+            {userNotifications.length > 0 ? (
+              <div style={{ width: "100%", overflow: "auto" }}>
+                {userNotifications.map((noti) => (
+                  <reactBootstrap.Row
+                    style={{ width: "100%", marginBottom: "5px" }}
+                  >
+                    <reactBootstrap.Col md={11}>
+                      <h6 style={{ fontSize: "15px" }}>{noti.message}</h6>
+                    </reactBootstrap.Col>
+                    <reactBootstrap.Col md={1}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        fill="#F5A494"
+                        className="bi bi-trash svgOnClick"
+                        viewBox="0 0 16 16"
+                        onClick={() => {
+                          handleDeleteNotification(noti);
+                        }}
+                      >
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                        <path
+                          fill-rule="evenodd"
+                          d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+                        />
+                      </svg>
+                    </reactBootstrap.Col>
+                  </reactBootstrap.Row>
+                ))}
+              </div>
+            ) : (
+              <div>No Notifications...</div>
+            )}
+          </reactBootstrap.Container>
         </reactBootstrap.Dropdown.Menu>
       </reactBootstrap.Dropdown>
 

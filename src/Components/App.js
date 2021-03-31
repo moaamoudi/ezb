@@ -15,33 +15,45 @@ import ProjectPage from "./ProjectPage";
 import ContactsPage from "./ContactsPage";
 import ContractsPage from "./ContractsPage";
 import Calendar from "./Calendar.js";
+import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
 
 function App() {
+  const options = {
+    // you can also just use 'bottom center'
+    position: positions.BOTTOM_CENTER,
+    timeout: 5000,
+    offset: "30px",
+    // you can also just use 'scale'
+    transition: transitions.SCALE,
+  };
   return (
     <div className="main-background">
       <Router>
-        <AuthProvider>
-          <Switch>
-            <PrivateRoute exact path="/" component={Dashboard} />
-            <PrivateRoute path="/calendar" component={Calendar} />
-            <PrivateRoute
-              path="/:company/projects/:project"
-              component={ProjectPage}
-            />
-            <PrivateRoute path="/profile-details" component={UpdateProfile} />
-            <PrivateRoute path="/clients" component={ContactsPage} />
-            <PrivateRoute path="/contracts" component={ContractsPage} />
-            <InnerCompleteDetails
-              path="/complete-details"
-              component={CompleteDetails}
-            />
+        <AlertProvider template={AlertTemplate} {...options}>
+          <AuthProvider>
+            <Switch>
+              <PrivateRoute exact path="/" component={Dashboard} />
+              <PrivateRoute path="/calendar" component={Calendar} />
+              <PrivateRoute
+                path="/:company/projects/:project"
+                component={ProjectPage}
+              />
+              <PrivateRoute path="/profile-details" component={UpdateProfile} />
+              <PrivateRoute path="/clients" component={ContactsPage} />
+              <PrivateRoute path="/contracts" component={ContractsPage} />
+              <InnerCompleteDetails
+                path="/complete-details"
+                component={CompleteDetails}
+              />
 
-            <PublicRoute path="/signup" component={Signup} />
-            <PublicRoute path="/ezb" component={Login} />
-            <PublicRoute path="/login" component={Login} />
-            <PublicRoute path="/forgot-password" component={ForgotPassword} />
-          </Switch>
-        </AuthProvider>
+              <PublicRoute path="/signup" component={Signup} />
+              <PublicRoute path="/ezb" component={Login} />
+              <PublicRoute path="/login" component={Login} />
+              <PublicRoute path="/forgot-password" component={ForgotPassword} />
+            </Switch>
+          </AuthProvider>
+        </AlertProvider>
       </Router>
     </div>
   );

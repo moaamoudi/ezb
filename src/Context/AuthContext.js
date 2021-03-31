@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import useLocalStorage from "../Components/useLocalStorage.js";
 import emailJS from "emailjs-com";
 import { colors } from "../Components/styles/RandomColors.js";
+import { useAlert } from "react-alert";
 
 const AuthContext = React.createContext();
 
@@ -16,6 +17,7 @@ export function AuthProvider({ children }) {
   const [userDetails, setUserDetails] = useLocalStorage("userDetails", []);
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useLocalStorage("CompanyProjects", []);
+  const alert = useAlert();
   const [selectedCompanyEmployee, setSelectedCompanyEmployee] = useLocalStorage(
     "selectedCompanyEmployee",
     {}
@@ -111,6 +113,7 @@ export function AuthProvider({ children }) {
           });
           setSelectedCompanyEmployee(emp);
           getCompanyProjects(querySnapshot.data().id);
+          getAllProjectsTasks();
         });
     }
   }
@@ -135,21 +138,6 @@ export function AuthProvider({ children }) {
             });
           });
         });
-      // comp.forEach((company) => {
-      //   db.collection("Companies")
-      //     .doc(company.id)
-      //     .collection("Employee")
-      //     .get()
-      //     .then((res) => {
-      //       console.log(res.data());
-      //       res.forEach((emp) => {
-      //         if (auth.currentUser.email === emp.data().EmployeeEmail) {
-      //           console.log("true");
-      //           items.push(company.data());
-      //         }
-      //       });
-      //     });
-      // });
 
       console.log(items);
 
@@ -248,12 +236,14 @@ export function AuthProvider({ children }) {
                   description: "" + description,
                   assigned: assigned,
                 })
-                .then(function () {
+                .then(() => {
                   console.log("Document successfully written!");
+                  alert.success("Project Added Successfully!");
                   getCompanyProjects(company.id);
                 })
-                .catch(function (error) {
+                .catch((error) => {
                   console.error("Error writing document: ", error);
+                  alert.error("Failed to Add Project!");
                 });
             }
           }
@@ -621,7 +611,6 @@ export function AuthProvider({ children }) {
 
     if (auth.currentUser) {
       items = [];
-      console.log(projects[0]);
       for (let index = 0; index < projects.length; index++) {
         await db
           .collection("Companies")
@@ -657,6 +646,7 @@ export function AuthProvider({ children }) {
     await fetchUserDetails;
     await getCompanies();
     await getCompanyProjects(selectCompany.id);
+    await getAllProjectsTasks();
   }
 
   async function insertCompanyToFirestore(companyName) {
@@ -987,11 +977,62 @@ export function AuthProvider({ children }) {
   async function deleteEmployee(email) {
     if (auth.currentUser) {
       const temp = selectedCompanyEmployee.filter(
-        (temp2) => temp2.email !== email
+        (user) => user.email !== email
       );
       let comp = selectCompany;
       comp.users = temp;
+      let tempProjects = [];
+      projects.forEach((project) => {
+        project.assigned = project.assigned.filter(
+          (user) => user.email !== email
+        );
+        tempProjects.push(project);
+      });
+      let projectTasks = [];
+      for (let i = 0; i < tempProjects.length; i++) {
+        projectTasks = [];
+        await db
+          .collection("Companies")
+          .doc(selectCompany.id)
+          .collection("Projects")
+          .doc(tempProjects[i].id)
+          .collection("Tasks")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((task) => {
+              let updatedTask = task.data();
+              updatedTask.subTasks.forEach((sub) => {
+                if (sub.assigned !== undefined) {
+                  if (sub.assigned.email === email) {
+                    console.log("deleted");
+                    delete sub.assigned;
+                  }
+                }
+              });
+              projectTasks.push(updatedTask);
+            });
 
+            for (let j = 0; j < projectTasks.length; j++) {
+              db.collection("Companies")
+                .doc(selectCompany.id)
+                .collection("Projects")
+                .doc(tempProjects[i].id)
+                .collection("Tasks")
+                .doc(projectTasks[j].taskName)
+                .set(projectTasks[j]);
+            }
+          });
+      }
+
+      console.log(tempProjects);
+      for (let i = 0; i < tempProjects.length; i++) {
+        await db
+          .collection("Companies")
+          .doc(selectCompany.id)
+          .collection("Projects")
+          .doc(tempProjects[i].id)
+          .set(tempProjects[i]);
+      }
       await db
         .collection("Companies")
         .doc(selectCompany.id)
@@ -999,6 +1040,24 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("employee successfully deleted");
           GetEmployee(selectCompany.id);
+        });
+    }
+  }
+
+  async function updateClient(name, email, id) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Clients")
+        .doc(id)
+        .set({
+          ClientEmail: email,
+          ClientName: name,
+          id: id,
+        })
+        .then(() => {
+          GetClients(selectCompany.id);
         });
     }
   }
@@ -1127,6 +1186,21 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function deleteNotification(noti) {
+    if (auth.currentUser) {
+      await db
+        .collection("Users")
+        .doc(auth.currentUser.email)
+        .collection("Notifications")
+        .doc(noti.id)
+        .delete()
+        .then(() => {
+          console.log("notification successfully deleted");
+          getUserNotifications();
+        });
+    }
+  }
+
   async function getUserNotifications() {
     if (auth.currentUser) {
       let items = [];
@@ -1238,6 +1312,8 @@ export function AuthProvider({ children }) {
     allCompanyTasks,
     updateProject,
     deleteProject,
+    updateClient,
+    deleteNotification,
   };
   return (
     <AuthContext.Provider value={value}>

@@ -487,11 +487,11 @@ export default function PopUpTaskDetails(props) {
                     <div className="text-center">
                       <Button
                         className="w-50  mt-3"
-                        type="submit"
                         onClick={() => {
-                          setSubtasklist(props.task.subTasks);
-                          setTaskCopy(props.task);
-                          setTaskCopyFinal(props.task);
+                          setTaskCopy(task);
+                          setTaskCopyFinal(task);
+                          setSubtasklist(task.subTasks);
+                          setUpdated(true);
                         }}
                       >
                         Reset

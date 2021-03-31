@@ -306,7 +306,9 @@ export default function CurrentWork() {
                                             handleDelete(note);
                                           }}
                                         >
-                                          <h6>Delete Note</h6>
+                                          <h6 style={{ fontSize: "14px" }}>
+                                            Delete Note
+                                          </h6>
                                         </Dropdown.Item>
                                       </div>
                                     </Dropdown.Menu>

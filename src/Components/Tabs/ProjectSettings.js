@@ -1,25 +1,33 @@
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../../Context/AuthContext";
 import { Form, Button, Card, Alert } from "react-bootstrap";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { RangeDatePicker } from "react-google-flight-datepicker";
 import "../styles/DatePicker.scss";
 import { useHistory } from "react-router-dom";
 import { format } from "date-fns";
 
 export default function ProjectSettings() {
-  const { updateProject, selectedProject, deleteProject } = useAuth();
+  const {
+    updateProject,
+    selectedProject,
+    deleteProject,
+    userDetails,
+  } = useAuth();
   const ProjectName = useRef();
   const ProjectDescription = useRef();
   const DeleteConfirmation = useRef();
   const [error, setError] = useState("");
+  const [currentUser, setCurrentUser] = useState("");
   const history = useHistory();
   const [startDate, setStartDate] = useState(
     format(new Date(selectedProject.startDate), "MMM-dd-yyyy")
   );
+
   const [endDate, setEndDate] = useState(
     format(new Date(selectedProject.endDate), "MMM-dd-yyyy")
   );
+
   function handleSubmit(e) {
     e.preventDefault();
     if (startDate === undefined || endDate === undefined) {
@@ -36,6 +44,7 @@ export default function ProjectSettings() {
 
     setError("");
   }
+
   function handleDelete() {
     if (DeleteConfirmation.current.value === "") {
       return setError("Please Enter Delete Confirmation!");
@@ -50,12 +59,21 @@ export default function ProjectSettings() {
 
     setError("");
   }
+
   function onDateChange(startDate, endDate) {
     if (startDate && endDate) {
       setStartDate(format(startDate, "MMM-dd-yyyy"));
       setEndDate(format(endDate, "MMM-dd-yyyy"));
     }
   }
+
+  useEffect(() => {
+    for (let index = 0; index < selectedProject.assigned.length; index++) {
+      if (selectedProject.assigned[index].email === userDetails.email) {
+        setCurrentUser(selectedProject.assigned[index]);
+      }
+    }
+  }, []);
 
   return (
     <Card className="main-shadow" style={{ width: "400px" }}>
@@ -113,12 +131,17 @@ export default function ProjectSettings() {
             />
           </Form.Group>
           <div className="text-center flex">
-            <Button className="w-40  mt-3" type="submit">
+            <Button
+              className="w-40  mt-3"
+              type="submit"
+              disabled={currentUser.type !== "owner"}
+            >
               Update
             </Button>
             <Button
               className="w-40 ml-2 mt-3"
               variant="danger"
+              disabled={currentUser.type !== "owner"}
               onClick={() => handleDelete()}
             >
               Delete

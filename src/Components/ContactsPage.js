@@ -7,6 +7,7 @@ import PopUpAddEmployee from "./PopUpAddEmployee";
 import PopUpAddClient from "./PopUpClients";
 import PopUpEmail from "./PopUpEmail";
 import { useAuth } from "../Context/AuthContext";
+import PopUpEditClient from "./PopUpEditClient";
 
 export default function ContactsPage() {
   const {
@@ -17,6 +18,8 @@ export default function ContactsPage() {
   } = useAuth();
   const [email, setEmail] = useState("");
   const [email1, setEmail1] = useState("");
+  const [client, setClient] = useState("");
+  const [employee, setEmployee] = useState("");
 
   const columns = [
     {
@@ -54,6 +57,7 @@ export default function ContactsPage() {
     style: { backgroundColor: "#f5a494" },
     onSelect: (row, isSelect, rowIndex, e) => {
       setEmail1(row.ClientEmail);
+      setClient(row);
     },
   };
   function handledelete() {
@@ -138,13 +142,7 @@ export default function ContactsPage() {
               }}
             >
               <PopUpEmail Email={email1}></PopUpEmail>
-              <Button
-                disabled={email1 === ""}
-                style={{ width: "20%", margin: "50px" }}
-                onClick={() => {}}
-              >
-                Edit
-              </Button>
+              <PopUpEditClient client={client} />
               <Button
                 variant="danger"
                 disabled={email1 === ""}

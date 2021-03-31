@@ -8,6 +8,7 @@ import "react-google-flight-datepicker/dist/main.css";
 import { format } from "date-fns";
 import "./styles/PopUp.css";
 
+
 export default function PopupProject() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -15,9 +16,9 @@ export default function PopupProject() {
   const ProjectName = useRef();
   const ProjectDescription = useRef();
   const [error, setError] = useState("");
+  
 
   function handleSubmit() {
-    
     if (startDate === undefined || endDate === undefined) {
       return setError("Please Enter Date!");
     }
@@ -28,6 +29,7 @@ export default function PopupProject() {
       endDate,
       ProjectDescription.current.value
     );
+
     setError("");
   }
 
@@ -41,7 +43,7 @@ export default function PopupProject() {
 
   return (
     <Popup
-      trigger={<Button> Add Project</Button>}
+      trigger={<Button>Add Project</Button>}
       position="center center"
       modal
       nested
@@ -51,7 +53,7 @@ export default function PopupProject() {
           <Card.Body>
             <h2 className="text-center mb-4">Add Project</h2>
             {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
+            <Form>
               <Form.Group id="ProjectName">
                 <Form.Label>Project Name:</Form.Label>
                 <Form.Control
@@ -89,6 +91,7 @@ export default function PopupProject() {
                   highlightToday="true"
                 />
               </Form.Group>
+
               <div className="text-center">
                 <Button
                   onClick={() => {
