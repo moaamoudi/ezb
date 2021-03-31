@@ -24,17 +24,28 @@ import "./styles/PopUp.css";
 
 export default function PopUpTaskDetailsWorker(props) {
   const task = props.task;
+  const currentUser = props.currentUser;
+  const projectAssigned = props.assignedUsers;
   const [updated, setUpdated] = useState(false);
   let [taskCopy, setTaskCopy] = useState(task);
   let [subtasklist, setSubtasklist] = useState(task.subTasks);
   let subTaskName = useState();
-  const { deleteTask, selectedProject } = useAuth();
+  const { deleteTask, selectedProject, handleSubTaskChangeWorker } = useAuth();
   const [error, setError] = useState("");
   const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
-  const handleSubTaskChange = props.handleSubTaskChange;
-  const [dropDownText, setDropDownText] = useState("Select Worker");
-  const [selectedWorker, setSelectedWorker] = useState();
+
   const [reset, setReset] = useState(false);
+
+  if (task.subTasks.length > 0) {
+    subtasklist = [];
+    task.subTasks.forEach((sub) => {
+      if (sub.assigned !== undefined) {
+        if (sub.assigned.email === currentUser.email) {
+          subtasklist.push(sub);
+        }
+      }
+    });
+  }
   function handleClick(sub) {
     let check = true;
     let items = [];
@@ -50,8 +61,18 @@ export default function PopUpTaskDetailsWorker(props) {
           };
           if (sub.complete) {
             temp.completionDate = format(new Date(), "MMM-dd-yyyy HH:mm");
+            if (
+              new Date(temp.completionDate).getTime() >
+              new Date(task.endDate).getTime()
+            ) {
+              temp.late =
+                (new Date(temp.completionDate).getTime() -
+                  new Date(task.endDate).getTime()) /
+                (1000 * 3600 * 24);
+            }
           } else {
             temp.completionDate = null;
+            delete temp.late;
           }
           items.push(temp);
         } else {
@@ -73,14 +94,12 @@ export default function PopUpTaskDetailsWorker(props) {
       setTaskCopyFinal(taskCopy);
     }
   }
-function resetForm  ()  {
-    
+  function resetForm() {
     setSubtasklist(props.task.subTasks);
     setTaskCopy(props.task);
     setTaskCopyFinal(props.task);
-    setReset(false)
-
-}
+    setReset(false);
+  }
   function checkComplete() {
     let check = true;
     if (taskCopy.subTasks.length > 0) {
@@ -96,13 +115,10 @@ function resetForm  ()  {
     }
   }
 
-
- 
   function handleSubmit(e) {
     e.preventDefault();
-    handleSubTaskChange(taskCopyFinal);
+    handleSubTaskChangeWorker(taskCopyFinal, projectAssigned, currentUser);
   }
-
 
   useEffect(() => {
     if (updated) {
@@ -110,11 +126,17 @@ function resetForm  ()  {
       setTaskCopyFinal(taskCopy);
       setUpdated(false);
     }
-  }, [updated, taskCopy,reset]);
+  }, [updated, taskCopy, reset]);
 
   return (
     <Popup
-      trigger={<Button>Edit</Button>}
+      trigger={
+        subtasklist.length > 0 ? (
+          <Button>Edit</Button>
+        ) : (
+          <div style={{ marginBottom: "20px" }}></div>
+        )
+      }
       position="center center"
       modal
       nested
@@ -123,7 +145,7 @@ function resetForm  ()  {
       {(close) => (
         <Card
           className="main-shadow"
-          style={{ width: "1000px", height: "850px" }}
+          style={{ width: "500px", height: "650px" }}
         >
           <Card.Body>
             <div
@@ -136,7 +158,7 @@ function resetForm  ()  {
             <div>
               <h2 className="text-center mb-4">{task.taskName} Details</h2>
               {error && <Alert variant="danger">{error}</Alert>}
-              <Form onSubmit={handleSubmit}  >
+              <Form onSubmit={handleSubmit}>
                 <Row>
                   <Col md={12} className="text-center">
                     <h5>{task.taskDescripiton}</h5>
@@ -286,30 +308,31 @@ function resetForm  ()  {
                     Save
                   </Button>
                 </div>
-                 <div className="text-center">
+                <div className="text-center">
                   <Button
-                    type='submit'
+                    type="submit"
                     className="w-50  mt-3"
-                    onClick={()=>{
-                        setSubtasklist(props.task.subTasks);
-                        setTaskCopy(props.task);
-                        setTaskCopyFinal(props.task);}}
+                    onClick={() => {
+                      setSubtasklist(props.task.subTasks);
+                      setTaskCopy(props.task);
+                      setTaskCopyFinal(props.task);
+                    }}
                   >
                     Reset
                   </Button>
                 </div>
               </Form>
-             
-                <div className="text-center">
-                  <Button
-                    className="w-50  mt-3"
-                    onClick={() => {
-                      close();
-                    }}
-                  >
-                    Close
-                  </Button>
-                </div>
+
+              <div className="text-center">
+                <Button
+                  className="w-50  mt-3"
+                  onClick={() => {
+                    close();
+                  }}
+                >
+                  Close
+                </Button>
+              </div>
             </div>
           </Card.Body>
         </Card>

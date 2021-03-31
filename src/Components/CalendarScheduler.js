@@ -153,7 +153,7 @@ export default class CalendarScheduler extends React.PureComponent {
             {appointmentData.subTasks.length > 0 ? (
               <div
                 style={{
-                  height: "100px",
+                  height: "120px",
                   width: "100%",
                   overflow: "auto",
                   marginTop: "10px",

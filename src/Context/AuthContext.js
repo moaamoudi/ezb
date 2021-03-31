@@ -385,6 +385,53 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function handleSubTaskChangeWorker(task, workers, selectedWorker) {
+    if (auth.currentUser) {
+      await db
+        .collection("Companies")
+        .doc(selectCompany.id)
+        .collection("Projects")
+        .doc(selectedProject.id)
+        .collection("Tasks")
+        .doc(task.taskName)
+        .set(task)
+        .then(() => {
+          console.log("subtask succesfully edited");
+          getProjectTasks(selectedProject);
+          getAllProjectsTasks();
+        });
+      let lates = [];
+      let late = false;
+      task.subTasks.forEach((sub) => {
+        if (sub.late !== undefined) {
+          late = true;
+          lates.push(sub.name);
+        }
+      });
+
+      if (late) {
+        for (let i = 0; i < workers.length; i++) {
+          if (
+            workers[i].type === "owner" ||
+            workers[i].type === "Administrator"
+          ) {
+            createNotification(
+              workers[i].email,
+              "Worker: " +
+                selectedWorker.name +
+                " Have Completed " +
+                lates +
+                " by " +
+                Math.floor(task.subTasks[0].late) +
+                " Days Late, in Project: " +
+                selectedProject.projectName
+            );
+          }
+        }
+      }
+    }
+  }
+
   async function insertNoteToFirestore(msg) {
     if (auth.currentUser) {
       let date = format(new Date(), "MMM-dd HH:m");
@@ -599,7 +646,7 @@ export function AuthProvider({ children }) {
     await initialGetCompanyProjects();
     await initialGetClients();
     await getAllProjectsTasks();
-    await updateDetails();
+    // await updateDetails();
 
     console.log(auth.currentUser);
 
@@ -1314,6 +1361,7 @@ export function AuthProvider({ children }) {
     deleteProject,
     updateClient,
     deleteNotification,
+    handleSubTaskChangeWorker,
   };
   return (
     <AuthContext.Provider value={value}>

@@ -10,13 +10,10 @@ export default function Dashboard() {
     projects,
     setSelectedProject1,
     selectCompany,
-    createNotification,
   } = useAuth();
   const history = useHistory();
 
-  async function handleCreateNotification() {
-    createNotification();
-  }
+ 
 
   function viewDetails(project) {
     setSelectedProject1(project);
@@ -68,7 +65,6 @@ export default function Dashboard() {
           />
           <div>
             <PopUp />
-            <Button onClick={handleCreateNotification}>Add Notification</Button>
           </div>
         </div>
       ) : (

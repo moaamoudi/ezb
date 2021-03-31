@@ -206,6 +206,8 @@ export default function CurrentWork() {
                                   <PopUpTaskDetailsWorker
                                     task={task}
                                     handleSubTaskChange={handleSubTaskChange}
+                                    currentUser={currentUser}
+                                    assignedUsers={selectedProject.assigned}
                                   ></PopUpTaskDetailsWorker>
                                 ) : (
                                   <PopUpTaskDetails
@@ -228,7 +230,7 @@ export default function CurrentWork() {
                 <div
                   style={{ position: "absolute", right: "5%", bottom: "5%" }}
                 >
-                  <TaskPopUp />
+                  {currentUser.type !== "Worker" ? <TaskPopUp /> : <div></div>}
                 </div>
               </Card.Body>
             </Card>
