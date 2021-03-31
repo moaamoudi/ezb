@@ -289,7 +289,7 @@ export function AuthProvider({ children }) {
         .delete()
         .then(() => {
           updateDetails();
-          allCompanyTasks();
+          getAllProjectsTasks();
           localStorage.removeItem("selectedProjectNotes");
           localStorage.removeItem("selectedProjectInventory");
           localStorage.removeItem("selectedProjectTasks");

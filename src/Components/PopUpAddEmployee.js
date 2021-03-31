@@ -129,7 +129,7 @@ export default function PopUpAddEmployee() {
                   id={`dropdown-button-drop-right`}
                   drop="right"
                   style={{ width: "50%", margin: "20px" }}
-                  title={selected.projectName}
+                  title={selected !== undefined ? selected.projectName : "No Projects"}
                 >
                   {projects.length > 0 ? (
                     <div>

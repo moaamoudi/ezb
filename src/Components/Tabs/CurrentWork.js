@@ -41,7 +41,7 @@ export default function CurrentWork() {
       }
     }
   }, []);
-  
+
   function calculateProgress() {
     let counter = 0;
     if (selectedProjectTasks.length > 0) {
@@ -50,10 +50,10 @@ export default function CurrentWork() {
           counter++;
         }
       });
-    } 
+    }
     return counter;
   }
- 
+
   function calculateSubProgress(task) {
     let counter = 0;
     if (selectedProjectTasks) {
@@ -406,7 +406,7 @@ export default function CurrentWork() {
                       selectedProject.assigned.map((worker) => (
                         <div
                           style={{
-                            width: "100%",
+                            width: "79%",
 
                             marginTop: "15px",
                           }}
@@ -464,22 +464,28 @@ export default function CurrentWork() {
                             </Col>
                             <Col md={5}>
                               {" "}
-                              <h6>{worker.name}</h6>
+                              <h6 style={{ fontSize: "14px" }}>
+                                {worker.name}
+                              </h6>
                             </Col>
-                            <Col md={5}>{worker.type}</Col>
+                            <Col md={5}>
+                              <h6 style={{ fontSize: "14px" }}>
+                                {worker.type}
+                              </h6>
+                            </Col>
 
                             {currentUser.type === "Worker" ? (
                               <></>
                             ) : (
-                              <div>
+                              <Col>
                                 {worker.type === "owner" ||
                                 currentUser.type === "Worker" ||
                                 currentUser.type === "owner" ? (
                                   <></>
                                 ) : (
-                                  <PopUpEmpDetailsAssigned Emp={worker}  />
+                                  <PopUpEmpDetailsAssigned Emp={worker} />
                                 )}
-                              </div>
+                              </Col>
                             )}
                           </div>
 
