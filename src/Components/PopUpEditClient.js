@@ -9,10 +9,9 @@ export default function PopUpEditClient(props) {
   const client = props.client;
   const ClientName = useRef();
   const ClientEmail = useRef();
-  const { insertClientToFirestore, updateClient } = useAuth();
+  const { updateClient } = useAuth();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     updateClient(
       ClientName.current.value,
       ClientEmail.current.value,
@@ -23,7 +22,10 @@ export default function PopUpEditClient(props) {
   return (
     <Popup
       trigger={
-        <Button disabled={props.client === ""} style={{ width: "20%" }}>
+        <Button
+          disabled={props.client === "" || !props.checkOwner()}
+          style={{ width: "20%" }}
+        >
           Edit
         </Button>
       }
@@ -35,7 +37,7 @@ export default function PopUpEditClient(props) {
         <Card className="main-shadow" style={{ width: "400px" }}>
           <Card.Body>
             <h2 className="text-center mb-4">Add Client</h2>
-            <Form onSubmit={handleSubmit}>
+            <Form>
               <Form.Group id="ClientName">
                 <Form.Label>Client Name:</Form.Label>
                 <Form.Control
@@ -58,7 +60,13 @@ export default function PopUpEditClient(props) {
               </Form.Group>
 
               <div className="text-center">
-                <Button className="w-50 mt-3" type="submit">
+                <Button
+                  className="w-50 mt-3"
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
+                >
                   Save
                 </Button>
               </div>

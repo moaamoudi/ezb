@@ -4,15 +4,15 @@ import { Form, Button, Card } from "react-bootstrap";
 import React, { useRef } from "react";
 import emailJS from "emailjs-com";
 import "./styles/PopUp.css";
+import { useAlert } from "react-alert";
 
 export default function PopUpAddEmployee(props) {
   let Email = props.Email;
-
+  const alert = useAlert();
   const Subject = useRef();
   const msg = useRef();
   const Name = useRef();
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     let variables = {
       msg: msg.current.value,
       Name: Name.current.value,
@@ -30,12 +30,13 @@ export default function PopUpAddEmployee(props) {
       .then(
         function (response) {
           console.log("SUCCESS!", response.status, response.text);
+          alert.success("Email Sent Successfully!");
         },
         function (error) {
           console.log("FAILED...", error);
+          alert.success("Failed to Send Email!");
         }
       );
-    e.target.reset();
   }
 
   return (
@@ -57,7 +58,7 @@ export default function PopUpAddEmployee(props) {
         <Card className="main-shadow" style={{ width: "400px" }}>
           <Card.Body>
             <h2 className="text-center mb-4">Send Email</h2>
-            <Form onSubmit={handleSubmit}>
+            <Form>
               <Form.Group id="Subject">
                 <Form.Label>Subject:</Form.Label>
                 <Form.Control
@@ -103,7 +104,13 @@ export default function PopUpAddEmployee(props) {
               </Form.Group>
 
               <div className="text-center">
-                <Button className="w-50 mt-3" type="submit">
+                <Button
+                  className="w-50 mt-3"
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
+                >
                   Send
                 </Button>
               </div>

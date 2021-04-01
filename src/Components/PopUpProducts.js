@@ -17,9 +17,7 @@ export default function PopUpProducts() {
 
   const { insertProductToFirestore } = useAuth();
 
-  function handleSubmit(e) {
-    e.preventDefault();
-
+  function handleSubmit() {
     const name = ProductName.current.value;
     const price = ProductPrice.current.value;
     const sellingP = ProductSellingPrice.current.value;
@@ -41,7 +39,7 @@ export default function PopUpProducts() {
           <Card.Body>
             <h2 className="text-center mb-4">Add Product</h2>
             {/* {error && <Alert variant="danger">{error}</Alert>} */}
-            <Form onSubmit={handleSubmit}>
+            <Form>
               <Form.Group id="ProductName">
                 <Form.Label>Product Name:</Form.Label>
                 <Form.Control
@@ -91,7 +89,10 @@ export default function PopUpProducts() {
               <div className="text-center">
                 <Button
                   className="w-50  mt-3"
-                  type="submit"
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
                 >
                   Add
                 </Button>

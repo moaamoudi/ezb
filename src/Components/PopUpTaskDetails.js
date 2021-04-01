@@ -163,8 +163,7 @@ export default function PopUpTaskDetails(props) {
     setError("");
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     handleSubTaskChange(taskCopyFinal);
     setError("");
   }
@@ -236,7 +235,7 @@ export default function PopUpTaskDetails(props) {
             <div>
               <h2 className="text-center mb-4">{task.taskName} Details</h2>
               {error && <Alert variant="danger">{error}</Alert>}
-              <Form onSubmit={handleSubmit}>
+              <Form>
                 <Row>
                   <Col md={12} className="text-center">
                     <h5>{task.taskDescripiton}</h5>
@@ -480,7 +479,13 @@ export default function PopUpTaskDetails(props) {
 
                   <Col md={12} style={{ marginTop: "15px" }}>
                     <div className="text-center">
-                      <Button className="w-50  mt-3" type="submit">
+                      <Button
+                        className="w-50  mt-3"
+                        onClick={() => {
+                          handleSubmit();
+                          close();
+                        }}
+                      >
                         Save
                       </Button>
                     </div>

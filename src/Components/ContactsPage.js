@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/ContactsPage.css";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
@@ -15,11 +15,33 @@ export default function ContactsPage() {
     selectedCompanyEmployee,
     deleteEmployee,
     deleteClient,
+    userDetails,
+    selectCompany,
   } = useAuth();
   const [email, setEmail] = useState("");
   const [email1, setEmail1] = useState("");
   const [client, setClient] = useState("");
-  const [employee, setEmployee] = useState("");
+
+  const [currentUser, setCurrentUser] = useState("");
+
+  useEffect(() => {
+    for (let index = 0; index < selectCompany.users.length; index++) {
+      if (selectCompany.users[index].email === userDetails.email) {
+        setCurrentUser(selectCompany.users[index]);
+      }
+    }
+  }, [currentUser, userDetails.email, selectCompany.users]);
+
+  function checkOwner() {
+    let isOwner = false;
+    if (currentUser.type !== undefined) {
+      if (currentUser.type === "owner") {
+        isOwner = true;
+      }
+    }
+
+    return isOwner;
+  }
 
   const columns = [
     {
@@ -80,7 +102,7 @@ export default function ContactsPage() {
             style={{ height: "85vh", padding: "50px", marginTop: "50px" }}
           >
             <div>
-              <PopUpAddEmployee />
+              <PopUpAddEmployee checkOwner={checkOwner} />
             </div>
             <Card.Body>
               <BootstrapTable
@@ -103,7 +125,7 @@ export default function ContactsPage() {
               <Button
                 variant="danger"
                 style={{ width: "20%", margin: "50px" }}
-                disabled={email === ""}
+                disabled={email === "" || !checkOwner()}
                 onClick={() => {
                   handledelete();
                 }}
@@ -122,7 +144,9 @@ export default function ContactsPage() {
             style={{ height: "85vh", padding: "50px", marginTop: "50px" }}
           >
             <div>
-              <PopUpAddClient className="Btn mb-2">Add</PopUpAddClient>
+              <PopUpAddClient className="Btn mb-2" checkOwner={checkOwner}>
+                Add
+              </PopUpAddClient>
             </div>
             <Card.Body>
               <BootstrapTable
@@ -142,10 +166,10 @@ export default function ContactsPage() {
               }}
             >
               <PopUpEmail Email={email1}></PopUpEmail>
-              <PopUpEditClient client={client} />
+              <PopUpEditClient client={client} checkOwner={checkOwner} />
               <Button
                 variant="danger"
-                disabled={email1 === ""}
+                disabled={email1 === "" || !checkOwner()}
                 style={{ width: "20%", margin: "50px" }}
                 onClick={() => {
                   handledeleteClient();

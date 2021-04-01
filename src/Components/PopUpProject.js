@@ -8,7 +8,6 @@ import "react-google-flight-datepicker/dist/main.css";
 import { format } from "date-fns";
 import "./styles/PopUp.css";
 
-
 export default function PopupProject() {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -16,7 +15,6 @@ export default function PopupProject() {
   const ProjectName = useRef();
   const ProjectDescription = useRef();
   const [error, setError] = useState("");
-  
 
   function handleSubmit() {
     if (startDate === undefined || endDate === undefined) {
@@ -43,7 +41,19 @@ export default function PopupProject() {
 
   return (
     <Popup
-      trigger={<Button>Add Project</Button>}
+      trigger={
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="100"
+          style={{ borderRadius: "50%", backgroundColor: "#f0e9e9" }}
+          height="100"
+          fill="#F5A494"
+          className="bi bi-plus svgOnClick"
+          viewBox="0 0 16 16"
+        >
+          <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+        </svg>
+      }
       position="center center"
       modal
       nested

@@ -5,13 +5,12 @@ import React, { useRef } from "react";
 import "./styles/PopUp.css";
 import { useAuth } from "../Context/AuthContext";
 
-export default function PopUpAddClient() {
+export default function PopUpAddClient(props) {
   const ClientName = useRef();
   const ClientEmail = useRef();
   const { insertClientToFirestore } = useAuth();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     insertClientToFirestore(
       ClientName.current.value,
       ClientEmail.current.value
@@ -21,8 +20,11 @@ export default function PopUpAddClient() {
   return (
     <Popup
       trigger={
-        <Button className="mb-2" style={{ marginRight: "66%" }}>
-          {" "}
+        <Button
+          disabled={!props.checkOwner()}
+          className="mb-2"
+          style={{ marginRight: "66%" }}
+        >
           Add Client
         </Button>
       }
@@ -34,7 +36,7 @@ export default function PopUpAddClient() {
         <Card className="main-shadow" style={{ width: "400px" }}>
           <Card.Body>
             <h2 className="text-center mb-4">Add Client</h2>
-            <Form onSubmit={handleSubmit}>
+            <Form>
               <Form.Group id="ClientName">
                 <Form.Label>Client Name:</Form.Label>
                 <Form.Control
@@ -55,7 +57,13 @@ export default function PopUpAddClient() {
               </Form.Group>
 
               <div className="text-center">
-                <Button className="w-50 mt-3" type="submit">
+                <Button
+                  className="w-50 mt-3"
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
+                >
                   Add
                 </Button>
               </div>

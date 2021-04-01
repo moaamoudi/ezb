@@ -10,8 +10,7 @@ export default function PopUpNote() {
   const note = useRef();
   const { insertNoteToFirestore } = useAuth();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     insertNoteToFirestore(note.current.value);
   }
 
@@ -27,7 +26,7 @@ export default function PopUpNote() {
           <Card.Body>
             <h2 className="text-center mb-4">Add Note</h2>
             {/* {error && <Alert variant="danger">{error}</Alert>} */}
-            <Form onSubmit={handleSubmit}>
+            <Form>
               <Form.Group id="Note">
                 <Form.Label>Note:</Form.Label>
                 <Form.Control
@@ -40,7 +39,10 @@ export default function PopUpNote() {
               <div className="text-center">
                 <Button
                   className="w-50  mt-3"
-                  type="submit"
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
                 >
                   Add
                 </Button>

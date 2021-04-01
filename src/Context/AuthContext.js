@@ -5,6 +5,8 @@ import useLocalStorage from "../Components/useLocalStorage.js";
 import emailJS from "emailjs-com";
 import { colors } from "../Components/styles/RandomColors.js";
 import { useAlert } from "react-alert";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 const AuthContext = React.createContext();
 
@@ -113,7 +115,9 @@ export function AuthProvider({ children }) {
           });
           setSelectedCompanyEmployee(emp);
           getCompanyProjects(querySnapshot.data().id);
-          getAllProjectsTasks(company);
+          GetClients(querySnapshot.data().id);
+
+          // getAllProjectsTasks(company);
         });
     }
   }
@@ -297,6 +301,7 @@ export function AuthProvider({ children }) {
           localStorage.removeItem("selectedProjectInventory");
           localStorage.removeItem("selectedProjectTasks");
           localStorage.removeItem("selectedProject");
+          alert.success("Successfully Deleted Project");
         });
     }
   }
@@ -328,10 +333,12 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("task written succesfully");
           getProjectTasks(selectedProject);
+          alert.success("Task Successfully Added!");
           getAllProjectsTasks(selectCompany);
         })
         .catch((e) => {
           console.error(e.message);
+          alert.success("Failed to Add Task!");
         });
     }
   }
@@ -393,7 +400,11 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("subtask succesfully edited");
           getProjectTasks(selectedProject);
+          alert.success("Task Successfully Updated!");
           getAllProjectsTasks(selectCompany);
+        })
+        .catch((e) => {
+          alert.error("Task Failed to Update!");
         });
     }
   }
@@ -411,7 +422,11 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("subtask succesfully edited");
           getProjectTasks(selectedProject);
+          alert.success("Task Successfully Updated!");
           getAllProjectsTasks(selectCompany);
+        })
+        .catch((e) => {
+          alert.error("Task Failed to Update!");
         });
       let lates = [];
       let late = false;
@@ -434,9 +449,9 @@ export function AuthProvider({ children }) {
                 selectedWorker.name +
                 " Have Completed " +
                 lates +
-                " by " +
+                " " +
                 Math.floor(task.subTasks[0].late) +
-                " Days Late, in Project: " +
+                " Days Later Than Scheduled, in Project: " +
                 selectedProject.projectName
             );
           }
@@ -464,6 +479,13 @@ export function AuthProvider({ children }) {
             email: auth.currentUser.email,
             photoURL: auth.currentUser.photoURL,
           },
+        })
+        .then(() => {
+          alert.success("Successfully Added Note!");
+        })
+        .catch((e) => {
+          console.error(e);
+          alert.error("Failed Adding Note!");
         });
       getProjectNotes(selectedProject);
     }
@@ -482,6 +504,11 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("note deleted succesfully");
           getProjectNotes(selectedProject);
+          alert.success("Successfully Deleted Note!");
+        })
+        .catch((e) => {
+          console.error(e);
+          alert.error("Failed Deleting Note!");
         });
     }
   }
@@ -532,6 +559,12 @@ export function AuthProvider({ children }) {
           productSellingPrice: sellingPrice,
           productQuantity: quantity,
           productUnitsSold: unitsSold,
+        })
+        .then(() => {
+          alert.success("Successfully Added Product!");
+        })
+        .catch((e) => {
+          alert.error("Failed Adding Product!");
         });
       getProjectInventory(selectedProject);
     }
@@ -546,7 +579,13 @@ export function AuthProvider({ children }) {
         .doc(selectedProject.id)
         .collection("Inventory")
         .doc(prod.id)
-        .delete();
+        .delete()
+        .then(() => {
+          alert.success("Successfully Deleted Product!");
+        })
+        .catch((e) => {
+          alert.error("Failed Deleting Product!");
+        });
       getProjectInventory(selectedProject);
     }
   }
@@ -573,6 +612,12 @@ export function AuthProvider({ children }) {
           productSellingPrice: sellingPrice,
           productQuantity: quantity,
           productUnitsSold: units,
+        })
+        .then(() => {
+          alert.success("Successfully Updated Product!");
+        })
+        .catch((e) => {
+          alert.error("Failed Updating Product!");
         });
       getProjectInventory(selectedProject);
     }
@@ -668,20 +713,33 @@ export function AuthProvider({ children }) {
 
   async function getAllProjectsTasks(company) {
     let items = [];
+    let companyProjects = [];
 
     if (auth.currentUser) {
+      await db
+        .collection("Companies/" + company.id + "/Projects")
+        .get()
+        .then((temp) => {
+          temp.forEach((doc) => {
+            let item = doc.data();
+            item.id = doc.id;
+            companyProjects.push(item);
+          });
+        });
+
       items = [];
-      for (let index = 0; index < projects.length; index++) {
+      let temp;
+      for (let index = 0; index < companyProjects.length; index++) {
         await db
           .collection("Companies")
           .doc(company.id)
           .collection("Projects")
-          .doc(projects[index].id)
+          .doc(companyProjects[index].id)
           .collection("Tasks")
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((task) => {
-              let temp = task.data();
+              temp = task.data();
               items.push({
                 assigned: temp.assigned,
                 complete: temp.complete,
@@ -691,13 +749,14 @@ export function AuthProvider({ children }) {
                 taskDescripiton: temp.taskDescripiton,
                 title: temp.taskName,
                 color: colors[index],
-                belongsTo: projects[index],
+                belongsTo: companyProjects[index],
               });
             });
-            setAllCompanyTasks(items);
           });
       }
 
+      setAllCompanyTasks(items);
+      setLoading(false);
       items = [];
     }
     items = [];
@@ -861,8 +920,11 @@ export function AuthProvider({ children }) {
           ClientEmail: ClientEmail,
         })
         .then(() => {
-          console.log("notification succesfully written");
+          alert.success("Successfully Added Client!");
           GetClients(selectCompany.id);
+        })
+        .catch((e) => {
+          alert.error("Failed Adding Client!");
         });
     }
   }
@@ -901,6 +963,7 @@ export function AuthProvider({ children }) {
               .set(comp)
               .then(() => {
                 console.log("employee successfuly inserted");
+                alert.success("Successfully Added Employee");
               });
           });
 
@@ -988,6 +1051,7 @@ export function AuthProvider({ children }) {
               .set(comp)
               .then(() => {
                 console.log("employee successfuly inserted");
+                alert.success("Successfully Added Employee");
               });
           });
 
@@ -1052,6 +1116,7 @@ export function AuthProvider({ children }) {
       let projectTasks = [];
       for (let i = 0; i < tempProjects.length; i++) {
         projectTasks = [];
+        let updatedTask;
         await db
           .collection("Companies")
           .doc(selectCompany.id)
@@ -1061,7 +1126,7 @@ export function AuthProvider({ children }) {
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((task) => {
-              let updatedTask = task.data();
+              updatedTask = task.data();
               updatedTask.subTasks.forEach((sub) => {
                 if (sub.assigned !== undefined) {
                   if (sub.assigned.email === email) {
@@ -1100,7 +1165,11 @@ export function AuthProvider({ children }) {
         .set(comp)
         .then(() => {
           console.log("employee successfully deleted");
+          alert.success("Successfully Deleted Employee!");
           GetEmployee(selectCompany.id);
+        })
+        .catch((e) => {
+          alert.error("Failed Deleting Employee!");
         });
     }
   }
@@ -1118,7 +1187,11 @@ export function AuthProvider({ children }) {
           id: id,
         })
         .then(() => {
+          alert.success("Successfully Updated Client!");
           GetClients(selectCompany.id);
+        })
+        .catch((e) => {
+          alert.error("Failed Updating Client!");
         });
     }
   }
@@ -1135,7 +1208,13 @@ export function AuthProvider({ children }) {
       await db
         .collection("Companies/" + selectCompany.id + "/Clients")
         .doc(temp.id)
-        .delete();
+        .delete()
+        .then(() => {
+          alert.success("Successfully Deleted Client!");
+        })
+        .catch((e) => {
+          alert.error("Failed Deleting Client!");
+        });
       GetClients(selectCompany.id);
     }
   }
@@ -1151,29 +1230,6 @@ export function AuthProvider({ children }) {
         .onSnapshot((querySnapshot) => {
           querySnapshot.data().users.forEach((user) => {
             items.push(user);
-          });
-          setSelectedCompanyEmployee(items);
-          items = [];
-        });
-      items = [];
-    }
-    items = [];
-  }
-
-  async function initialGetEmployee() {
-    let items = [];
-    if (auth.currentUser) {
-      items = [];
-      await db
-        .collection("Companies")
-        .doc(selectCompany.id)
-        .collection("Employee")
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((note) => {
-            let item = note.data();
-            item.id = note.id;
-            items.push(item);
           });
           setSelectedCompanyEmployee(items);
           items = [];
@@ -1376,10 +1432,25 @@ export function AuthProvider({ children }) {
     updateClient,
     deleteNotification,
     handleSubTaskChangeWorker,
+    setLoading,
+    getAllProjectsTasks,
   };
+
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {!loading && children ? (
+        children
+      ) : (
+        <div style={{ position: "fixed", top: "50%", left: "50%" }}>
+          <Loader
+            height={100}
+            width={100}
+            type="TailSpin"
+            color="#F5A494"
+            timeout={10000} //3 secs
+          />
+        </div>
+      )}
     </AuthContext.Provider>
   );
 }

@@ -14,8 +14,7 @@ export default function PopUpProductDetails(props) {
   const units = useRef();
   const { updateProduct } = useAuth();
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     updateProduct(
       props.prod.id,
       name.current.value,
@@ -39,7 +38,7 @@ export default function PopUpProductDetails(props) {
           <Card.Body>
             <h2 className="text-center mb-4">Add Note</h2>
             {/* {error && <Alert variant="danger">{error}</Alert>} */}
-            <Form onSubmit={handleSubmit}>
+            <Form>
               <Form.Group id="Name">
                 <Form.Label>Product Name:</Form.Label>
                 <Form.Control
@@ -93,7 +92,10 @@ export default function PopUpProductDetails(props) {
               <div className="text-center">
                 <Button
                   className="w-50  mt-3"
-                  type="submit"
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
                 >
                   Save
                 </Button>

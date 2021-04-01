@@ -9,12 +9,8 @@ import {
   Col,
   Row,
   Container,
-  Alert,
-  Dropdown,
   Tooltip,
   OverlayTrigger,
-  DropdownButton,
-  ButtonGroup,
 } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 
@@ -28,13 +24,9 @@ export default function PopUpTaskDetailsWorker(props) {
   const projectAssigned = props.assignedUsers;
   const [updated, setUpdated] = useState(false);
   let [taskCopy, setTaskCopy] = useState(task);
-  let [subtasklist, setSubtasklist] = useState(task.subTasks);
-  let subTaskName = useState();
-  const { deleteTask, selectedProject, handleSubTaskChangeWorker } = useAuth();
-  const [error, setError] = useState("");
+  let [subtasklist, setSubtasklist] = useState(taskCopy.subTasks);
+  const { handleSubTaskChangeWorker } = useAuth();
   const [taskCopyFinal, setTaskCopyFinal] = useState(taskCopy);
-
-  const [reset, setReset] = useState(false);
 
   if (task.subTasks.length > 0) {
     subtasklist = [];
@@ -46,6 +38,7 @@ export default function PopUpTaskDetailsWorker(props) {
       }
     });
   }
+
   function handleClick(sub) {
     let check = true;
     let items = [];
@@ -94,29 +87,8 @@ export default function PopUpTaskDetailsWorker(props) {
       setTaskCopyFinal(taskCopy);
     }
   }
-  function resetForm() {
-    setSubtasklist(props.task.subTasks);
-    setTaskCopy(props.task);
-    setTaskCopyFinal(props.task);
-    setReset(false);
-  }
-  function checkComplete() {
-    let check = true;
-    if (taskCopy.subTasks.length > 0) {
-      taskCopy.subTasks.forEach((item) => {
-        if (item.complete) {
-        } else {
-          check = false;
-        }
-      });
-      taskCopy.complete = check;
-      setUpdated(true);
-      setTaskCopyFinal(taskCopy);
-    }
-  }
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     handleSubTaskChangeWorker(taskCopyFinal, projectAssigned, currentUser);
   }
 
@@ -124,9 +96,10 @@ export default function PopUpTaskDetailsWorker(props) {
     if (updated) {
       setTaskCopy(taskCopy);
       setTaskCopyFinal(taskCopy);
+      setSubtasklist(taskCopy.subTasks);
       setUpdated(false);
     }
-  }, [updated, taskCopy, reset]);
+  }, [updated, taskCopy]);
 
   return (
     <Popup
@@ -157,8 +130,7 @@ export default function PopUpTaskDetailsWorker(props) {
             ></div>
             <div>
               <h2 className="text-center mb-4">{task.taskName} Details</h2>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <Form onSubmit={handleSubmit}>
+              <Form>
                 <Row>
                   <Col md={12} className="text-center">
                     <h5>{task.taskDescripiton}</h5>
@@ -304,18 +276,25 @@ export default function PopUpTaskDetailsWorker(props) {
                   </Container>
                 </Row>
                 <div className="text-center">
-                  <Button className="w-50  mt-3" type="submit">
+                  <Button
+                    className="w-50  mt-3"
+                    onClick={() => {
+                      handleSubmit();
+                      close();
+                    }}
+                  >
                     Save
                   </Button>
                 </div>
                 <div className="text-center">
                   <Button
-                    type="submit"
                     className="w-50  mt-3"
+                    type="reset"
                     onClick={() => {
-                      setSubtasklist(props.task.subTasks);
-                      setTaskCopy(props.task);
-                      setTaskCopyFinal(props.task);
+                      console.log(task);
+                      taskCopy = task;
+                      setTaskCopyFinal(taskCopy);
+                      setSubtasklist(taskCopy.subTasks);
                     }}
                   >
                     Reset

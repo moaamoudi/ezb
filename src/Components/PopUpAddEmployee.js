@@ -10,13 +10,14 @@ import {
   Container,
   Col,
   Row,
+  Alert,
 } from "react-bootstrap";
 import React, { useRef, useState } from "react";
 
 import "./styles/PopUp.css";
 import { useAuth } from "../Context/AuthContext";
 
-export default function PopUpAddEmployee() {
+export default function PopUpAddEmployee(props) {
   const { insertEmployeeToFirestore, projects } = useAuth();
   const [selected, setSelected] = useState(projects[0]);
   const [Employee, setEmployee] = useState("Administrator");
@@ -25,8 +26,7 @@ export default function PopUpAddEmployee() {
   let [projectlist, setProjectlist] = useState([]);
   const [error, setError] = useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit() {
     insertEmployeeToFirestore(
       EmployeeName.current.value,
       EmployeeEmail.current.value,
@@ -73,7 +73,7 @@ export default function PopUpAddEmployee() {
 
   return (
     <Popup
-      trigger={<Button> Add Employee</Button>}
+      trigger={<Button disabled={!props.checkOwner()}> Add Employee</Button>}
       position="center center"
       modal
       nested
@@ -82,7 +82,8 @@ export default function PopUpAddEmployee() {
         <Card className="main-shadow" style={{ width: "500px" }}>
           <Card.Body>
             <h2 className="text-center mb-4">Add Employee to company</h2>
-            <Form onSubmit={handleSubmit}>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form>
               <Form.Group id="EmployeeName">
                 <Form.Label>Employee Name:</Form.Label>
 
@@ -129,7 +130,11 @@ export default function PopUpAddEmployee() {
                   id={`dropdown-button-drop-right`}
                   drop="right"
                   style={{ width: "50%", margin: "20px" }}
-                  title={selected !== undefined ? selected.projectName : "No Projects"}
+                  title={
+                    selected !== undefined
+                      ? selected.projectName
+                      : "No Projects"
+                  }
                 >
                   {projects.length > 0 ? (
                     <div>
@@ -197,7 +202,13 @@ export default function PopUpAddEmployee() {
               )}
 
               <div className="text-center">
-                <Button className="w-50 mt-3" type="submit">
+                <Button
+                  className="w-50 mt-3"
+                  onClick={() => {
+                    handleSubmit();
+                    close();
+                  }}
+                >
                   Add Employee
                 </Button>
               </div>

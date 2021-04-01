@@ -2,7 +2,6 @@ import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
 import {
-  Form,
   Button,
   Card,
   Row,
@@ -10,13 +9,12 @@ import {
   Container,
   ProgressBar,
 } from "react-bootstrap";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "react-google-flight-datepicker/dist/main.css";
 import "./styles/PopUp.css";
 
 export default function PopUpEmpDetailsAssigned(props) {
-  const data = props.Emp;
-  const [Emp, setEmp] = useState(props.Emp);
+  const Emp = useState(props.Emp);
   const { selectedProjectTasks } = useAuth();
   let tasks = [];
   let majorTasks = [];
@@ -93,7 +91,11 @@ export default function PopUpEmpDetailsAssigned(props) {
 
   return (
     <Popup
-      trigger={<Button style={{ marginLeft: "-17px", fontSize:"12px" }}>Details</Button>}
+      trigger={
+        <Button style={{ marginLeft: "-17px", fontSize: "12px" }}>
+          Details
+        </Button>
+      }
       position="center center"
       modal
       nested
@@ -111,10 +113,16 @@ export default function PopUpEmpDetailsAssigned(props) {
             <div className="text-center">
               <h6>Employee Email: {Emp.email}</h6>
             </div>
-            
+
             <Container className=" text-center" fluid>
               {Emp.type !== "Administrator" ? (
-                <div style={{ height: "420px", overflow: "auto", marginBottom:"20px" }}>
+                <div
+                  style={{
+                    height: "420px",
+                    overflow: "auto",
+                    marginBottom: "20px",
+                  }}
+                >
                   <h6 className="text-center">Assigned Tasks:</h6>
                   {majorTasks.length !== 0 ? (
                     majorTasks.map((task) => (
@@ -125,7 +133,7 @@ export default function PopUpEmpDetailsAssigned(props) {
                         {task.subTasks.length > 0 ? (
                           <div>
                             {task.subTasks.map((sub) => (
-                              <Row style={{marginBottom:"-10px"}}>
+                              <Row style={{ marginBottom: "-10px" }}>
                                 <Col md={6}>
                                   <p>{sub.name}</p>
                                 </Col>
@@ -194,5 +202,4 @@ export default function PopUpEmpDetailsAssigned(props) {
   );
 }
 
-{
-}
+
