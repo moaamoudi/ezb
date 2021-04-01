@@ -28,7 +28,7 @@ export default function PopUpProductDetails(props) {
 
   return (
     <Popup
-      trigger={<Button>Edit</Button>}
+      trigger={<Button disabled={!props.checkOwner()}>Edit</Button>}
       position="center center"
       modal
       nested

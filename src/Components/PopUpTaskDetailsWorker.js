@@ -291,7 +291,7 @@ export default function PopUpTaskDetailsWorker(props) {
                     className="w-50  mt-3"
                     type="reset"
                     onClick={() => {
-                      console.log(task);
+                      console.log(props.task);
                       taskCopy = task;
                       setTaskCopyFinal(taskCopy);
                       setSubtasklist(taskCopy.subTasks);

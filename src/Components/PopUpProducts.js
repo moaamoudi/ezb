@@ -8,7 +8,7 @@ import "react-google-flight-datepicker/dist/main.css";
 
 import "./styles/PopUp.css";
 
-export default function PopUpProducts() {
+export default function PopUpProducts(props) {
   const ProductName = useRef();
   const ProductPrice = useRef();
   const ProductSellingPrice = useRef();
@@ -29,7 +29,7 @@ export default function PopUpProducts() {
 
   return (
     <Popup
-      trigger={<Button> Add Product</Button>}
+      trigger={<Button disabled={!props.checkOwner()}> Add Product</Button>}
       position="center center"
       modal
       nested

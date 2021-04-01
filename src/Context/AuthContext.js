@@ -1366,6 +1366,7 @@ export function AuthProvider({ children }) {
     await setSelectedProject(project);
     getProjectTasks(project);
     getProjectNotes(project);
+    getProjectInventory(project);
   }
 
   useEffect(() => {

@@ -9,16 +9,17 @@ import {
   Container,
   ProgressBar,
 } from "react-bootstrap";
-import React, { useState } from "react";
+import React from "react";
 import "react-google-flight-datepicker/dist/main.css";
 import "./styles/PopUp.css";
 
 export default function PopUpEmpDetailsAssigned(props) {
-  const Emp = useState(props.Emp);
+  const Emp = props.Emp;
   const { selectedProjectTasks } = useAuth();
   let tasks = [];
   let majorTasks = [];
 
+  console.log(Emp);
   for (let i = 0; i < selectedProjectTasks.length; i++) {
     for (let j = 0; j < selectedProjectTasks[i].subTasks.length; j++) {
       if (selectedProjectTasks[i].subTasks[j].assigned !== undefined) {
@@ -113,7 +114,7 @@ export default function PopUpEmpDetailsAssigned(props) {
             <div className="text-center">
               <h6>Employee Email: {Emp.email}</h6>
             </div>
-
+            <h6 className="text-center">Assigned Tasks:</h6>
             <Container className=" text-center" fluid>
               {Emp.type !== "Administrator" ? (
                 <div
@@ -123,7 +124,6 @@ export default function PopUpEmpDetailsAssigned(props) {
                     marginBottom: "20px",
                   }}
                 >
-                  <h6 className="text-center">Assigned Tasks:</h6>
                   {majorTasks.length !== 0 ? (
                     majorTasks.map((task) => (
                       <div style={{ width: "95%" }}>
@@ -201,5 +201,3 @@ export default function PopUpEmpDetailsAssigned(props) {
     </Popup>
   );
 }
-
-

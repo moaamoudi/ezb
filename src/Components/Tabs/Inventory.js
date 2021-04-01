@@ -13,7 +13,34 @@ import { useAuth } from "../../Context/AuthContext";
 import PopUpProducts from "../PopUpProducts";
 export default function Inventory() {
   const [Selected, setSelected] = useState("");
-  const { selectedProjectInventory, sortInventory, deleteProduct } = useAuth();
+  const {
+    selectedProjectInventory,
+    sortInventory,
+    deleteProduct,
+    selectedProject,
+    userDetails,
+  } = useAuth();
+
+  const [currentUser, setCurrentUser] = useState("");
+
+  useEffect(() => {
+    for (let index = 0; index < selectedProject.assigned.length; index++) {
+      if (selectedProject.assigned[index].email === userDetails.email) {
+        setCurrentUser(selectedProject.assigned[index]);
+      }
+    }
+  }, [currentUser, userDetails.email]);
+
+  function checkOwner() {
+    let isOwner = false;
+    if (currentUser.type !== undefined) {
+      if (currentUser.type === "owner") {
+        isOwner = true;
+      }
+    }
+
+    return isOwner;
+  }
 
   function handleDelete(prod) {
     deleteProduct(prod);
@@ -133,7 +160,7 @@ export default function Inventory() {
       <div style={{ display: "inline-flex" }}>
         <h4 className="ml-3">Products</h4>
         <div style={{ position: "absolute", right: "50px" }}>
-          <PopUpProducts />
+          <PopUpProducts checkOwner={checkOwner} />
         </div>
       </div>
 
@@ -229,39 +256,46 @@ export default function Inventory() {
                             position: "absolute",
                           }}
                         >
-                          <Dropdown
-                            style={{ marginRight: "32px", marginLeft: "auto" }}
-                            drop="down"
-                          >
-                            <Dropdown.Toggle
-                              variant="transperant"
-                              style={{ fontSize: "0px" }}
-                              id="dropdown-basic"
+                          {checkOwner() ? (
+                            <Dropdown
+                              style={{
+                                marginRight: "32px",
+                                marginLeft: "auto",
+                              }}
+                              drop="down"
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="20"
-                                height="20"
-                                fill="currentColor"
-                                className="bi bi-three-dots-vertical"
-                                viewBox="0 0 16 16"
+                              <Dropdown.Toggle
+                                variant="transperant"
+                                style={{ fontSize: "0px" }}
+                                id="dropdown-basic"
                               >
-                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                              </svg>
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              <div>
-                                <Dropdown.Item
-                                  as="button"
-                                  onClick={() => {
-                                    handleDelete(prod);
-                                  }}
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  fill="currentColor"
+                                  className="bi bi-three-dots-vertical"
+                                  viewBox="0 0 16 16"
                                 >
-                                  <h6>Delete Product</h6>
-                                </Dropdown.Item>
-                              </div>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                                  <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                </svg>
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                <div>
+                                  <Dropdown.Item
+                                    as="button"
+                                    onClick={() => {
+                                      handleDelete(prod);
+                                    }}
+                                  >
+                                    <h6>Delete Product</h6>
+                                  </Dropdown.Item>
+                                </div>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          ) : (
+                            <></>
+                          )}
                         </div>
                         <div className="mb-2">
                           <h2>{prod.productName}</h2>
@@ -287,6 +321,7 @@ export default function Inventory() {
                         <div className="mt-3">
                           <PopUpProductDetails
                             prod={prod}
+                            checkOwner={checkOwner}
                             handleSelect={handleSelect}
                           ></PopUpProductDetails>
                         </div>

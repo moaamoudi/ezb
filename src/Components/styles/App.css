@@ -40,24 +40,21 @@
 
 .rec.rec-dot_active {
   background-color: rgba(255, 188, 181, 0.664) !important;
-  
-  
- 
 }
 
-.rec-dot:active{
-  box-shadow:  0 0 1px 3px #f5a494 !important;
+.rec-dot:active {
+  box-shadow: 0 0 1px 3px #f5a494 !important;
 }
 
-.cetQhm{
-  box-shadow:  0 0 1px 3px #f5a494 !important;
+.cetQhm {
+  box-shadow: 0 0 1px 3px #f5a494 !important;
 }
 .bQjoUN:hover {
-  box-shadow:  0 0 1px 3px #f5a494 !important;
+  box-shadow: 0 0 1px 3px #f5a494 !important;
 }
 
-
-/* var boxShadow = "0 0 1px 2px #f5a494";
-var activeBoxShadow = "0 0 1px 3px #f5a494";
-var hoveredBoxShadow = "0 0 1px 3px #f5a494"; */
-
+.btn-primary {
+  background-color: #cacaca !important;
+  border-color: #f58472 !important;
+  color: black !important;
+}
