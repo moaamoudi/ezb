@@ -113,7 +113,7 @@ export function AuthProvider({ children }) {
           });
           setSelectedCompanyEmployee(emp);
           getCompanyProjects(querySnapshot.data().id);
-          getAllProjectsTasks();
+          getAllProjectsTasks(company);
         });
     }
   }
@@ -186,9 +186,22 @@ export function AuthProvider({ children }) {
           item.id = doc.id;
           items.push(item);
         });
-        setProjects(items);
+        setProjects(items.sort(sortAlphabetical));
       });
     }
+  }
+
+  function sortAlphabetical(a, b) {
+    const bandA = a.projectName.toUpperCase();
+    const bandB = b.projectName.toUpperCase();
+
+    let comparison = 0;
+    if (bandA > bandB) {
+      comparison = 1;
+    } else if (bandA < bandB) {
+      comparison = -1;
+    }
+    return comparison;
   }
 
   async function initialGetCompanyProjects() {
@@ -200,7 +213,7 @@ export function AuthProvider({ children }) {
           temp.forEach((doc) => {
             items.push(doc.data());
           });
-          setProjects(items);
+          setProjects(items.sort(sortAlphabetical));
         });
     }
   }
@@ -279,7 +292,7 @@ export function AuthProvider({ children }) {
         .delete()
         .then(() => {
           updateDetails();
-          getAllProjectsTasks();
+          getAllProjectsTasks(selectCompany);
           localStorage.removeItem("selectedProjectNotes");
           localStorage.removeItem("selectedProjectInventory");
           localStorage.removeItem("selectedProjectTasks");
@@ -315,7 +328,7 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("task written succesfully");
           getProjectTasks(selectedProject);
-          getAllProjectsTasks();
+          getAllProjectsTasks(selectCompany);
         })
         .catch((e) => {
           console.error(e.message);
@@ -336,7 +349,7 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("task written succesfully");
           getProjectTasks(selectedProject);
-          getAllProjectsTasks();
+          getAllProjectsTasks(selectCompany);
         })
         .catch((e) => {
           console.error(e.message);
@@ -380,7 +393,7 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("subtask succesfully edited");
           getProjectTasks(selectedProject);
-          getAllProjectsTasks();
+          getAllProjectsTasks(selectCompany);
         });
     }
   }
@@ -398,7 +411,7 @@ export function AuthProvider({ children }) {
         .then(() => {
           console.log("subtask succesfully edited");
           getProjectTasks(selectedProject);
-          getAllProjectsTasks();
+          getAllProjectsTasks(selectCompany);
         });
       let lates = [];
       let late = false;
@@ -645,15 +658,15 @@ export function AuthProvider({ children }) {
     await initialGetCompanies();
     await initialGetCompanyProjects();
     await initialGetClients();
-    await getAllProjectsTasks();
-    // await updateDetails();
+    await getAllProjectsTasks(selectCompany);
+    await updateDetails();
 
     console.log(auth.currentUser);
 
     setLoading(false);
   }
 
-  async function getAllProjectsTasks() {
+  async function getAllProjectsTasks(company) {
     let items = [];
 
     if (auth.currentUser) {
@@ -661,7 +674,7 @@ export function AuthProvider({ children }) {
       for (let index = 0; index < projects.length; index++) {
         await db
           .collection("Companies")
-          .doc(selectCompany.id)
+          .doc(company.id)
           .collection("Projects")
           .doc(projects[index].id)
           .collection("Tasks")
@@ -681,9 +694,10 @@ export function AuthProvider({ children }) {
                 belongsTo: projects[index],
               });
             });
+            setAllCompanyTasks(items);
           });
       }
-      await setAllCompanyTasks(items);
+
       items = [];
     }
     items = [];
@@ -693,7 +707,7 @@ export function AuthProvider({ children }) {
     await fetchUserDetails;
     await getCompanies();
     await getCompanyProjects(selectCompany.id);
-    await getAllProjectsTasks();
+    await getAllProjectsTasks(selectCompany);
   }
 
   async function insertCompanyToFirestore(companyName) {

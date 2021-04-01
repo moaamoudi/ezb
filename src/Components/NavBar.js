@@ -133,6 +133,7 @@ function NavBar(props) {
                           localStorage.removeItem("selectedProjectTasks");
                           localStorage.removeItem("selectedCompanyEmployee");
                           localStorage.removeItem("selectedCompanyClients");
+                          
                           setSelectedCompany(company);
                           history.push("/");
                         }}
