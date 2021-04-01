@@ -200,11 +200,12 @@ function NavBar(props) {
 
         <reactBootstrap.Dropdown.Menu>
           <reactBootstrap.Container
-            style={{ width: "420px", maxHeight: "350px" }}
+            
             fluid
           >
+            <div style={{ width: "420px", height: "350px",overflow:'auto' }}>
             {userNotifications.length > 0 ? (
-              <div style={{ width: "100%", overflow: "auto" }}>
+              <div style={{ width: "100%"}}>
                 {userNotifications.map((noti) => (
                   <reactBootstrap.Row
                     style={{ width: "100%", marginBottom: "5px" }}
@@ -231,12 +232,13 @@ function NavBar(props) {
                         />
                       </svg>
                     </reactBootstrap.Col>
+                    <hr style={{border:'1px solid lightgray',width:'100%',margin:'0'}}/>
                   </reactBootstrap.Row>
                 ))}
               </div>
             ) : (
               <div>No Notifications...</div>
-            )}
+            )}</div>
           </reactBootstrap.Container>
         </reactBootstrap.Dropdown.Menu>
       </reactBootstrap.Dropdown>
