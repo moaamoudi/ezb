@@ -81,14 +81,14 @@ const Header = withStyles(style, {
       }}
     >
       <Row style={{ textAlign: "center" }}>
-        <Col md={12} style={{ marginBottom: "-10px" }}>
-          <p style={{ color: "white" }}>
+        <Col md={12}>
+          <h6 style={{ color: "white", fontSize:"18px" }}>
             {appointmentData.belongsTo.projectName}
-          </p>
+          </h6>
         </Col>
         {/* <hr style={{ color: "black", width: "100%" }} /> */}
-        <Col md={12} style={{ marginTop: "-5px", marginBottom: "-12px" }}>
-          <p style={{ color: "white" }}>{appointmentData.title}</p>
+        <Col md={12} >
+          <h6 style={{ color: "white" }}>{appointmentData.title}</h6>
         </Col>
       </Row>
     </Container>
@@ -260,7 +260,7 @@ export default class CalendarScheduler extends React.PureComponent {
               className="mt-3 mb-3"
               onClick={() => this.props.viewDetails(appointmentData.belongsTo)}
             >
-              Go to project page
+              Go to Project Page
             </Button>
           </Col>
         </Row>

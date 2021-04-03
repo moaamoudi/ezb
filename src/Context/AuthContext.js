@@ -282,6 +282,10 @@ export function AuthProvider({ children }) {
         .then(() => {
           updateDetails();
           setSelectedProject(project);
+          alert.success("Successfully Updated Project!");
+        })
+        .catch((e) => {
+          alert.error("Failed to Update Project!");
         });
     }
   }
@@ -357,9 +361,11 @@ export function AuthProvider({ children }) {
           console.log("task written succesfully");
           getProjectTasks(selectedProject);
           getAllProjectsTasks(selectCompany);
+          alert.success("Task Successfully Deleted!")
         })
         .catch((e) => {
           console.error(e.message);
+          alert.error("Failed to Delete Task!")
         });
     }
   }
@@ -703,12 +709,62 @@ export function AuthProvider({ children }) {
     await initialGetCompanies();
     await initialGetCompanyProjects();
     await initialGetClients();
-    await getAllProjectsTasks(selectCompany);
+    await initialGetAllProjectsTasks(selectCompany);
     await updateDetails();
 
     console.log(auth.currentUser);
 
     setLoading(false);
+  }
+
+  async function initialGetAllProjectsTasks(company) {
+    let items = [];
+    let companyProjects = [];
+
+    if (auth.currentUser) {
+      await db
+        .collection("Companies/" + company.id + "/Projects")
+        .get()
+        .then((temp) => {
+          temp.forEach((doc) => {
+            let item = doc.data();
+            item.id = doc.id;
+            companyProjects.push(item);
+          });
+        });
+
+      items = [];
+      let temp;
+      for (let index = 0; index < companyProjects.length; index++) {
+        await db
+          .collection("Companies")
+          .doc(company.id)
+          .collection("Projects")
+          .doc(companyProjects[index].id)
+          .collection("Tasks")
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((task) => {
+              temp = task.data();
+              items.push({
+                assigned: temp.assigned,
+                complete: temp.complete,
+                endDate: temp.endDate,
+                startDate: temp.startDate,
+                subTasks: temp.subTasks,
+                taskDescripiton: temp.taskDescripiton,
+                title: temp.taskName,
+                color: colors[index],
+                belongsTo: companyProjects[index],
+              });
+            });
+          });
+      }
+
+      setAllCompanyTasks(items);
+      items = [];
+    }
+    items = [];
   }
 
   async function getAllProjectsTasks(company) {
@@ -1294,7 +1350,7 @@ export function AuthProvider({ children }) {
         .doc()
         .set({
           message: message,
-          creationDate: new Date(),
+          creationDate: format(new Date(), "MMM-dd HH:m"),
           read: false,
         })
         .then(() => {
@@ -1330,9 +1386,18 @@ export function AuthProvider({ children }) {
             item.id = temp.id;
             items.push(item);
           });
-          setUserNotifications(items);
+
+          setUserNotifications(items.sort(sortTime));
         });
     }
+  }
+  function sortTime(a, b) {
+    if (new Date(a.creationDate).getTime() > new Date(b.creationDate).getTime())
+      return 1;
+    if (new Date(a.creationDate).getTime() < new Date(b.creationDate).getTime())
+      return -1;
+
+    return 0;
   }
 
   async function setUserNotificationsRead(items) {
