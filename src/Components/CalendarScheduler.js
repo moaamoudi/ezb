@@ -288,8 +288,6 @@ export default class CalendarScheduler extends React.PureComponent {
       <Paper>
         <Scheduler data={data} height="100%">
           <ViewState defaultCurrentViewName="Month" />
-          <DayView />
-          <WeekView />
           <MonthView height="100%" />
           <Toolbar />
           <ViewSwitcher />
