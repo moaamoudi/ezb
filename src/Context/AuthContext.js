@@ -222,6 +222,8 @@ export function AuthProvider({ children }) {
     }
   }
 
+  //input: project details
+
   async function insertProjectToFirestore(
     projectName,
     startDate,
@@ -270,7 +272,9 @@ export function AuthProvider({ children }) {
 
     await updateDetails();
   }
+  //output: added project to firestore and Success message
 
+  //input: project details
   async function updateProject(project) {
     if (auth.currentUser) {
       await db
@@ -289,7 +293,9 @@ export function AuthProvider({ children }) {
         });
     }
   }
+  //output: edited project in firestore and Success message
 
+  //input: project to be deleted
   async function deleteProject(project) {
     if (auth.currentUser) {
       await db
@@ -305,11 +311,16 @@ export function AuthProvider({ children }) {
           localStorage.removeItem("selectedProjectInventory");
           localStorage.removeItem("selectedProjectTasks");
           localStorage.removeItem("selectedProject");
-          alert.success("Successfully Deleted Project");
+          alert.success("Successfully Deleted Project!");
+        })
+        .catch((e) => {
+          alert.error("Failed to Delete Project!");
         });
     }
   }
+  //output: deleted project in firestore and Success message
 
+  //input: Task details
   async function insertTaskToFirestore(
     taskName,
     taskDescripiton,
@@ -347,6 +358,9 @@ export function AuthProvider({ children }) {
     }
   }
 
+  //output: insert task in firestore and Success message and update selected project
+
+  //input: Task to be deleted
   async function deleteTask(task) {
     if (auth.currentUser) {
       await db;
@@ -369,7 +383,9 @@ export function AuthProvider({ children }) {
         });
     }
   }
+  //output: delete task in firestore and Success message and update selected project
 
+  //input: selected project to get tasks
   async function getProjectTasks(project) {
     let items = [];
     if (auth.currentUser && project) {
@@ -392,7 +408,9 @@ export function AuthProvider({ children }) {
     }
     setLoading(false);
   }
+  //output: get all selected project tasks and update the selected project tasks state
 
+  //input: selected task new details
   async function handleSubTaskChange(task) {
     if (auth.currentUser) {
       await db
@@ -414,7 +432,9 @@ export function AuthProvider({ children }) {
         });
     }
   }
+  //output: update task details and subtasks progress in firestore and display msg
 
+  //input: selected task new details **FOR WORKER ROLE**
   async function handleSubTaskChangeWorker(task, workers, selectedWorker) {
     if (auth.currentUser) {
       await db
@@ -465,7 +485,9 @@ export function AuthProvider({ children }) {
       }
     }
   }
+  //output: update task details and subtasks progress in firestore and display msg **FOR WORKER ROLE**
 
+  //input: message from user
   async function insertNoteToFirestore(msg) {
     if (auth.currentUser) {
       let date = format(new Date(), "MMM-dd HH:m");
@@ -496,7 +518,9 @@ export function AuthProvider({ children }) {
       getProjectNotes(selectedProject);
     }
   }
+  //output: insert new note and update the page to show new note
 
+  //input: note to be deleted
   async function deleteNote(note) {
     if (auth.currentUser) {
       await db
@@ -518,7 +542,9 @@ export function AuthProvider({ children }) {
         });
     }
   }
+  //output: delete the note and update the page to show updated notes
 
+  //input: selected project to get notes from
   async function getProjectNotes(project) {
     let items = [];
     if (auth.currentUser && project) {
@@ -543,7 +569,9 @@ export function AuthProvider({ children }) {
     }
     items = [];
   }
+  //output: save the notes of the project in state and display them
 
+  //input: product details **ONLY OWNER ROLE CAN INSERT**
   async function insertProductToFirestore(
     name,
     price,
@@ -575,7 +603,9 @@ export function AuthProvider({ children }) {
       getProjectInventory(selectedProject);
     }
   }
+  //output: insert product to firestore and update the page to show new products and display success message
 
+  //input: proudct to be deleted **ONLY OWNER ROLE CAN DELETE**
   async function deleteProduct(prod) {
     if (auth.currentUser) {
       await db
@@ -595,7 +625,10 @@ export function AuthProvider({ children }) {
       getProjectInventory(selectedProject);
     }
   }
+  //output: delete product from firestore and update the page to show updated products and display success message
 
+  
+  //input: proudct to be updated **ONLY OWNER ROLE CAN DELETE**
   async function updateProduct(
     prodId,
     name,
@@ -628,7 +661,10 @@ export function AuthProvider({ children }) {
       getProjectInventory(selectedProject);
     }
   }
+//output: update product in firestore and update the page to show updated products and display success message
 
+
+//input: selected project to fetch inventory from firestore
   async function getProjectInventory(project) {
     let items = [];
     if (auth.currentUser && project) {
@@ -653,6 +689,7 @@ export function AuthProvider({ children }) {
     }
     items = [];
   }
+  //output: save inventory in state and display them in inventory tab of project
 
   function sortInventory(temp) {
     setSelectedProjectInventory(temp);

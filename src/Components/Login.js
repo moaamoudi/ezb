@@ -28,8 +28,8 @@ export default function Login() {
         history.push("/complete-details");
       } else {
       }
-    } catch {
-      setError("Failed to log in");
+    } catch (e) {
+      setError(e.message);
     }
 
     setLoading(false);
