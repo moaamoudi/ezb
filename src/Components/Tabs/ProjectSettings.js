@@ -73,7 +73,7 @@ export default function ProjectSettings() {
         setCurrentUser(selectedProject.assigned[index]);
       }
     }
-  }, []);
+  }, [selectedProject.assigned, userDetails.email]);
 
   return (
     <Card className="main-shadow" style={{ width: "400px" }}>

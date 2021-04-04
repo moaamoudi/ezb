@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import TaskPopUp from "../popUptask";
 import NotePopUp from "../PopUpNote";
 import LineChart from "../LineChart";
@@ -32,15 +32,13 @@ export default function CurrentWork() {
     deleteNote(note);
   }
 
-  const [currentUser, setCurrentUser] = useState("");
+  let currentUser = {};
 
-  useEffect(() => {
-    for (let index = 0; index < selectedProject.assigned.length; index++) {
-      if (selectedProject.assigned[index].email === userDetails.email) {
-        setCurrentUser(selectedProject.assigned[index]);
-      }
+  for (let index = 0; index < selectedProject.assigned.length; index++) {
+    if (selectedProject.assigned[index].email === userDetails.email) {
+      currentUser = selectedProject.assigned[index];
     }
-  }, []);
+  }
 
   function calculateProgress() {
     let counter = 0;
@@ -125,9 +123,9 @@ export default function CurrentWork() {
                         <div
                           style={{
                             width: "100%",
-                            
                             marginTop: "15px",
                           }}
+                          key={task.taskName}
                         >
                           <div style={{ display: "flex" }}>
                             <Col md={10}>
@@ -140,7 +138,7 @@ export default function CurrentWork() {
                                   width="22"
                                   height="22"
                                   fill="#F5A494"
-                                  class="bi bi-check-square-fill"
+                                  className="bi bi-check-square-fill"
                                   viewBox="0 0 16 16"
                                 >
                                   <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z" />
@@ -151,7 +149,7 @@ export default function CurrentWork() {
                                   width="22"
                                   height="22"
                                   fill="#F5A494"
-                                  class="bi bi-square"
+                                  className="bi bi-square"
                                   viewBox="0 0 16 16"
                                 >
                                   <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
@@ -272,7 +270,10 @@ export default function CurrentWork() {
                     >
                       {selectedProjectNotes.length > 0 ? (
                         selectedProjectNotes.map((note) => (
-                          <Container style={{ marginBottom: "10px" }}>
+                          <Container
+                            style={{ marginBottom: "10px" }}
+                            key={note.id}
+                          >
                             <Row>
                               <Col md={12}>
                                 <div
@@ -411,9 +412,9 @@ export default function CurrentWork() {
                         <div
                           style={{
                             width: "79%",
-
                             marginTop: "15px",
                           }}
+                          key={worker.email}
                         >
                           <div style={{ display: "flex" }}>
                             <Col md={2}>

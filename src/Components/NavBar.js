@@ -209,6 +209,7 @@ function NavBar(props) {
                   {userNotifications.map((noti) => (
                     <reactBootstrap.Row
                       style={{ width: "100%", marginBottom: "5px" }}
+                      key={new Date(noti.creationDate).getTime()}
                     >
                       <reactBootstrap.Col md={11}>
                         <h6 style={{ fontSize: "15px" }}>{noti.message}</h6>

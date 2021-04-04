@@ -25,27 +25,26 @@ export default function ProjectPage() {
       <div>
         <Tabs>
           <TabList>
-            <Tab>Current Work</Tab>
-            <Tab>Gantt Chart</Tab>
-            <Tab>NPV</Tab>
-            <Tab>Inventory</Tab>
-
-            <Tab>Settings</Tab>
+            <Tab key="0">Current Work</Tab>
+            <Tab key="1">Gantt Chart</Tab>
+            <Tab key="2">NPV</Tab>
+            <Tab key="3">Inventory</Tab>
+            <Tab key="4">Settings</Tab>
           </TabList>
           <div style={{ height: "86vh", overflow: "auto" }}>
-            <TabPanel>
+            <TabPanel key="0">
               <CurrentWork />
             </TabPanel>
-            <TabPanel>
+            <TabPanel key="1">
               <GanttChart />
             </TabPanel>
-            <TabPanel>
+            <TabPanel key="2">
               <NPV />
             </TabPanel>
-            <TabPanel>
+            <TabPanel key="3">
               <Inventory />
             </TabPanel>
-            <TabPanel className="d-flex align-items-center justify-content-center">
+            <TabPanel className="d-flex align-items-center justify-content-center" key="4">
               <ProjectSettings />
             </TabPanel>
           </div>

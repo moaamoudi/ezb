@@ -51,7 +51,7 @@ export default function Dashboard() {
         setCurrentUser(selectCompany.users[index]);
       }
     }
-  }, [selectCompany, currentUser, allCompanyTasks]);
+  }, [selectCompany, currentUser, allCompanyTasks, userDetails.email]);
 
   function isAssigned(project) {
     let assigned = false;

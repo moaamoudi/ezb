@@ -361,11 +361,11 @@ export function AuthProvider({ children }) {
           console.log("task written succesfully");
           getProjectTasks(selectedProject);
           getAllProjectsTasks(selectCompany);
-          alert.success("Task Successfully Deleted!")
+          alert.success("Task Successfully Deleted!");
         })
         .catch((e) => {
           console.error(e.message);
-          alert.error("Failed to Delete Task!")
+          alert.error("Failed to Delete Task!");
         });
     }
   }
@@ -718,7 +718,6 @@ export function AuthProvider({ children }) {
   }
 
   async function initialGetAllProjectsTasks(company) {
-    let items = [];
     let companyProjects = [];
 
     if (auth.currentUser) {
@@ -733,8 +732,6 @@ export function AuthProvider({ children }) {
           });
         });
 
-      items = [];
-      let temp;
       for (let index = 0; index < companyProjects.length; index++) {
         await db
           .collection("Companies")
@@ -744,6 +741,8 @@ export function AuthProvider({ children }) {
           .collection("Tasks")
           .get()
           .then((querySnapshot) => {
+            let items = [];
+            let temp;
             querySnapshot.forEach((task) => {
               temp = task.data();
               items.push({
@@ -758,17 +757,13 @@ export function AuthProvider({ children }) {
                 belongsTo: companyProjects[index],
               });
             });
+            setAllCompanyTasks(items);
           });
       }
-
-      setAllCompanyTasks(items);
-      items = [];
     }
-    items = [];
   }
 
   async function getAllProjectsTasks(company) {
-    let items = [];
     let companyProjects = [];
 
     if (auth.currentUser) {
@@ -783,8 +778,7 @@ export function AuthProvider({ children }) {
           });
         });
 
-      items = [];
-      let temp;
+      let items = [];
       for (let index = 0; index < companyProjects.length; index++) {
         await db
           .collection("Companies")
@@ -795,7 +789,7 @@ export function AuthProvider({ children }) {
           .get()
           .then((querySnapshot) => {
             querySnapshot.forEach((task) => {
-              temp = task.data();
+              let temp = task.data();
               items.push({
                 assigned: temp.assigned,
                 complete: temp.complete,
@@ -815,7 +809,6 @@ export function AuthProvider({ children }) {
       setLoading(false);
       items = [];
     }
-    items = [];
   }
 
   async function updateDetails() {
@@ -1169,9 +1162,9 @@ export function AuthProvider({ children }) {
         );
         tempProjects.push(project);
       });
-      let projectTasks = [];
+
       for (let i = 0; i < tempProjects.length; i++) {
-        projectTasks = [];
+        let projectTasks = [];
         let updatedTask;
         await db
           .collection("Companies")

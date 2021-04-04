@@ -82,12 +82,12 @@ const Header = withStyles(style, {
     >
       <Row style={{ textAlign: "center" }}>
         <Col md={12}>
-          <h6 style={{ color: "white", fontSize:"18px" }}>
+          <h6 style={{ color: "white", fontSize: "18px" }}>
             {appointmentData.belongsTo.projectName}
           </h6>
         </Col>
         {/* <hr style={{ color: "black", width: "100%" }} /> */}
-        <Col md={12} >
+        <Col md={12}>
           <h6 style={{ color: "white" }}>{appointmentData.title}</h6>
         </Col>
       </Row>
@@ -160,7 +160,10 @@ export default class CalendarScheduler extends React.PureComponent {
                 }}
               >
                 {appointmentData.subTasks.map((sub) => (
-                  <Row style={{ width: "99%", marginBottom: "10px" }}>
+                  <Row
+                    style={{ width: "99%", marginBottom: "10px" }}
+                    key={sub.name}
+                  >
                     <Col md={6}>{sub.name}</Col>
                     <Col md={4}>
                       {sub.complete ? (

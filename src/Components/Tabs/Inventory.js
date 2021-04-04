@@ -29,7 +29,7 @@ export default function Inventory() {
         setCurrentUser(selectedProject.assigned[index]);
       }
     }
-  }, [currentUser, userDetails.email]);
+  }, [currentUser, userDetails.email, selectedProject.assigned]);
 
   function checkOwner() {
     let isOwner = false;

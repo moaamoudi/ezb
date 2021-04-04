@@ -18,24 +18,25 @@ export default function PopUpEmpDetailsAssigned(props) {
   const { selectedProjectTasks } = useAuth();
   let tasks = [];
   let majorTasks = [];
+  var taskObj = {};
+  var joined = [];
 
-  console.log(Emp);
   for (let i = 0; i < selectedProjectTasks.length; i++) {
     for (let j = 0; j < selectedProjectTasks[i].subTasks.length; j++) {
       if (selectedProjectTasks[i].subTasks[j].assigned !== undefined) {
         if (selectedProjectTasks[i].subTasks[j].assigned.email === Emp.email) {
           if (tasks.length < 1) {
-            var taskObj = {
+            taskObj = {
               name: selectedProjectTasks[i].subTasks[j].name,
               complete: selectedProjectTasks[i].subTasks[j].complete,
               completeDate: selectedProjectTasks[i].subTasks[j].completionDate,
               majorTask: selectedProjectTasks[i].taskName,
             };
-            var joined = tasks.concat(taskObj);
+            joined = tasks.concat(taskObj);
             tasks = joined;
           } else {
             var found = -1;
-            var taskObj = {
+            taskObj = {
               name: selectedProjectTasks[i].subTasks[j].name,
               complete: selectedProjectTasks[i].subTasks[j].complete,
               completeDate: selectedProjectTasks[i].subTasks[j].completionDate,
@@ -49,7 +50,7 @@ export default function PopUpEmpDetailsAssigned(props) {
               }
             }
             if (found !== 1) {
-              var joined = [];
+              joined = [];
               joined = tasks.concat(taskObj);
               tasks = joined;
             }
@@ -71,7 +72,6 @@ export default function PopUpEmpDetailsAssigned(props) {
   for (let i = 0; i < majorTasks.length; i++) {
     for (let j = 0; j < tasks.length; j++) {
       if (tasks[j].majorTask === majorTasks[i].majorTaskName) {
-        console.log("true");
         majorTasks[i].subTasks = majorTasks[i].subTasks.concat(tasks[j]);
       }
     }
@@ -87,8 +87,6 @@ export default function PopUpEmpDetailsAssigned(props) {
 
     return counter;
   }
-
-  console.log(majorTasks);
 
   return (
     <Popup
@@ -114,7 +112,7 @@ export default function PopUpEmpDetailsAssigned(props) {
             <div className="text-center">
               <h6>Employee Email: {Emp.email}</h6>
             </div>
-            <h6 className="text-center">Assigned Tasks:</h6>
+
             <Container className=" text-center" fluid>
               {Emp.type !== "Administrator" ? (
                 <div
@@ -124,6 +122,7 @@ export default function PopUpEmpDetailsAssigned(props) {
                     marginBottom: "20px",
                   }}
                 >
+                  <h6 className="text-center">Assigned Tasks:</h6>
                   {majorTasks.length !== 0 ? (
                     majorTasks.map((task) => (
                       <div style={{ width: "95%" }}>

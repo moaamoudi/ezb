@@ -18,7 +18,7 @@ export default function LineChart() {
         setCurrentUser(selectedProject.assigned[index]);
       }
     }
-  }, []);
+  }, [selectedProject.assigned, userDetails.email]);
 
   if (currentUser.type === "Worker") {
     if (selectedProjectTasks.length > 0) {
