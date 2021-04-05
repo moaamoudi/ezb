@@ -15,7 +15,7 @@ export default function PopupProject() {
   const ProjectName = useRef();
   const ProjectDescription = useRef();
   const [error, setError] = useState("");
-
+//adds the project to database
   function handleSubmit() {
     if (startDate === undefined || endDate === undefined) {
       return setError("Please Enter Date!");
@@ -30,7 +30,7 @@ export default function PopupProject() {
 
     setError("");
   }
-
+//formatting dates
   function onDateChange(startDate, endDate) {
     if (startDate && endDate) {
       console.log(startDate);

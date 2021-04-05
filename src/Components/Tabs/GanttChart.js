@@ -60,6 +60,7 @@ export default function GanttChart() {
     //pushing the formatted task into the array 
     formattedData.push(formattedTask);
   });
+  
   //this function input is a whole task which has subtasks in it
   function calculateTaskProgress(task) {
     let counter = 0;
