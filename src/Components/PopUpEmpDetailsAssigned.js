@@ -20,7 +20,7 @@ export default function PopUpEmpDetailsAssigned(props) {
   let majorTasks = [];
   var taskObj = {};
   var joined = [];
-//looping through the slected project tasks
+//looping through the selected project tasks
   for (let i = 0; i < selectedProjectTasks.length; i++) {
     //looping through the subtasks of the task
     for (let j = 0; j < selectedProjectTasks[i].subTasks.length; j++) {

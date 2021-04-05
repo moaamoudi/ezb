@@ -56,6 +56,7 @@ export default function PopUptask() {
   }
 
   function addItem() {
+    //checking the text field is not empty
     if (subTaskName.value !== "") {
       var joined = [];
       if (subtasklist.length > 0) {

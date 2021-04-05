@@ -41,7 +41,7 @@ export default function LineChart() {
       //**FOR WORKER ROLE ONLY** Stricting the view of worker to only show their own performance without showing other people who are assigned in the project
       let users = [currentUser.email];
 
-      //add the users options that is required by google charts api
+      //add the users to options index that is required by google charts api
       let formattedData = [["x"]];
       users.forEach((user) => {
         formattedData[0].push(user);
