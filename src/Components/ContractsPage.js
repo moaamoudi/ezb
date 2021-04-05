@@ -10,11 +10,13 @@ import {
 } from "@react-pdf/renderer";
 
 export default function ContractsPage() {
+  //states (variables) to be used in the pdf
   const [content, setcontent] = useState("");
   const [subtitle, setsubtitle] = useState("");
   const [title, settitle] = useState("");
   const [save, setsave] = useState(false);
-
+//to adjust the content with a good preformance which when the user edit it will return to the default template we made 
+//when he hits save it will take his input to be printed in the page!
   function handleSave() {
     setsave(!save);
   }
@@ -78,12 +80,11 @@ export default function ContractsPage() {
       </div>
 
       <div style={{ width: "fit-content" }}>
+        {/* basically when the user hit save we will take his input into the imported package of pdf  elemants */}
         <PDFViewer style={{ width: "8in", height: "8in", marginTop: "2%" }}>
           <Document>
             <Page style={styles.body}>
-              {/* <Text style={styles.header} fixed>
-                {save ? header : "this is the page header"}
-              </Text> */}
+              
               <Text style={styles.title} fixed>
                 {save ? title : "this is the page title"}
               </Text>
@@ -110,6 +111,7 @@ export default function ContractsPage() {
             </Page>
           </Document>
         </PDFViewer>
+        {/*elements ends */}
       </div>
     </div>
   );

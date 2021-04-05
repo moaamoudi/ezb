@@ -20,11 +20,15 @@ export default function PopUpEmpDetailsAssigned(props) {
   let majorTasks = [];
   var taskObj = {};
   var joined = [];
-
+//looping through the slected project tasks
   for (let i = 0; i < selectedProjectTasks.length; i++) {
+    //looping through the subtasks of the task
     for (let j = 0; j < selectedProjectTasks[i].subTasks.length; j++) {
+      //checking if the subtask is assigned to  a worker
       if (selectedProjectTasks[i].subTasks[j].assigned !== undefined) {
+        //checking if the current user is assigned to this subtask
         if (selectedProjectTasks[i].subTasks[j].assigned.email === Emp.email) {
+          //checking if the tasks that he is assigned to is so far empty or already got data in it
           if (tasks.length < 1) {
             taskObj = {
               name: selectedProjectTasks[i].subTasks[j].name,
@@ -35,6 +39,8 @@ export default function PopUpEmpDetailsAssigned(props) {
             joined = tasks.concat(taskObj);
             tasks = joined;
           } else {
+            //this else is for if wokrer had other tasks that he is assigned to
+            //boolean to check with 
             var found = -1;
             taskObj = {
               name: selectedProjectTasks[i].subTasks[j].name,
@@ -42,6 +48,7 @@ export default function PopUpEmpDetailsAssigned(props) {
               completeDate: selectedProjectTasks[i].subTasks[j].completionDate,
               majorTask: selectedProjectTasks[i].taskName,
             };
+            //checking if the task is already in the array for duplication correction
             for (let dublicate = 0; dublicate < tasks.length; dublicate++) {
               if (tasks[dublicate].majorTask === taskObj.majorTask) {
                 if (tasks[dublicate].name === taskObj.name) {
@@ -49,6 +56,7 @@ export default function PopUpEmpDetailsAssigned(props) {
                 }
               }
             }
+            //if its not already inserted in the array it will insert it
             if (found !== 1) {
               joined = [];
               joined = tasks.concat(taskObj);
@@ -59,24 +67,26 @@ export default function PopUpEmpDetailsAssigned(props) {
       }
     }
   }
-
+  //looping to  have the major tasks and format them 
   for (let i = 0; i < tasks.length; i++) {
     majorTasks.push({ majorTaskName: tasks[i].majorTask, subTasks: [] });
   }
-
+//removing any duplication
   majorTasks = majorTasks.filter(
     (v, i, a) =>
       a.findIndex((t) => JSON.stringify(t) === JSON.stringify(v)) === i
   );
-
+//looping through major tasks to have them formatted !
   for (let i = 0; i < majorTasks.length; i++) {
+    //looping through tasks that the worker is assigned to
     for (let j = 0; j < tasks.length; j++) {
+      //checking if the subtask is on this major task and then adds it to subtasks array of the major task!
       if (tasks[j].majorTask === majorTasks[i].majorTaskName) {
         majorTasks[i].subTasks = majorTasks[i].subTasks.concat(tasks[j]);
       }
     }
   }
-
+//function to calculate the preformance of the employee ...worker!
   function calculateProgress(task) {
     let counter = 0;
     for (let i = 0; i < task.subTasks.length; i++) {
