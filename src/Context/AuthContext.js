@@ -1424,9 +1424,9 @@ export function AuthProvider({ children }) {
     }
   }
   function sortTime(a, b) {
-    if (new Date(a.creationDate).getTime() > new Date(b.creationDate).getTime())
-      return 1;
     if (new Date(a.creationDate).getTime() < new Date(b.creationDate).getTime())
+      return 1;
+    if (new Date(a.creationDate).getTime() > new Date(b.creationDate).getTime())
       return -1;
 
     return 0;

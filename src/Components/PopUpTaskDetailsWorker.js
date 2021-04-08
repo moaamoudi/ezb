@@ -286,20 +286,6 @@ export default function PopUpTaskDetailsWorker(props) {
                     Save
                   </Button>
                 </div>
-                <div className="text-center">
-                  <Button
-                    className="w-50  mt-3"
-                    type="reset"
-                    onClick={() => {
-                      console.log(props.task);
-                      taskCopy = task;
-                      setTaskCopyFinal(taskCopy);
-                      setSubtasklist(taskCopy.subTasks);
-                    }}
-                  >
-                    Reset
-                  </Button>
-                </div>
               </Form>
 
               <div className="text-center">

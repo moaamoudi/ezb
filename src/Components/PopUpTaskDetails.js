@@ -491,19 +491,6 @@ export default function PopUpTaskDetails(props) {
                         Save
                       </Button>
                     </div>
-                    <div className="text-center">
-                      <Button
-                        className="w-50  mt-3"
-                        onClick={() => {
-                          setTaskCopy(task);
-                          setTaskCopyFinal(task);
-                          setSubtasklist(task.subTasks);
-                          setUpdated(true);
-                        }}
-                      >
-                        Reset
-                      </Button>
-                    </div>
 
                     <div className="text-center">
                       <Button
