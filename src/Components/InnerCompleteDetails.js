@@ -75,7 +75,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
                       enable: true,
                       outMode: "bounce",
                       random: false,
-                      speed: 4,
+                      speed: 1.5,
                       straight: false,
                     },
                     number: {
