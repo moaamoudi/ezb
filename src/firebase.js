@@ -1,15 +1,19 @@
 import firebase from "firebase";
 import "firebase/auth";
+var admin = require("firebase-admin");
 
-const app = firebase.initializeApp({
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
-});
+const firebaseConfig = {
+  apiKey: "AIzaSyASZ4Kixswbss5lNzM3xSUbKnJZl8-9rus",
+  authDomain: "ezb-dev.firebaseapp.com",
+  databaseURL: "https://ezb-dev-default-rtdb.firebaseio.com",
+  projectId: "ezb-dev",
+  storageBucket: "ezb-dev.appspot.com",
+  messagingSenderId: "353004365627",
+  appId: "1:353004365627:web:40352e4910fc0804d3f91e",
+  measurementId: "G-P7JDKD93NJ",
+};
+
+const app = firebase.initializeApp(firebaseConfig);
 
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const db = app.firestore();

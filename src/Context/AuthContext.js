@@ -627,7 +627,6 @@ export function AuthProvider({ children }) {
   }
   //output: delete product from firestore and update the page to show updated products and display success message
 
-  
   //input: proudct to be updated **ONLY OWNER ROLE CAN DELETE**
   async function updateProduct(
     prodId,
@@ -661,10 +660,9 @@ export function AuthProvider({ children }) {
       getProjectInventory(selectedProject);
     }
   }
-//output: update product in firestore and update the page to show updated products and display success message
+  //output: update product in firestore and update the page to show updated products and display success message
 
-
-//input: selected project to fetch inventory from firestore
+  //input: selected project to fetch inventory from firestore
   async function getProjectInventory(project) {
     let items = [];
     if (auth.currentUser && project) {
@@ -1073,6 +1071,7 @@ export function AuthProvider({ children }) {
               assigned: project.assigned,
             });
         });
+        setSelectedCompany(selectCompany);
         let names = [];
         Projects.forEach((project) => {
           names.push(project.projectName);
@@ -1167,6 +1166,9 @@ export function AuthProvider({ children }) {
               assigned: project.assigned,
             });
         });
+
+        setSelectedCompany(selectCompany);
+
         let names = [];
         Projects.forEach((project) => {
           names.push(project.projectName);

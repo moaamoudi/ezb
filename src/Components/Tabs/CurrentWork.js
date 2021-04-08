@@ -2,6 +2,7 @@ import React from "react";
 import TaskPopUp from "../popUptask";
 import NotePopUp from "../PopUpNote";
 import LineChart from "../LineChart";
+import PopUpAssign from "../PopUpAssign.js";
 import PopUpTaskDetails from "../PopUpTaskDetails";
 import PopUpEmpDetailsAssigned from "../PopUpEmpDetailsAssigned";
 import {
@@ -506,6 +507,15 @@ export default function CurrentWork() {
                       ))
                     ) : (
                       <></>
+                    )}
+                  </div>
+                  <div
+                    style={{ position: "absolute", right: "5%", bottom: "5%" }}
+                  >
+                    {currentUser.type !== "Worker" ? (
+                      <PopUpAssign currentUser={currentUser} />
+                    ) : (
+                      <div></div>
                     )}
                   </div>
                 </div>

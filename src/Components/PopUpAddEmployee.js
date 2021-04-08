@@ -53,7 +53,7 @@ export default function PopUpAddEmployee(props) {
           joined = projectlist.concat(selected);
           setProjectlist(joined);
         } else {
-          return setError("Duplicate SubTask Was Entered!");
+          return setError("Duplicate Project Was Entered!");
         }
       } else {
         joined = projectlist.concat(selected);
@@ -81,7 +81,7 @@ export default function PopUpAddEmployee(props) {
       {(close) => (
         <Card className="main-shadow" style={{ width: "500px" }}>
           <Card.Body>
-            <h2 className="text-center mb-4">Add Employee to company</h2>
+            <h2 className="text-center mb-4">Add Employee to Company</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form>
               <Form.Group id="EmployeeName">
