@@ -280,11 +280,13 @@ export default function PopUpTaskDetails(props) {
                     }}
                   >
                     <div style={{ display: "flex" }}>
-                      <Col md={6} style={{ marginLeft: "-30px" }}>
+                      <Col md={3} style={{ marginLeft: "-30px" }}>
                         Subtask name
                       </Col>
-                      <Col md={4}>Complete</Col>
-                      <Col md={5}>Last Modified</Col>
+                      <Col md={2}>Complete</Col>
+                      <Col md={3}>Last Modified</Col>
+                      <Col md={3}>Assigned Employee</Col>
+                      <Col md={2}>Delete</Col>
                     </div>
 
                     <div
