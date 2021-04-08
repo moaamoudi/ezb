@@ -2,8 +2,6 @@ import * as React from "react";
 import Paper from "@material-ui/core/Paper";
 import {
   Scheduler,
-  DayView,
-  WeekView,
   MonthView,
   Toolbar,
   ViewSwitcher,

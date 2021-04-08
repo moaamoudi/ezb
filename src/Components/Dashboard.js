@@ -136,7 +136,7 @@ export default function Dashboard() {
                       style={{ width: "250px", height: "300px" }}
                     >
                       <Card.Body>
-                        <h1>{project.projectName}</h1>
+                        <h2>{project.projectName}</h2>
                         <h6 style={{ marginBottom: "-10px" }}>
                           Completion Progress
                         </h6>
@@ -202,7 +202,7 @@ export default function Dashboard() {
                   style={{ width: "250px", height: "300px" }}
                 >
                   <Card.Body>
-                    <h1>{project.projectName}</h1>
+                    <h2>{project.projectName}</h2>
                     <h6 style={{ marginBottom: "-10px" }}>
                       Completion Progress
                     </h6>

@@ -1,7 +1,6 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import { useAuth } from "../Context/AuthContext";
-import { auth } from "../firebase.js";
 import {
   Form,
   Button,
@@ -11,14 +10,11 @@ import {
   Container,
   Alert,
   Dropdown,
-  Tooltip,
-  OverlayTrigger,
   DropdownButton,
   ButtonGroup,
 } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import "react-google-flight-datepicker/dist/main.css";
-import { format } from "date-fns";
 import "./styles/PopUp.css";
 
 export default function PopUpAssign(props) {
@@ -30,7 +26,7 @@ export default function PopUpAssign(props) {
     updateProject,
     createNotification,
   } = useAuth();
-  let [userList, setUserList] = useState([]);
+  let [userList] = useState([]);
   let found = false;
   let [users, setUsers] = useState([]);
 

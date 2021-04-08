@@ -1,6 +1,5 @@
 import firebase from "firebase";
 import "firebase/auth";
-var admin = require("firebase-admin");
 
 const firebaseConfig = {
   apiKey: "AIzaSyASZ4Kixswbss5lNzM3xSUbKnJZl8-9rus",

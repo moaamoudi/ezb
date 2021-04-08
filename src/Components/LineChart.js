@@ -4,7 +4,6 @@ import { useAuth } from "../Context/AuthContext.js";
 export default function LineChart() {
   const {
     selectedProjectTasks,
-    selectCompany,
     selectedProject,
     userDetails,
   } = useAuth();

@@ -107,7 +107,7 @@ function NavBar(props) {
         }}
       >
         <h2 style={{ display: "flex" }}>
-          {selectCompany.companyName.length > 0
+          {selectCompany !== undefined
             ? selectCompany.companyName
             : "<<Loading>>"}
           {companiesData.length > 1 ? (
